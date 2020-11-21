@@ -6,9 +6,8 @@
       </div>
       <div class="content-left">
         <div class="content-left-nav">
-          <div class="left-nav">
-            <screen-item></screen-item>
-            <screen-item></screen-item>
+          <div class="left-nav" v-for="(item, index) in category_list" :key="index">
+            <screen-item :category="item"></screen-item>
           </div>
         </div>
         <div class="content-left-rs">
@@ -18,7 +17,7 @@
                 <el-popover
                     placement="top-start"
                     width="10"
-                    trigger="click">
+                    trigger="hover">
                   <div class="sort-item" @click="sortByRelative()">按相关性</div>
                   <div class="sort-item" @click="sortByCitation()">按被引量</div>
                   <div class="sort-item" @click="sortByTime">按时间降序</div>
@@ -34,6 +33,18 @@
             </div>
           </div>
         </div>
+        <div style="clear: both"></div>
+        <p class="page">
+          <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-size="100"
+              layout="prev, pager, next, jumper"
+              :total=total_rs>
+          </el-pagination>
+        </p>
       </div>
     </div>
   </div>
@@ -109,7 +120,176 @@
             version: "中国知网"
           },
         ],
+        category_list: [
+          {
+            title: "时间",
+            list: [
+              {
+                name: 9102,
+                kind: 1,
+                nums: 100
+              },
+              {
+                name: 2020,
+                kind: 2,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 3,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 4,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 5,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 6,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 7,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 8,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 9,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 10,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 11,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 12,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 13,
+                nums: 300,
+              },
+              {
+                name: 2021,
+                kind: 14,
+                nums: 300,
+              }
+            ]
+          },
+          {
+            title: "时间",
+            list: [
+              {
+                name: 9102,
+                kind: 1,
+                nums: 100
+              },
+              {
+                name: 2020,
+                kind: 2,
+                nums: 200
+              }
+            ]
+          },
+          {
+            title: "时间",
+            list: [
+              {
+                name: 9102,
+                kind: 1,
+                nums: 100
+              },
+              {
+                name: 2020,
+                kind: 2,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 3,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 4,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 5,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 6,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 7,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 8,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 9,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 10,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 11,
+                nums: 300,
+              },
+              {
+                name: 2020,
+                kind: 12,
+                nums: 200
+              },
+              {
+                name: 2021,
+                kind: 13,
+                nums: 300,
+              },
+              {
+                name: 2021,
+                kind: 14,
+                nums: 300,
+              }
+            ]
+          }
+        ],
         width: 600,
+        total_rs: 0,
+        currentPage: 0
       }
     },
     methods: {
@@ -124,7 +304,17 @@
       sortByTime() {
         console.log("按时间降序排序！");
         this.sort_method = "时间降序";
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
       }
+    },
+    mounted() {
+      this.total_rs = this.result_list.length;
+      this.currentPage = 0;
     }
   }
 </script>
@@ -182,6 +372,10 @@
   .content-left-rs{
     float: left;
     width: 620px;
+  }
+  .page{
+    margin-left: 240px;
+    text-align: center;
   }
 </style>
 <style>
