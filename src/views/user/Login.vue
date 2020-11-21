@@ -1,17 +1,16 @@
 <template>
-<!--  <div :style="{backgroundImage:'url('+require('@/assets/backgroud1.jpg')+')'}" style="height: 100%;width: 100%">-->
   <div class="full">
-    <el-menu router :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item style="font-weight: bold">学术成果分享平台</el-menu-item>
+    <el-menu router :default-active="$route.path" class="el-menu-demo" mode="horizontal">
+      <el-menu-item style="font-weight: bold">LinkedBrains</el-menu-item>
     </el-menu>
     <el-form  class="login-container" label-position="left"
               label-width="0px" v-loading="loading" style="margin-top: 7%">
       <h3 class="login_title">登录</h3>
       <el-form-item prop="account">
-        <el-input type="text" v-model="user.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="user.userName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input type="password" v-model="user.password" auto-complete="off" placeholder="密码"></el-input>
+        <el-input type="passwd" v-model="user.passwd" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <br>
       <el-form-item style="width: 100%">
@@ -28,8 +27,8 @@
       return {
         checked: true,
         user: {
-          username: '',
-          password: ''
+          userName: '',
+          passwd: ''
         },
         loading: false,
 
@@ -37,21 +36,25 @@
     },
     methods: {
       submit(){
-        if(sessionStorage.getItem("username")!=null||sessionStorage.getItem("userId")!=null){
+        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userId")!=null){
           // alert("您已登录");
           this.$message({
             message: '您已登录',
             type: 'warning'
           });
-          this.$router.push("/homepage");
+//          this.$router.push("/homepage");
         }
         else {
-          this.$http.post(this.requestUrl+"/login",this.user).then(res=>{
-            // if (this.user.password==3){
+          this.$http.post(this.requestUrl+"/login",
+            {
+              userName:this.user.userName,
+              passwd:this.user.passwd
+            }).then(res=>{
+            // if (this.user.passwd==3){
               if (res.data.success){
-              sessionStorage.setItem("username",this.user.username);
-              sessionStorage.setItem("userId",res.data.ID);
-              this.$router.push("/homepage");
+              sessionStorage.setItem("userName",this.user.userName);
+              sessionStorage.setItem("userId",res.data.userId);
+              this.$router.push("/test");
             }
             else{
               // alert("登录失败");
@@ -95,7 +98,7 @@
     padding:0;
   }
   .full{
-    background:url("../assets/backgroud1.jpg");
+    background:url("../../assets/backgroud1.jpg");
     width:100%;
     height:100%;
     position:fixed;

@@ -7,7 +7,12 @@ Vue.use(VueRouter)
     {
       path: '/',
       name:'Login',
-      component: () => import('../views/Login.vue')
+      component: () => import('../views/user/Login.vue')
+    },
+    {
+      path: '/',
+      name:'Register',
+      component: () => import('../views/user/Register.vue')
     },
     {
       path: '/test',

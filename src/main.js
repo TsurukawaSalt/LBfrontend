@@ -12,8 +12,8 @@ Vue.use(VueAxios,axios);
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 
+Vue.prototype.requestUrl = "http://rap2api.taobao.org/app/mock/271178";
 /*Vue.config.productionTip = false;
- // Vue.prototype.requestUrl = "http://rap2.taobao.org:38080/app/mock/262266";
 Vue.prototype.requestUrl = "http://localhost:8081";
 Vue.prototype.baseUrl = "http://39.97.126.242:8081/index.html#/";
 Vue.prototype.recentDoc = "";*/
