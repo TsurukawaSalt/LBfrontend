@@ -10,7 +10,7 @@
         <el-input type="text" v-model="user.userName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input type="passwd" v-model="user.passwd" auto-complete="off" placeholder="密码"></el-input>
+        <el-input type="password" v-model="user.passwd" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <br>
       <el-form-item style="width: 100%">
