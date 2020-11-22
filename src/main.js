@@ -6,8 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import utils from './javascript/utils.js'
+import api from './http'
 Vue.use(utils);
-
+Vue.use(api);
 Vue.use(VueAxios,axios);
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);

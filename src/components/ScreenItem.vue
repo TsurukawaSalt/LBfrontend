@@ -65,14 +65,12 @@ export default {
 <style scoped>
   .el-card{
     font-size: 13px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+    border: none;
     box-shadow: none;
     margin-right: 50px;
   }
   .el-card /deep/ .el-card__body{
-    padding: 10px 10px 15px 0;
+    padding: 10px 0 0 0;
   }
   .nav-title{
     color: #9fa19f;
