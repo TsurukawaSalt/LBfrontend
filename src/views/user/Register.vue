@@ -7,10 +7,10 @@
         <el-input type="text" v-model="RegisterForm.userName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass" label="密码">
-        <el-input type="passwd" v-model="RegisterForm.passwd1" auto-complete="off" placeholder="请输入您的密码"></el-input>
+        <el-input type="password" v-model="RegisterForm.passwd1" auto-complete="off" placeholder="请输入您的密码"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input type="passwd" v-model="RegisterForm.passwd2" auto-complete="off" placeholder="请重复输入密码"></el-input>
+        <el-input type="password" v-model="RegisterForm.passwd2" auto-complete="off" placeholder="请重复输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass" label="邮箱">
         <el-input type="email" v-model="RegisterForm.email" auto-complete="off" placeholder="请输入您的邮箱" style="float:left;width: 160px"></el-input>
