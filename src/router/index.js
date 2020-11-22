@@ -23,6 +23,11 @@ Vue.use(VueRouter)
       path: '/academicSearch',
       name: 'AcademicSearch',
       component: () => import('../views/academic/AcademicSearch')
+    },
+    {
+      path:'/academicShow',
+      name: 'AcademicShow',
+      component: () => import('../views/academic/AcademicShow')
     }
 ]
 
