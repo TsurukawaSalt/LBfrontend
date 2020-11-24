@@ -10,7 +10,7 @@
         <el-input type="text" v-model="user.userName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input type="passwd" v-model="user.passwd" auto-complete="off" placeholder="密码"></el-input>
+        <el-input type="password" v-model="user.passwd" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <br>
       <el-form-item style="width: 100%">
@@ -36,7 +36,9 @@
     },
     methods: {
       submit(){
-        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userId")!=null){
+        var encryptionPasswd = this.$md5(this.user.passwd);
+        alert(encryptionPasswd);
+        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
           // alert("您已登录");
           this.$message({
             message: '您已登录',
@@ -48,12 +50,12 @@
           this.$http.post(this.requestUrl+"/login",
             {
               userName:this.user.userName,
-              passwd:this.user.passwd
+              passwd:encryptionPasswd
             }).then(res=>{
             // if (this.user.passwd==3){
               if (res.data.success){
               sessionStorage.setItem("userName",this.user.userName);
-              sessionStorage.setItem("userId",res.data.userId);
+              sessionStorage.setItem("userID",res.data.userID);
               this.$router.push("/test");
             }
             else{

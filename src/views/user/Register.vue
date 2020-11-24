@@ -7,10 +7,10 @@
         <el-input type="text" v-model="RegisterForm.userName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass" label="密码">
-        <el-input type="passwd" v-model="RegisterForm.passwd1" auto-complete="off" placeholder="请输入您的密码"></el-input>
+        <el-input type="password" v-model="RegisterForm.passwd1" auto-complete="off" placeholder="请输入您的密码"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input type="passwd" v-model="RegisterForm.passwd2" auto-complete="off" placeholder="请重复输入密码"></el-input>
+        <el-input type="password" v-model="RegisterForm.passwd2" auto-complete="off" placeholder="请重复输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass" label="邮箱">
         <el-input type="email" v-model="RegisterForm.email" auto-complete="off" placeholder="请输入您的邮箱" style="float:left;width: 160px"></el-input>
@@ -44,7 +44,7 @@
     },
     methods: {
       submit(){
-        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userId")!=null){
+        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
           // alert("您已登录");
           this.$message({
             message: '您已登录',
@@ -60,16 +60,17 @@
           });
         }
         else{
+          var encryptionPasswd = this.$md5(this.RegisterForm.passwd1);
           this.$http.post(this.requestUrl + "/register",
             {
                 userName:this.RegisterForm.userName,
-                passwd:this.RegisterForm.passwd1,
+                passwd:encryptionPasswd,
                 email:this.RegisterForm.email,
                 code:this.RegisterForm.code
             }).then(res=>{ 
                 if (res.data.success){
                 sessionStorage.setItem("userName",this.RegisterForm.userName);
-                sessionStorage.setItem("userId",res.data.userId);
+                sessionStorage.setItem("userID",res.data.userID);
                 // alert(res.data.msg);
                 this.$message({
                     message: res.data.msg,
