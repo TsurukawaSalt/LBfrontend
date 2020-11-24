@@ -20,9 +20,20 @@ Vue.use(VueRouter)
       component: () => import('../views/test.vue')
     },
     {
+      path: '/home',
+      name: 'Home',
+      component: () => import('../views/homePage.vue')
+    },
+    
+    {
       path: '/academicSearch',
       name: 'AcademicSearch',
       component: () => import('../views/academic/AcademicSearch')
+    },
+    {
+      path:'/academicShow',
+      name: 'AcademicShow',
+      component: () => import('../views/academic/AcademicShow')
     }
 ]
 

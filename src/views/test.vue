@@ -22,8 +22,8 @@ export default {
 
 <style scoped>
   .head {
-    margin: -10px;
-    padding: 0;
+    //margin: -10px;
+    //padding: 0;
     //width: 100%;
     //height: 100%;
   }

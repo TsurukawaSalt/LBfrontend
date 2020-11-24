@@ -1,0 +1,146 @@
+<template>
+  <div>
+    <el-link class="title" :underline="false">
+      Logo
+    </el-link>
+    <el-input class="search" placeholder="请输入你要查找的内容" prefix-icon="el-icon-search" v-model="input">
+        <el-button class="button" slot="append">搜索</el-button>
+    </el-input>
+    <div class="top_block">
+      <el-row>
+        <el-link :underline="false">站内功能</el-link>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="6" v-for="(o) in 4" :key="o">
+          <el-card class="card" shadow="hover"> 功能</el-card>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="bottom_block">
+      <div class="left_block">
+        <el-row  v-for="(o) in 4" :key="o">
+          <el-link :underline="false">文献长，文献宽，文献想绑在文献上</el-link>
+        </el-row>
+      </div>
+      <div class="right_block">
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name:"homePage",
+  data() {
+    return {
+      input:'',
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .title {
+    position: absolute;
+    top: 27%;
+    left: 25%;
+    width: 50%;
+    font-size: 70px;
+
+  }
+  .search {
+    position: absolute;
+    top: 40%;
+    left: 25%;
+    width: 50%;
+  }
+  .search >>> .el-input__inner {
+    border-radius: 25px 0 0 25px;
+    border-width: 2px;
+    border-color: #245cc0;
+    font-size: 18px;
+    height: 60px;
+  }
+  .search >>> .el-input__prefix .el-input__icon {
+    margin-left: 5px;
+    font-size: 18px;
+  }
+  .search >>> .el-input-group__append{
+    border-width: 0;
+    background: rgba(0,0,0,0);
+  }
+  .search >>> .el-input-group__append .el-button {
+    border-radius: 0 25px 25px 0;
+    border-width: 10px;
+    background: #245cc0;
+    height: 60px;
+    width: 100px;
+    font-size: 18px;
+    color: white;
+  }
+  .top_block {
+    //background: blue;
+    margin: -8px;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 20%;
+  }
+  .top_block .el-row{
+    width: 100%;
+  }
+  .top_block .el-row .el-link {
+    left: -40%;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2461ea;
+  }
+
+  .card {
+    margin: 5px;
+    width: 95%;
+    height: 30%;
+  }
+
+  .bottom_block {
+    //background: red;
+    margin: -8px;
+    padding: 0;
+    position: absolute;
+    top: 70%;
+    width: 100%;
+    height: 100%;
+    //display: flex;
+  }
+  .left_block {
+    //background: black;
+    //margin: -8px;
+    padding: 0;
+    position: absolute;
+    //top: 80%;
+    float: left;
+    width: 70%;
+    height: 100%;
+  }
+  .left_block .el-row {
+    margin-left: -250px;
+    margin-bottom: 20px;
+  }
+  .left_block .el-row .el-link {
+    font-size: 20px;
+  }
+  .right_block {
+    background: white;
+    //margin: -8px;
+    padding: 0;
+    position: absolute;
+    //top: 80%;
+    float: left;
+    margin-left: 70%;
+    width: 30%;
+    height: 100%;
+  }
+</style>
