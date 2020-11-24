@@ -37,7 +37,7 @@
     methods: {
       submit(){
         var encryptionPasswd = this.$md5(this.user.passwd);
-        alert(encryptionPasswd);
+//        alert(encryptionPasswd);
         if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
           // alert("您已登录");
           this.$message({
