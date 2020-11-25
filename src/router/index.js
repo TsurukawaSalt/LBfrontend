@@ -15,6 +15,16 @@ Vue.use(VueRouter)
       component: () => import('../views/user/Register.vue')
     },
     {
+      path: '/perInfo',
+      name:'PerInfo',
+      component: () => import('../views/user/PerInfo.vue')
+    },    
+    {
+      path: '/changeInfo',
+      name:'ChangeInfo',
+      component: () => import('../views/user/ChangeInfo.vue')
+    },        
+    {
       path: '/test',
       name: 'Test',
       component: () => import('../views/test.vue')
