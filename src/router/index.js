@@ -18,12 +18,12 @@ Vue.use(VueRouter)
       path: '/perInfo',
       name:'PerInfo',
       component: () => import('../views/user/PerInfo.vue')
-    },    
+    },
     {
       path: '/changeInfo',
       name:'ChangeInfo',
       component: () => import('../views/user/ChangeInfo.vue')
-    },        
+    },
     {
       path: '/test',
       name: 'Test',
@@ -34,7 +34,7 @@ Vue.use(VueRouter)
       name: 'Home',
       component: () => import('../views/homePage.vue')
     },
-    
+
     {
       path: '/academicSearch',
       name: 'AcademicSearch',
@@ -44,6 +44,11 @@ Vue.use(VueRouter)
       path:'/academicShow',
       name: 'AcademicShow',
       component: () => import('../views/academic/AcademicShow')
+    },
+    {
+      path: '/scholarPage',
+      name: 'ScholarPage',
+      component: () => import('../views/scholar/ScholarPage')
     }
 ]
 
