@@ -3,37 +3,37 @@
         <Header>
         </Header>
         <div class="avatar-uploader">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="perInfo.url" :src="perInfo.url" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </div>
         <div class="info">
             <el-row class="row">
-                <el-col :span="5" class="font">用户ID</el-col>
-                <el-col :span="3" class="font">:</el-col>
-                <el-col :span="48" class="font">{{perInfo.userID}}</el-col>
+                <el-col :span="5" class="font1">用户ID</el-col>
+                <el-col :span="3" class="font2">:</el-col>
+                <el-col :span="48" class="font3">{{perInfo.userID}}</el-col>
             </el-row>
             <el-row class="row">
-                <el-col :span="5" class="font">用户名</el-col>
-                <el-col :span="3" class="font">:</el-col>
-                <el-col :span="48" class="font">{{perInfo.userName}}</el-col>
+                <el-col :span="5" class="font1">用户名</el-col>
+                <el-col :span="3" class="font2">:</el-col>
+                <el-col :span="48" class="font3">{{perInfo.userName}}</el-col>
             </el-row>
             <el-row class="row">
-                <el-col :span="5" class="font">姓名</el-col>
-                <el-col :span="3" class="font">:</el-col>
-                <el-col :span="48" class="font">{{perInfo.realName}}</el-col>
+                <el-col :span="5" class="font1">姓名</el-col>
+                <el-col :span="3" class="font2">:</el-col>
+                <el-col :span="48" class="font3">{{perInfo.realName}}</el-col>
             </el-row>
             <el-row class="row">
-                <el-col :span="5" class="font">邮箱</el-col>
-                <el-col :span="3" class="font">:</el-col>
-                <el-col :span="48" class="font">{{perInfo.email}}</el-col>
+                <el-col :span="5" class="font1">邮箱</el-col>
+                <el-col :span="3" class="font2">:</el-col>
+                <el-col :span="48" class="font3">{{perInfo.email}}</el-col>
             </el-row>
             <el-row class="row">
-                <el-col :span="5" class="font">电话</el-col>
-                <el-col :span="3" class="font">:</el-col>
-                <el-col :span="48" class="font">{{perInfo.phoneNum}}</el-col>
+                <el-col :span="5" class="font1">电话</el-col>
+                <el-col :span="3" class="font2">:</el-col>
+                <el-col :span="48" class="font3">{{perInfo.phoneNum}}</el-col>
             </el-row> 
             <el-row style="line-height:70px">
-                <el-button type="primary" round class="left-button" @click="gotochangeInfo">修改信息</el-button>
+                <el-button type="primary" round class="left-button" @click="gotochangeInfo">修改信息<i class="el-icon-edit"></i></el-button>
             </el-row>          
         </div>
     </div>
@@ -57,6 +57,7 @@
                     this.perInfo.realName= res.data.realName;
                     this.perInfo.email= res.data.email;
                     this.perInfo.phoneNum= res.data.phoneNum;
+                    this.perInfo.url= res.data.url;
                 }
                 else{
                     // alert(res.data.msg);
@@ -66,14 +67,14 @@
         },
         data() {
             return {
-                imageUrl: '',
 
                 perInfo: {
                     userID : '',
                     userName : '',
                     realName : '',
                     email : '',
-                    phoneNum : ''
+                    phoneNum : '',
+                    url : ''
                 }
             };
         },
@@ -85,8 +86,8 @@
     }
 </script>
 <style scoped>
-    .backgroud {
-        background: url("../../assets/perInfoBackgroud.jpg");
+    .all {
+        background-color: #EBEEF5;
         width: 100%;
         height: 100%;
         position:fixed;
@@ -127,8 +128,18 @@
         line-height: 70px;
         border-bottom: 2px black dotted;
     }
-    .font {
-        font-size: 25px;
+    .font1 {
+        font-size: 20px;
+        text-align: center;
+        font-family: "Microsoft YaHei";
+    }
+    .font2 {
+        font-size: 20px;
+        text-align: center;
+        font-family: "Microsoft YaHei";
+    }
+    .font3 {
+        font-size: 20px;
         text-align: center;
         font-family: "Microsoft YaHei";
     }

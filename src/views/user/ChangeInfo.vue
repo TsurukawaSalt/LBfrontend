@@ -8,7 +8,7 @@
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="perInfo.url" :src="perInfo.url" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
         <el-form  class="info" label-position="left"
@@ -61,6 +61,7 @@
                     this.perInfo.realName= res.data.realName;
                     this.perInfo.email= res.data.email;
                     this.perInfo.phoneNum= res.data.phoneNum;
+                    this.perInfo.url= res.data.url;
                 }
                 else{
                     // alert(res.data.msg);
@@ -70,14 +71,13 @@
         },
         data() {
             return {
-                imageUrl: '',
-
                 perInfo: {
                     userID : '',
                     userName : '',
                     realName : '',
                     email : '',
                     phoneNum : '',
+                    url : '',
                     passwd1 : '',
                     passwd2 : ''
                 }
@@ -85,7 +85,20 @@
         },
         methods: {
             handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+                this.perInfo.url = URL.createObjectURL(file.raw);
+                this.$http.post(this.requestUrl+"/changeImg",{
+                params:{
+                    userID:sessionStorage.getItem("userID"),
+                    url:this.perInfo.url
+                }
+            }).then(res=>{
+                if(res.data.success){
+                    this.$message.success(res.data.msg);
+                }
+                else{
+                    this.$message.error(res.data.msg);
+                }
+            })
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -121,7 +134,22 @@
                     });
                 }
                 else {
-                    alert("修改成功");
+                    this.$http.post(this.requestUrl+"/changeInfo",{
+                        params:{
+                            userID:sessionStorage.getItem("userID"),
+                            userName:this.perInfo.userName,
+                            realName:this.perInfo.realName,
+                            email:this.perInfo.email,
+                            phoneNum:this.perInfo.phoneNum
+                        }
+                    }).then(res=>{
+                        if(res.data.success){
+                            this.$message.success(res.data.msg);
+                        }
+                        else{
+                            this.$message.error(res.data.msg);
+                        }
+                    })
                 }
             },
             preservePasswd() {
@@ -138,7 +166,20 @@
                     });
                 }
                 else {
-                    alert("修改成功");
+                    var encryptionPasswd = this.$md5(this.user.passwd1);
+                    this.$http.post(this.requestUrl+"/changePasswd",{
+                        params:{
+                            userID:sessionStorage.getItem("userID"),
+                            passwd:encryptionPasswd
+                        }
+                    }).then(res=>{
+                        if(res.data.success){
+                            this.$message.success(res.data.msg);
+                        }
+                        else{
+                            this.$message.error(res.data.msg);
+                        }
+                    })
                 }
             }     
         }
