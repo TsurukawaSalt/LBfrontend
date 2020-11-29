@@ -46,12 +46,12 @@
             Header,
         },
         mounted() {
-            this.$http.get(this.requestUrl+"/getPerInfo",{
+            this.$http.get(this.requestUrl+"/user/getPerInfo",{
                 params:{
                     userID:sessionStorage.getItem("userID"),
                 }
             }).then(res=>{
-                if(res.data.success){
+                if(res.data.success == 200){
                     this.perInfo.userID= sessionStorage.getItem("userID");
                     this.perInfo.userName= res.data.userName;
                     this.perInfo.realName= res.data.realName;

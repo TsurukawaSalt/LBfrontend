@@ -47,20 +47,20 @@
 //          this.$router.push("/homepage");
         }
         else {
-          this.$http.post(this.requestUrl+"/login",
+          this.$http.post(this.requestUrl+"/user/login",
             {
               userName:this.user.userName,
               passwd:encryptionPasswd
             }).then(res=>{
             // if (this.user.passwd==3){
-              if (res.data.success){
+              if (res.data.success == 200){
               sessionStorage.setItem("userName",this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
               this.$router.push("/test");
             }
             else{
               // alert("登录失败");
-              this.$message.error('登录失败！请重试');
+              this.$message.error(res.data.msg);
               this.$router.push("/login");
             }
           })
