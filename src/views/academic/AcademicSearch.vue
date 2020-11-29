@@ -461,7 +461,7 @@
       }
     },
     mounted() {
-      this.search_words = this.$route.params
+      this.search_words = this.$route.params.keyword // todo:rbl修改
       // 加载检索数据
       var _this = this;
       this.currentPage = 1;

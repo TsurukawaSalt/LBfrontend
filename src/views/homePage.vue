@@ -3,8 +3,8 @@
     <el-link class="title" :underline="false">
       Logo
     </el-link>
-    <el-input class="search" placeholder="请输入你要查找的内容" prefix-icon="el-icon-search" v-model="input">
-        <el-button class="button" slot="append">搜索</el-button>
+    <el-input class="search" placeholder="请输入你要查找的内容" prefix-icon="el-icon-search" v-model="keyword" @keyup.enter.native="goSearch()">
+        <el-button class="button" slot="append" @click="goSearch()">搜索</el-button>
     </el-input>
     <div class="top_block">
       <el-row>
@@ -16,10 +16,11 @@
         </el-col>
       </el-row>
     </div>
-    <div class="bottom_block">
+    <div class="middle_block">
       <div class="left_block">
-        <el-row  v-for="(o) in 4" :key="o">
-          <el-link :underline="false">文献长，文献宽，文献想绑在文献上</el-link>
+        <el-row  v-for="(o) in this.academic_list" :key="o.title">
+          <el-link :underline="false">{{ o.title }}</el-link>
+          <el-link :underline="false">{{o.author}}{{o.year}}</el-link>
         </el-row>
       </div>
       <div class="right_block">
@@ -34,8 +35,35 @@ export default {
   name:"homePage",
   data() {
     return {
-      input:'',
+      keyword:'',
+      academic_list:[
+        {title:'123456', year:2020, author:'ABC', cited:195},
+        {title:'654321', year:2020, author:'ABC', cited:195},
+        {title:'111111', year:2020, author:'ABC', cited:195},
+        {title:'222222', year:2020, author:'ABC', cited:195},
+        {title:'333333', year:2020, author:'ABC', cited:195},
+
+        {title:'444444', year:2020, author:'ABC', cited:195},
+        {title:'555555', year:2020, author:'ABC', cited:195},
+        {title:'666666', year:2020, author:'ABC', cited:195},
+        {title:'888888', year:2020, author:'ABC', cited:195},
+        {title:'777777', year:2020, author:'ABC', cited:195},
+      ]
     }
+  },
+  methods: {
+    goSearch(){
+      if (!this.keyword) {
+        alert("搜索内容为空")
+      } else {
+        this.$router.push({
+          name:"AcademicSearch",
+          params:{
+            keyword:this.keyword
+          }
+        })
+      }
+    },
   }
 }
 </script>
@@ -105,7 +133,7 @@ export default {
     height: 30%;
   }
 
-  .bottom_block {
+  .middle_block {
     //background: red;
     margin: -8px;
     padding: 0;
