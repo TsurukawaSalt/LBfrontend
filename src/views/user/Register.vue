@@ -61,40 +61,40 @@
         }
         else{
           var encryptionPasswd = this.$md5(this.RegisterForm.passwd1);
-          this.$http.post(this.requestUrl + "/register",
+          this.$http.post(this.requestUrl + "/user/register",
             {
                 userName:this.RegisterForm.userName,
                 passwd:encryptionPasswd,
                 email:this.RegisterForm.email,
                 code:this.RegisterForm.code
             }).then(res=>{ 
-                if (res.data.success){
-                sessionStorage.setItem("userName",this.RegisterForm.userName);
-                sessionStorage.setItem("userID",res.data.userID);
-                // alert(res.data.msg);
-                this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                });
-                this.$router.push("/homepage");
-                }
+                if (res.data.success == 200){
+                  sessionStorage.setItem("userName",this.RegisterForm.userName);
+                  sessionStorage.setItem("userID",res.data.userID);
+                  // alert(res.data.msg);
+                  this.$message({
+                      message: res.data.msg,
+                      type: 'success'
+                  });
+                  this.$router.push("/homepage");
+                  }
                 else{
-                this.$message.error({
-                    message: res.data.msg,
-                    type: 'danger'
-                });
-                this.$router.push("/register");
+                  this.$message.error({
+                      message: res.data.msg,
+                      type: 'danger'
+                  });
+                  this.$router.push("/register");
                 }
           })
         }
       },
       sendEmail(){
-        this.$http.get(this.requestUrl+"/sendEmail",{
+        this.$http.get(this.requestUrl+"/user/sendEmail",{
           params:{
             email:this.RegisterForm.email
           }
         }).then(res=>{
-          if (!res.data.success) {
+          if (!res.data.succes != 200) {
             this.$message.error("发送失败");
           }
           else {

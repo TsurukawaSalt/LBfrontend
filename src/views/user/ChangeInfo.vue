@@ -51,12 +51,12 @@
             Header,
         },
         mounted() {
-            this.$http.get(this.requestUrl+"/getPerInfo",{
+            this.$http.get(this.requestUrl+"/user/getPerInfo",{
                 params:{
                     userID:sessionStorage.getItem("userID"),
                 }
             }).then(res=>{
-                if(res.data.success){
+                if(res.data.success == 200){
                     this.perInfo.userName= res.data.userName;
                     this.perInfo.realName= res.data.realName;
                     this.perInfo.email= res.data.email;
@@ -86,13 +86,13 @@
         methods: {
             handleAvatarSuccess(res, file) {
                 this.perInfo.url = URL.createObjectURL(file.raw);
-                this.$http.post(this.requestUrl+"/changeImg",{
+                this.$http.post(this.requestUrl+"/user/changeImg",{
                 params:{
                     userID:sessionStorage.getItem("userID"),
                     url:this.perInfo.url
                 }
             }).then(res=>{
-                if(res.data.success){
+                if(res.data.success == 200){
                     this.$message.success(res.data.msg);
                 }
                 else{
@@ -134,7 +134,7 @@
                     });
                 }
                 else {
-                    this.$http.post(this.requestUrl+"/changeInfo",{
+                    this.$http.post(this.requestUrl+"/user/changeInfo",{
                         params:{
                             userID:sessionStorage.getItem("userID"),
                             userName:this.perInfo.userName,
@@ -143,7 +143,7 @@
                             phoneNum:this.perInfo.phoneNum
                         }
                     }).then(res=>{
-                        if(res.data.success){
+                        if(res.data.code == 200){
                             this.$message.success(res.data.msg);
                         }
                         else{
@@ -167,13 +167,13 @@
                 }
                 else {
                     var encryptionPasswd = this.$md5(this.user.passwd1);
-                    this.$http.post(this.requestUrl+"/changePasswd",{
+                    this.$http.post(this.requestUrl+"/user/changePasswd",{
                         params:{
                             userID:sessionStorage.getItem("userID"),
                             passwd:encryptionPasswd
                         }
                     }).then(res=>{
-                        if(res.data.success){
+                        if(res.data.success == 200){
                             this.$message.success(res.data.msg);
                         }
                         else{
