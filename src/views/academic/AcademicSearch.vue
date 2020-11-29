@@ -370,6 +370,28 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+      },
+      loadSearchSc(){
+        var _this = this;
+        this.$api.academic.getSearchResult({
+          search_word: _this.search_words,// 不同检索的字段名
+          filter_words: _this.filter_words,
+          sort: _this.sort,// 排序方式
+          page: _this.currentPage// 页码
+        }).then(res => {
+          if (res.code === 200){
+            _this.result_list = res.data.result_list;
+            // _this.filter_list = res.data.filter_list;
+            _this.result_length = _this.result_list.length;
+            _this.total_rs = res.data.total;
+          }else {
+            _this.$message({
+              message: res.message,
+              type: "error"
+            })
+            console.log("Request => getSearchResult : not 200");
+          }
+        })
       }
     },
     computed: {
@@ -461,30 +483,11 @@
       }
     },
     mounted() {
-      this.search_words = this.$route.params.keyword // todo:rbl修改
-      // 加载检索数据
-      var _this = this;
+      this.search_words.kw = this.$route.params.keyword // todo:rbl修改
+      console.log("获取关键词：" + this.search_words.kw)
       this.currentPage = 1;
-      this.$api.academic.getSearchResult({
-        search_word: _this.search_words,// 不同检索的字段名
-        filter_words: _this.filter_words,
-        sort: _this.sort,// 排序方式
-        page: _this.currentPage// 页码
-      }).then(res => {
-        if (res.code === 200){
-          console.log("200!!");
-          _this.result_list = res.data.result_list;
-          // _this.filter_list = res.data.filter_list;
-          _this.result_length = _this.result_list.length;
-          _this.total_rs = res.data.total;
-        }else {
-          _this.$message({
-            message: res.message,
-            type: "error"
-          })
-          console.log("Request => getSearchResult : not 200");
-        }
-      })
+      // 加载检索数据
+      this.loadSearchSc()
     }
   }
 </script>
