@@ -2,6 +2,7 @@
   <div class="wrapper">
     <div class="container">
       <div id="main-content">
+        <!--科研人员信息-->
         <div id="author-info">
           <div class="person-image">
             <div class="person-portrait"></div>
@@ -44,17 +45,82 @@
             </ul>
           </div>
         </div>
+        <!--成就统计 & 相关文献-->
         <div id="main-content-left">
+          <!--成就展示-->
           <div id="achievement">
             这里是图表
           </div>
+          <!--相关文献-->
           <div id="article-list">
-<!--            todo sort-->
-            <div v-for="(result_item,index) in result_list" v-bind:key="index">
-              <academic-item :item = result_item></academic-item>
+            <div id="article-list-container">
+              <!--筛选 filter-->
+              <div id="content-top">
+                <div class="content-filter">
+                  <div class="filter-item">
+                    <el-popover
+                        placement="bottom-start"
+                        width="100"
+                        trigger="click">
+                      <div>全部时间</div>
+                      <div>2020</div>
+                      <div>2019</div>
+                      <div>2018</div>
+                      <el-button class="button-sort" slot="reference" @click="unfoldYear">{{ this.getYear }}
+                        <i class="el-icon-arrow-down" style="float: right" ref="icon_year"></i>
+                      </el-button>
+                    </el-popover>
+                  </div>
+                  <div class="filter-item">
+                    <el-popover
+                        placement="bottom-start"
+                        width="100"
+                        trigger="click">
+                      <div @click="paperTo0">全部</div>
+                      <div @click="paperTo1">期刊</div>
+                      <div @click="paperTo2">会议</div>
+                      <div @click="paperTo3">专著</div>
+                      <el-button class="button-sort" slot="reference" @click="unfoldPaper">{{ this.getPaper }}
+                        <i class="el-icon-arrow-down" style="float: right" ref="icon_paper"></i>
+                      </el-button>
+                    </el-popover>
+                  </div>
+                  <div class="filter-item">
+                    <el-popover
+                        placement="bottom-start"
+                        width="100"
+                        trigger="click">
+                      <div @click="authorTo0">全部作者</div>
+                      <div @click="authorTo1">第一作者</div>
+                      <el-button class="button-sort" slot="reference" @click="unfoldAuthor">{{ this.getAuthor }}
+                        <i class="el-icon-arrow-down" style="float: right" ref="icon_author"></i>
+                      </el-button>
+                    </el-popover>
+                  </div>
+                  <div class="filter-item">
+                    <el-popover
+                        placement="bottom-start"
+                        width="100"
+                        trigger="click">
+                      <div @click="sortToTime">按时间降序</div>
+                      <div @click="sortToCited">按被引降序</div>
+                      <el-button class="button-sort" slot="reference" @click="unfoldSort">{{ this.getSort }}
+                        <i class="el-icon-arrow-down" style="float: right" ref="icon_sort"></i>
+                      </el-button>
+                    </el-popover>
+                  </div>
+                </div>
+              </div>
+              <!--文献列表-->
+              <div id="content-result">
+                <div v-for="(result_item,index) in result_list" v-bind:key="index">
+                  <academic-item :item = result_item></academic-item>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <!--合作统计展示-->
         <div id="main-content-right">这里是关系图等</div>
       </div>
     </div>
@@ -128,10 +194,72 @@ export default {
           version: "中国知网"
         },
       ],
+      sc_year: '',
+      paper_type: '0',
+      first_author : '0',
+      sc_sort: 'time',
     }
   },
   methods: {
+    unfoldYear() {
+      this.$refs.icon_year.className = "el-icon-arrow-up"
+    },
+    unfoldPaper(){
+      this.$refs.icon_paper.className = "el-icon-arrow-up"
+    },
+    unfoldAuthor() {
+      this.$refs.icon_author.className = "el-icon-arrow-up"
+    },
+    unfoldSort() {
+      this.$refs.icon_sort.className = "el-icon-arrow-up"
+    }
+  },
+  computed: {
+    getYear() {
+      switch (this.sc_year) {
+        case "2020":
+          return '2020'
+        case '2019':
+          return '2019'
+        default:
+          return '全部年份'
+      }
+    },
+    getPaper() {
+      switch (this.paper_type){
+        case "0":
+          return '全部类型'
+        case "1":
+          return '期刊'
+        case "2":
+          return '会议'
+        case "3":
+          return '专著'
+        default:
+          return '全部类型'
+      }
 
+    },
+    getAuthor() {
+      switch (this.first_author){
+        case "0":
+          return '全部作者'
+        case "1":
+          return '第一作者'
+        default:
+          return '全部作者'
+      }
+    },
+    getSort() {
+      switch (this.sc_sort){
+        case "time":
+          return '按时间降序'
+        case "cited":
+          return '按被引降序'
+        default:
+          return '按时间降序'
+      }
+    }
   }
 }
 </script>
@@ -181,7 +309,7 @@ export default {
   }
   .person-baseinfo{
     float: left;
-    width: 555px;
+    width: 510px;
   }
   .p-name{
     float: left;
@@ -247,5 +375,25 @@ export default {
   }
   #article-list{
     margin-top: 20px;
+  }
+  .content-filter{
+    float: left;
+  }
+  .filter-item{
+    position: relative;
+    float: left;
+    margin-right: 20px;
+  }
+  .button-sort{
+    border: none;
+    padding: 0;
+    font-size: 12px;
+  }
+</style>
+<style>
+  .el-popover{
+    min-width: 70px;
+    padding: 2px 12px 2px 12px;
+    box-shadow: none;
   }
 </style>

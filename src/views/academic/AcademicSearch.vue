@@ -6,8 +6,12 @@
       </div>
       <div class="content-left">
         <div class="content-left-nav">
-          <div class="left-nav" v-for="(item, index) in category_list" :key="index">
-            <screen-item :category="item"></screen-item>
+          <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
+            <filter-item
+                :filter_item="item"
+                :c_filter_words="filter_words"
+                v-on:getFilter="handleSelect"
+                v-on:cancelSelect="handleCancel"></filter-item>
           </div>
         </div>
         <div class="content-left-rs">
@@ -19,7 +23,7 @@
                     width="70"
                     trigger="hover">
                   <div class="sort-item" @click="sortByRelative()" >按相关性</div>
-                  <div class="sort-item" @click="sortByCitation()">按被引量</div>
+                  <div class="sort-item" @click="sortByCited()">按被引量</div>
                   <div class="sort-item" @click="sortByTime">按时间降序</div>
                   <el-button class="button-sort" slot="reference">
                     <i class="el-icon-sort">按{{ this.getSortMethod }}</i>
@@ -52,11 +56,11 @@
 
 <script>
   import AcademicItem from "@/components/AcademicItem";
-  import ScreenItem from "@/components/ScreenItem";
+  import FilterItem from "@/components/FilterItem";
   export default {
     name: "AcademicSearch",
     components: {
-      ScreenItem,
+      FilterItem,
       AcademicItem
     },
     data() {
@@ -120,191 +124,244 @@
           },
         ],
         result_length: 0,
-        category_list: [
+        filter_list: [
           {
+            filter_name: 'year',
             title: "时间",
             list: [
               {
                 name: 9102,
                 kind: 1,
+                value: 2000,
                 nums: 100
               },
               {
                 name: 2020,
                 kind: 2,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 3,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 4,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 5,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 6,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 7,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 8,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 9,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 10,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 11,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 12,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 13,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2021,
                 kind: 14,
+                value: 2000,
                 nums: 300,
               }
             ]
           },
           {
+            filter_name: 'cate',
             title: "时间",
             list: [
               {
                 name: 9102,
                 kind: 1,
+                value: 2000,
                 nums: 100
               },
               {
                 name: 2020,
                 kind: 2,
+                value: 2000,
                 nums: 200
               }
             ]
           },
           {
+            filter_name: 'affs',
             title: "时间",
             list: [
               {
                 name: 9102,
                 kind: 1,
+                value: 2000,
                 nums: 100
               },
               {
                 name: 2020,
                 kind: 2,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 3,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 4,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 5,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 6,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 7,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 8,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 9,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 10,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 11,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2020,
                 kind: 12,
+                value: 2000,
                 nums: 200
               },
               {
                 name: 2021,
                 kind: 13,
+                value: 2000,
                 nums: 300,
               },
               {
                 name: 2021,
                 kind: 14,
+                value: 2000,
                 nums: 300,
               }
             ]
           }
         ],
         total_rs: 1000,// 搜索结果数目，非当前页面展示数量
-        currentPage: 0,
+        currentPage: 1,
         sort: "relate",
+        search_words: {
+          kw: 'big data',
+          au: '李华'
+        },
+        filter_words: {
+          year: '2020',
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
+          type: '',
+          authors: '',
+          jnls: '',
+          affs: '',
+        }
       }
     },
     methods: {
+      handleSelect(val, name){
+        console.log(name + "父组件监听成功！成功筛选！"+val)
+        this.filter_words[name] = val
+      },
+      handleCancel(name){
+        console.log(name + "父组件监听成功！取消了筛选！");
+        this.filter_words[name] = '';
+      },
       sortByRelative() {
-        // sort_method = 1
         console.log("按相关性排序！");
         this.sort = "relate";
       },
-      sortByCitation() {
-        // sort_method = 2
+      sortByCited() {
         console.log("按被引量排序！");
         this.sort = "cited";
       },
       sortByTime() {
-        // sort_method = 3
         console.log("按时间降序排序！");
         this.sort = "time";
       },
@@ -313,20 +370,6 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        var that = this;
-        this.$api.academic.getSearchResult({
-          search:{
-            kw: "big data",
-          },
-          sort: that.sort,
-          page: that.currentPage
-        }).then(res=>{
-          if (res.code === 200){
-            that.result_list = res.data.result_list;
-            that.result_length = that.result_list.length;
-            that.total_rs = res.data.total;
-          }
-        })
       }
     },
     computed: {
@@ -340,25 +383,108 @@
         }
       }
     },
-    mounted() {
-      var that = this;
-      this.$api.academic.getSearchResult({
-        search:{
-          kw: "big data",
+    watch: {
+      sort: function () {
+        // 监听：排序方式
+        var _this = this;
+        this.$api.academic.getSearchResult({
+          search_words: _this.search_words,
+          filter_words: _this.filter_words,
+          sort: _this.sort,
+          page: _this.currentPage
+        }).then(res => {
+          if (res.code === 200){
+            _this.result_list = res.data.result_list;
+            // _this.filter_list = res.data.filter_list;
+            _this.result_length = _this.result_list.length;
+            _this.total_rs = res.data.total;
+          } else {
+            _this.$message({
+              message: res.message,
+              type: "error"
+            })
+            console.log("Request => getSearchResult : not 200");
+          }
+        })
+      },
+      currentPage: function () {
+        // 监听：页码
+        var _this = this
+        this.$api.academic.getSearchResult({
+          search_words: _this.search_words,
+          filter_words: _this.filter_words,
+          sort: _this.sort,
+          page: _this.currentPage
+        }).then(res => {
+          if (res.code === 200){
+            _this.result_list = res.data.result_list;
+            // _this.filter_list = res.data.filter_list;
+            _this.result_length = _this.result_list.length;
+            _this.total_rs = res.data.total;
+          } else {
+            _this.$message({
+              message: res.message,
+              type: "error"
+            })
+            console.log("Request => getSearchResult : not 200");
+          }
+        })
+
+      },
+      filter_words: {
+        // 监听左侧过滤项点击
+        handler (){
+          console.log("filter_words 父组件对自己深度监听成功！")
+          console.log(this.filter_words)
+          var _this = this
+          this.$api.academic.getSearchResult({
+            search_words: _this.search_words,
+            filter_words: _this.filter_words,
+            sort: _this.sort,
+            page: _this.currentPage
+          }).then(res => {
+            if (res.code === 200){
+              _this.result_list = res.data.result_list;
+              // _this.filter_list = res.data.filter_list;
+              _this.result_length = _this.result_list.length;
+              _this.total_rs = res.data.total;
+            } else {
+              _this.$message({
+                message: res.message,
+                type: "error"
+              })
+              console.log("Request => getSearchResult : not 200");
+            }
+          })
         },
-        sort: that.sort,
-        page: that.currentPage
+        deep: true
+      }
+    },
+    mounted() {
+      this.search_words = this.$route.params
+      // 加载检索数据
+      var _this = this;
+      this.currentPage = 1;
+      this.$api.academic.getSearchResult({
+        search_word: _this.search_words,// 不同检索的字段名
+        filter_words: _this.filter_words,
+        sort: _this.sort,// 排序方式
+        page: _this.currentPage// 页码
       }).then(res => {
         if (res.code === 200){
           console.log("200!!");
-          that.result_list = res.data.result_list;
-          that.result_length = that.result_list.length;
-          that.total_rs = res.data.total;
+          _this.result_list = res.data.result_list;
+          // _this.filter_list = res.data.filter_list;
+          _this.result_length = _this.result_list.length;
+          _this.total_rs = res.data.total;
         }else {
-          console.log("not 200!!");
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+          console.log("Request => getSearchResult : not 200");
         }
       })
-      this.currentPage = 1;
     }
   }
 </script>
