@@ -14,33 +14,21 @@
             </div>
           </div>
           <div class="person-baseinfo">
-            <div class="p-name">时代发</div>
-            <div class="p-volume c-grey">2342人看过</div>
+            <div class="p-name">{{ scholar_info.name }}</div>
+            <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
                 ScholarID:
                 <span class="p-scholarID-id">
-                  CN-B073VAMJ
+                  {{ scholar_info.scholar_id }}
                 </span>
               </div>
             </div>
-            <div class="p-affiliate">首都第一医院</div>
+            <div class="p-affiliate">{{ scholar_info.affiliate }}</div>
             <ul class="p-ach">
-              <li class="p-ach-item">
-                <p class="p-ach-type c-grey">被引频次</p>
-                <p class="p-ach-num">1231</p>
-              </li>
-              <li class="p-ach-item">
-                <p class="p-ach-type c-grey">被引频次</p>
-                <p class="p-ach-num">1231</p>
-              </li>
-              <li class="p-ach-item">
-                <p class="p-ach-type c-grey">被引频次</p>
-                <p class="p-ach-num">1231</p>
-              </li>
-              <li class="p-ach-item">
-                <p class="p-ach-type c-grey">被引频次</p>
-                <p class="p-ach-num">1231</p>
+              <li class="p-ach-item" v-for="(item, index) in scholar_info.ach" :key="index">
+                <p class="p-ach-type c-grey">{{ item.title }}</p>
+                <p class="p-ach-num">{{ item.num }}</p>
               </li>
             </ul>
           </div>
@@ -49,7 +37,8 @@
         <div id="main-content-left">
           <!--成就展示-->
           <div id="achievement">
-            这里是图表
+            <div class="achievement-pie"></div>
+            <div class="achievement-line"></div>
           </div>
           <!--相关文献-->
           <div id="article-list">
@@ -62,12 +51,13 @@
                         placement="bottom-start"
                         width="100"
                         trigger="click">
+                      <!--由后端传具体有哪些年份 for循环-->
                       <div>全部时间</div>
                       <div>2020</div>
                       <div>2019</div>
                       <div>2018</div>
-                      <el-button class="button-sort" slot="reference" @click="unfoldYear">{{ this.getYear }}
-                        <i class="el-icon-arrow-down" style="float: right" ref="icon_year"></i>
+                      <el-button class="button-sort" slot="reference">{{ this.getYear }}
+                        <i class="el-icon-s-data" style="float: right" ref="icon_year"></i>
                       </el-button>
                     </el-popover>
                   </div>
@@ -80,8 +70,8 @@
                       <div @click="paperTo1">期刊</div>
                       <div @click="paperTo2">会议</div>
                       <div @click="paperTo3">专著</div>
-                      <el-button class="button-sort" slot="reference" @click="unfoldPaper">{{ this.getPaper }}
-                        <i class="el-icon-arrow-down" style="float: right" ref="icon_paper"></i>
+                      <el-button class="button-sort" slot="reference">{{ this.getPaper }}
+                        <i class="el-icon-s-data" style="float: right" ref="icon_paper"></i>
                       </el-button>
                     </el-popover>
                   </div>
@@ -92,8 +82,8 @@
                         trigger="click">
                       <div @click="authorTo0">全部作者</div>
                       <div @click="authorTo1">第一作者</div>
-                      <el-button class="button-sort" slot="reference" @click="unfoldAuthor">{{ this.getAuthor }}
-                        <i class="el-icon-arrow-down" style="float: right" ref="icon_author"></i>
+                      <el-button class="button-sort" slot="reference">{{ this.getAuthor }}
+                        <i class="el-icon-s-data" style="float: right" ref="icon_author"></i>
                       </el-button>
                     </el-popover>
                   </div>
@@ -104,8 +94,8 @@
                         trigger="click">
                       <div @click="sortToTime">按时间降序</div>
                       <div @click="sortToCited">按被引降序</div>
-                      <el-button class="button-sort" slot="reference" @click="unfoldSort">{{ this.getSort }}
-                        <i class="el-icon-arrow-down" style="float: right" ref="icon_sort"></i>
+                      <el-button class="button-sort" slot="reference">{{ this.getSort }}
+                        <i class="el-icon-s-data" style="float: right" ref="icon_sort"></i>
                       </el-button>
                     </el-popover>
                   </div>
@@ -113,6 +103,7 @@
               </div>
               <!--文献列表-->
               <div id="content-result">
+                <div ></div>
                 <div v-for="(result_item,index) in result_list" v-bind:key="index">
                   <academic-item :item = result_item></academic-item>
                 </div>
@@ -121,7 +112,33 @@
           </div>
         </div>
         <!--合作统计展示-->
-        <div id="main-content-right">这里是关系图等</div>
+        <div id="main-content-right">
+          <!--合作学者展示-->
+          <div class="co-author-wr">
+            <h3>合作学者</h3>
+            <div class="co-author-list">
+              <div v-for="(item, index) in co_authors_list" :key="index">
+                <div class="co-author-item">
+                  <div class="co-author-name">{{ item.name }}</div>
+                  <div class="co-author-affiliate">{{ item.affiliate }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--合作机构展示-->
+          <div class="co-affiliate-wr">
+            <h3>合作机构</h3>
+            <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
+              <li>
+                <span class="co_affiliate_name">{{ item.name }}</span>
+                <span class="co_affiliate_line">
+                  <span class="co_affiliate_width"></span>
+                  <span class="co_affiliate_count">{{ item.count }}</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -136,6 +153,55 @@ export default {
   },
   data() {
     return {
+      scholar_id: '0',
+      scholar_info: {
+        name: '张三',
+        volume: 21312,
+        scholar_id: 'CN-B073VAMJ',
+        affiliate: '北京航空航天大学',
+        ach: [
+          {
+            title: 'a指数',
+            num: 1341
+          },
+          {
+            title: 'b指数',
+            num: 2565
+          },
+          {
+            title: 'c指数',
+            num: 241
+          },
+          {
+            title: 'd指数',
+            num: 597
+          }
+        ]
+      },
+      co_authors_list:[
+        {
+          scholar_id: '23423',
+          name: '十六日',
+          affiliate: '浙江医科大学肿瘤研究所'
+        },
+        {
+          scholar_id: '3673',
+          name: '打过交道',
+          affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
+        }
+      ],
+      co_affiliate_list: [
+        {
+          aff_id: '13451',
+          name: '啊的发挥快递费',
+          count: 14351
+        },
+        {
+          aff_id: '1414',
+          name: '是该公司认为',
+          count: 42654
+        }
+      ],
       result_list:[
         {
           title : "1. this is the title",
@@ -194,29 +260,104 @@ export default {
           version: "中国知网"
         },
       ],
-      sc_year: '',
-      paper_type: '0',
-      first_author : '0',
-      sc_sort: 'time',
+      sort_words: {
+        sc_year: '',
+        paper_type: '0',
+        first_author : '0',
+        sc_sort: 'time',
+      }
     }
   },
   methods: {
-    unfoldYear() {
-      this.$refs.icon_year.className = "el-icon-arrow-up"
+    paperTo0() {
+      this.sort_words.paper_type = '0';
     },
-    unfoldPaper(){
-      this.$refs.icon_paper.className = "el-icon-arrow-up"
+    paperTo1() {
+      this.sort_words.paper_type = '1';
     },
-    unfoldAuthor() {
-      this.$refs.icon_author.className = "el-icon-arrow-up"
+    paperTo2() {
+      this.sort_words.paper_type = '2';
     },
-    unfoldSort() {
-      this.$refs.icon_sort.className = "el-icon-arrow-up"
+    paperTo3() {
+      this.sort_words.paper_type = '3';
+    },
+    authorTo0() {
+      this.sort_words.first_author = '0';
+    },
+    authorTo1() {
+      this.sort_words.first_author = '1';
+    },
+    sortToTime() {
+      this.sort_words.sc_sort = 'time';
+    },
+    sortToCited() {
+      this.sort_words.sc_sort = 'cited';
+    },
+    loadInfo(){
+      var _this = this
+      this.$api.scholar.getInfo({
+        scholar_id: _this.scholar_id
+      }).then(res => {
+        if (res.code === 200){
+          _this.scholar_info = res.data
+        }else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
+      })
+    },
+    loadRelateSc(){
+      var _this = this
+      this.$api.scholar.getRelateSc({
+        scholar_id: _this.scholar_id,
+        sort_words: _this.sort_words
+      }).then(res => {
+        if (res.code === 200){
+          _this.result_list = res.data.result_list
+        }else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
+      })
+    },
+    loadCoAuthorsList(){
+      var _this = this
+      this.$api.scholar.getCoAuthors({
+        scholar_id: _this.scholar_id
+      }).then(res => {
+        if (res.code === 200) {
+          _this.co_authors_list = res.data
+        } else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
+      })
+    },
+    loadCoAffList() {
+      var _this = this
+      this.$api.scholar.getCoAffiliate({
+        scholar_id: _this.scholar_id
+      }).then(res => {
+        if (res.code === 200) {
+          _this.co_affiliate_list = res.data
+        } else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
+      })
     }
   },
   computed: {
     getYear() {
-      switch (this.sc_year) {
+      switch (this.sort_words.sc_year) {
         case "2020":
           return '2020'
         case '2019':
@@ -226,7 +367,7 @@ export default {
       }
     },
     getPaper() {
-      switch (this.paper_type){
+      switch (this.sort_words.paper_type){
         case "0":
           return '全部类型'
         case "1":
@@ -241,7 +382,7 @@ export default {
 
     },
     getAuthor() {
-      switch (this.first_author){
+      switch (this.sort_words.first_author){
         case "0":
           return '全部作者'
         case "1":
@@ -251,7 +392,7 @@ export default {
       }
     },
     getSort() {
-      switch (this.sc_sort){
+      switch (this.sort_words.sc_sort){
         case "time":
           return '按时间降序'
         case "cited":
@@ -260,6 +401,20 @@ export default {
           return '按时间降序'
       }
     }
+  },
+  watch: {
+    sort_words: {
+      handler: function () {
+        this.loadRelateDate()
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.loadInfo()
+    this.loadRelateSc()
+    this.loadCoAuthorsList()
+    this.loadCoAffList()
   }
 }
 </script>
@@ -373,6 +528,12 @@ export default {
   #achievement{
     border-bottom: 1px dotted #bfbfbf;
   }
+  .achievement-pie{
+    height: 166px;
+  }
+  .achievement-line{
+    height: 170px;
+  }
   #article-list{
     margin-top: 20px;
   }
@@ -388,6 +549,23 @@ export default {
     border: none;
     padding: 0;
     font-size: 12px;
+  }
+  .co-author-item{
+    margin-bottom: 10px;
+  }
+  .co-author-name{
+    color: #005cd9;
+  }
+  .co-author-name:hover{
+    cursor: pointer;
+  }
+  .co_affiliate_list span {
+    display: inline-block;
+    vertical-align: middle;
+    height: 16px;
+  }
+  .co_affiliate_line{
+    float: right;
   }
 </style>
 <style>

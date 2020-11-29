@@ -1,5 +1,7 @@
 import * as academic from './modules/academic'
+import * as scholar from './modules/scholar'
 
 export default {
-  academic
+  academic,
+  scholar
 }
