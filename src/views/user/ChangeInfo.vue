@@ -13,9 +13,6 @@
         </el-upload>
         <el-form  class="info" label-position="left"
             label-width="90px" v-loading="loading">
-            <el-form-item label="昵称：" class="table">
-                <el-input type="text" v-model="perInfo.nickName" auto-complete="off"></el-input>
-            </el-form-item>
             <el-form-item label="姓名：" class="table">
                 <el-input type="text" v-model="perInfo.realName" auto-complete="off"></el-input>
             </el-form-item>
@@ -116,7 +113,7 @@
             preserveInfo() {
                 const emailPattern =  /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 const phoneNumPattern = /^1[3|4|5|7|8][0-9]{9}$/;
-                if(!this.perInfo.userName||!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
+                if(!this.perInfo.nickName||!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
                     this.$message({
                         message: '信息不能为空',
                         type: 'warning'
@@ -138,7 +135,7 @@
                     var _this = this
                     this.$api.user.changeInfo({
                         userID: sessionStorage.getItem("userID"),
-                        userName: _this.perInfo.userName,
+                        nickName: _this.perInfo.nickName,
                         realName: _this.perInfo.realName,
                         email: _this.perInfo.email,
                         phoneNum: _this.perInfo.phoneNum
@@ -224,13 +221,13 @@
         margin-top: -22%;
         margin-left: 40%;
         width: 600px;
-        height: 430px;
+        height: 300px;
     }
     .pw {
-        margin-top: -5%;
+        margin-top: 0%;
         margin-left: 40%;
         width: 600px;
-        height: 430px;        
+        height: 300px;        
     }
     .table {
         height: 50px;
