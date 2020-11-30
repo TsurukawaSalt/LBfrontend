@@ -51,21 +51,19 @@
             Header,
         },
         mounted() {
-            this.$http.get(this.requestUrl+"/user/getPerInfo",{
-                params:{
-                    userID:sessionStorage.getItem("userID"),
-                }
+            var _this = this
+            this.$api.user.getPerInfo({
+                userID:sessionStorage.getItem("userID"),
             }).then(res=>{
-                if(res.data.success == 200){
-                    this.perInfo.userName= res.data.userName;
-                    this.perInfo.realName= res.data.realName;
-                    this.perInfo.email= res.data.email;
-                    this.perInfo.phoneNum= res.data.phoneNum;
-                    this.perInfo.url= res.data.url;
+                if(res.code === 200){
+                    _this.perInfo.userName= res.data.userName;
+                    _this.perInfo.realName= res.data.realName;
+                    _this.perInfo.email= res.data.email;
+                    _this.perInfo.phoneNum= res.data.phoneNum;
+                    _this.perInfo.url= res.data.url;
                 }
                 else{
-                    // alert(res.data.msg);
-                    this.$message.error(res.data.msg);
+                    _this.$message.error(res.msg);
                 }
             })
         },
@@ -86,19 +84,18 @@
         methods: {
             handleAvatarSuccess(res, file) {
                 this.perInfo.url = URL.createObjectURL(file.raw);
-                this.$http.post(this.requestUrl+"/user/changeImg",{
-                params:{
+                var _this = this
+                this.$api.user.changeImg({
                     userID:sessionStorage.getItem("userID"),
-                    url:this.perInfo.url
-                }
-            }).then(res=>{
-                if(res.data.success == 200){
-                    this.$message.success(res.data.msg);
-                }
-                else{
-                    this.$message.error(res.data.msg);
-                }
-            })
+                    url:_this.perInfo.url
+                }).then(res=>{
+                    if(res.code === 200){
+                        _this.$message.success(res.msg);
+                    }
+                    else{
+                        _this.$message.error(res.msg);
+                    }
+                })
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -134,20 +131,19 @@
                     });
                 }
                 else {
-                    this.$http.post(this.requestUrl+"/user/changeInfo",{
-                        params:{
-                            userID:sessionStorage.getItem("userID"),
-                            userName:this.perInfo.userName,
-                            realName:this.perInfo.realName,
-                            email:this.perInfo.email,
-                            phoneNum:this.perInfo.phoneNum
-                        }
+                    var _this = this
+                    this.$api.user.changeInfo({
+                        userID: sessionStorage.getItem("userID"),
+                        userName: _this.perInfo.userName,
+                        realName: _this.perInfo.realName,
+                        email: _this.perInfo.email,
+                        phoneNum: _this.perInfo.phoneNum
                     }).then(res=>{
-                        if(res.data.code == 200){
-                            this.$message.success(res.data.msg);
+                        if(res.code === 200){
+                            _this.$message.success(res.msg);
                         }
                         else{
-                            this.$message.error(res.data.msg);
+                            _this.$message.error(res.msg);
                         }
                     })
                 }
@@ -167,17 +163,16 @@
                 }
                 else {
                     var encryptionPasswd = this.$md5(this.user.passwd1);
-                    this.$http.post(this.requestUrl+"/user/changePasswd",{
-                        params:{
-                            userID:sessionStorage.getItem("userID"),
-                            passwd:encryptionPasswd
-                        }
+                    var _this = this
+                    this.$api.user.changPasswd({
+                        userID:sessionStorage.getItem("userID"),
+                        passwd:encryptionPasswd
                     }).then(res=>{
-                        if(res.data.success == 200){
-                            this.$message.success(res.data.msg);
+                        if(res.code === 200){
+                            _this.$message.success(res.msg);
                         }
                         else{
-                            this.$message.error(res.data.msg);
+                            _this.$message.error(res.msg);
                         }
                     })
                 }

@@ -60,48 +60,46 @@
           });
         }
         else{
-          var encryptionPasswd = this.$md5(this.RegisterForm.passwd1);
-          this.$http.post(this.requestUrl + "/user/register",
-            {
-                userName:this.RegisterForm.userName,
-                passwd:encryptionPasswd,
-                email:this.RegisterForm.email,
-                code:this.RegisterForm.code
+          var encryptionPasswd = this.$md5(this.RegisterForm.passwd1)
+          var _this = this
+          this.$api.user.postRegisterForm({
+              userName: _this.RegisterForm.userName,
+              passwd: encryptionPasswd,
+              email: _this.RegisterForm.email,
+              code: _this.RegisterForm.code
             }).then(res=>{ 
-                if (res.data.success == 200){
-                  sessionStorage.setItem("userName",this.RegisterForm.userName);
+                if (res.data.code === 200){
+                  sessionStorage.setItem("userName", _this.RegisterForm.userName);
                   sessionStorage.setItem("userID",res.data.userID);
-                  // alert(res.data.msg);
-                  this.$message({
-                      message: res.data.msg,
+                  _this.$message({
+                      message: res.msg,
                       type: 'success'
                   });
-                  this.$router.push("/homepage");
-                  }
+                    _this.$router.push("/homepage");
+                }
                 else{
-                  this.$message.error({
-                      message: res.data.msg,
+                  _this.$message.error({
+                      message: res.msg,
                       type: 'danger'
                   });
-                  this.$router.push("/register");
+                  _this.$router.push("/register");
                 }
           })
         }
       },
       sendEmail(){
-        this.$http.get(this.requestUrl+"/user/sendEmail",{
-          params:{
-            email:this.RegisterForm.email
-          }
+        var _this = this
+        this.$api.user.sendEmail({
+          email: _this.RegisterForm.email
         }).then(res=>{
-          if (!res.data.succes != 200) {
-            this.$message.error("发送失败");
-          }
-          else {
-            this.$message({
+          if (res.code === 200) {
+              _this.$message({
               message: '已发送，请接收',
               type: 'success'
-            });
+            });     
+          }
+          else {
+            _this.$message.error("发送失败");
           }
         })
       }

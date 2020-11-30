@@ -47,21 +47,19 @@
 //          this.$router.push("/homepage");
         }
         else {
-          this.$http.post(this.requestUrl+"/user/login",
-            {
-              userName:this.user.userName,
-              passwd:encryptionPasswd
-            }).then(res=>{
-            // if (this.user.passwd==3){
-              if (res.data.success == 200){
-              sessionStorage.setItem("userName",this.user.userName);
+          var _this = this
+          this.$api.user.postLoginForm ({
+            userName: _this.user.userName,
+            passwd: encryptionPasswd
+          }).then(res=>{
+            if (res.code === 200) {
+              sessionStorage.setItem("userName",_this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
-              this.$router.push("/test");
+              _this.$router.push("/test");
             }
-            else{
-              // alert("登录失败");
-              this.$message.error(res.data.msg);
-              this.$router.push("/login");
+            else {
+              _this.$message.error(res.msg);
+              _this.$router.push("/login");
             }
           })
         }
