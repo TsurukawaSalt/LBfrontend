@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <el-link class="title" :underline="false">
       Logo
     </el-link>
@@ -18,9 +18,10 @@
     </div>
     <div class="middle_block">
       <div class="left_block">
-        <el-row  v-for="(o) in this.academic_list" :key="o.title">
-          <el-link :underline="false">{{ o.title }}</el-link>
-          <el-link :underline="false">{{o.author}}{{o.year}}</el-link>
+        <el-row v-for="(o) in this.academic_list" :key="o.title">
+          <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+          <br>
+          <el-link class="list_author" :underline="false">{{o.author}}{{o.year}}</el-link>
         </el-row>
       </div>
       <div class="right_block">
@@ -69,6 +70,14 @@ export default {
 </script>
 
 <style scoped>
+  .page{
+    position: relative;
+    min-width: 940px;
+    //max-width: 1500px;
+    min-height: 800px;
+    //left: 10%;
+  }
+
   .title {
     position: absolute;
     top: 27%;
@@ -113,7 +122,9 @@ export default {
     padding: 0;
     position: absolute;
     top: 50%;
-    width: 100%;
+    left: 10%;
+    //right: 10%;
+    width: 80%;
     height: 20%;
   }
   .top_block .el-row{
@@ -139,7 +150,8 @@ export default {
     padding: 0;
     position: absolute;
     top: 70%;
-    width: 100%;
+    //left: 10%;
+    width: 80%;
     height: 100%;
     //display: flex;
   }
@@ -150,24 +162,33 @@ export default {
     position: absolute;
     //top: 80%;
     float: left;
-    width: 70%;
+    width: 100%;
     height: 100%;
   }
   .left_block .el-row {
-    margin-left: -250px;
+    left: -25%;
     margin-bottom: 20px;
   }
   .left_block .el-row .el-link {
+
+  }
+
+  .list_title {
     font-size: 20px;
   }
+  .list_author{
+    left: -5px;
+    font-size: 5px;
+  }
+
   .right_block {
-    background: white;
+    background: blue;
     //margin: -8px;
     padding: 0;
     position: absolute;
     //top: 80%;
     float: left;
-    margin-left: 70%;
+    margin-left: 80%;
     width: 30%;
     height: 100%;
   }
