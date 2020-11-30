@@ -2,7 +2,7 @@
   <div>
     <br>
     <div style="width: 1000px; margin: 0 auto">
-      <el-col span="17">
+      <el-col :span="17">
         <el-row>
           <div style="font-size: 35px; color: #0066cc; float: left;">
             {{academic.title}}
@@ -16,9 +16,9 @@
             </span>
             </td>
             <td style="float:left;">
-              <span v-for="author in academic.authors" :key="author"
-                    class="author">
-                {{author.name}}
+              <span v-for="expert in academic.experts" :key="expert"
+                    class="expert">
+                {{expert.name}}
               </span>
             </td>
           </tr>
@@ -30,7 +30,7 @@
             </td>
             <td style="float:left; text-align: left">
             <span style="white-space: normal">
-              {{academic.abstract}}
+              {{academic.summary}}
             </span>
             </td>
           </tr>
@@ -50,7 +50,7 @@
               <span class="tableleft" >年份：</span>
             </td>
             <td style="float:left;">
-              {{academic.year}}
+              {{academic.time}}
             </td>
           </tr>
 
@@ -59,7 +59,7 @@
               <span class="tableleft" >引用量：</span>
             </td>
             <td style="float:left;">
-              {{academic.n_citation}}
+              {{academic.cited_quantity}}
             </td>
           </tr>
           <tr>
@@ -67,24 +67,24 @@
               <span class="tableleft" >来源：</span>
             </td>
             <td style="float:left;">
-              {{academic.version}}
+              {{academic.origin}}
             </td>
           </tr>
         </table>
         <el-row style="margin-top: 20px">
-          <el-col offset="2" span="4">
+          <el-col :offset="2" :span="4">
             <el-button type="primary" plain>查看全文</el-button>
           </el-col>
-          <el-col span="4">
+          <el-col :span="4">
             <el-button type="primary" round>收藏</el-button>
           </el-col>
-          <el-col span="4">
+          <el-col :span="4">
             <el-button type="primary" round>分享</el-button>
           </el-col>
-          <el-col span="4">
+          <el-col :span="4">
             <el-button type="primary" round>举报</el-button>
           </el-col>
-          <el-col span="4">
+          <el-col :span="4">
             <el-button type="primary" round>认领</el-button>
           </el-col>
         </el-row>
@@ -92,7 +92,7 @@
         <p style="text-align: left;font-size: 25px">相关推荐</p>
         这里还没写，就用那个插件
       </el-col>
-      <el-col offset="2" span="5" align="left">
+      <el-col :offset="2" :span="5" align="left">
         这里是右侧<br>
 
         假装有广告
@@ -103,34 +103,47 @@
 </template>
 
 <script>
+
   export default {
     name: "AcademicShow",
     data() {
       return {
         academic: {
           title: "this is the title",
-          abstract: "摘要 this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
+          summary: "摘要 this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary",
+          experts: [
             {name: "学者1"},
             {name: "学者2"},
             {name: "学者3"}
           ],
           keywords:["fds","kdfIFD","段通风户籍"],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
+          link: "this is the link",
+          cited_quantity: 100,
+          time: 1990,
+          origin: "中国知网"
         },
       }
+    },
+    mounted() {
+      let vue = this;
+      this.$api.academic.getById(
+          {id:"123"}
+      ).then(
+          res =>{
+            console.log(res);
+            console.log(res.data);
+            vue.academic = res.data;
+          }
+      ).catch(err=>{console.log(err)})
     }
   }
 </script>
 
 <style scoped>
-  .author{
+  .expert{
     color: #0066cc;
   }
-  .author:hover{
+  .expert:hover{
     text-decoration: underline;
   }
   .keyword{

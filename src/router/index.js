@@ -49,6 +49,11 @@ Vue.use(VueRouter)
       path: '/scholarPage',
       name: 'ScholarPage',
       component: () => import('../views/scholar/ScholarPage')
+    },
+    {
+      path:'/admin',
+      name:'admin',
+      component: () => import('../views/admin/admin')
     }
 ]
 

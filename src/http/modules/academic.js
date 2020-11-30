@@ -9,6 +9,15 @@ export const getSearchResult = params => {
   })
 }
 
+// 根据id获取一篇文章
+export const getById = params =>{
+  return axios({
+    url:'/academic/getById',
+    method:'get',
+    params
+  })
+}
+
 // 获取搜索结果左侧导航栏的信息
 export const getNavResult = params => {
   return axios({
