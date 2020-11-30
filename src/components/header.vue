@@ -23,11 +23,11 @@ export default {
 <style scoped>
   .header {
     background-color: #2c3e50;
-    margin: -10px;
+    margin: -10px -10px 0 -10px;
     padding: 0;
-    //margin: 0;
-    //padding: 0;
-    //text-align: center;
+    /*//margin: 0;*/
+    /*//padding: 0;*/
+    /*//text-align: center;*/
   }
   .search {
     width: 40%;
