@@ -13,8 +13,8 @@
         </el-upload>
         <el-form  class="info" label-position="left"
             label-width="90px" v-loading="loading">
-            <el-form-item label="用户名：" class="table">
-                <el-input type="text" v-model="perInfo.userName" auto-complete="off"></el-input>
+            <el-form-item label="昵称：" class="table">
+                <el-input type="text" v-model="perInfo.nickName" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="姓名：" class="table">
                 <el-input type="text" v-model="perInfo.realName" auto-complete="off"></el-input>
@@ -31,6 +31,9 @@
         </el-form>
         <el-form  class="pw" label-position="left"
             label-width="90px" v-loading="loading">
+            <el-form-item label="旧密码：" class="table">
+                <el-input type="password" v-model="perInfo.oldPasswd" auto-complete="off"></el-input>
+            </el-form-item>
             <el-form-item label="新密码：" class="table">
                 <el-input type="password" v-model="perInfo.passwd1" auto-complete="off"></el-input>
             </el-form-item>
@@ -38,7 +41,7 @@
                 <el-input type="password" v-model="perInfo.passwd2" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item style="width: 75%">
-                <el-button type="primary" style="width: 40%" @click="changePasswd">保存</el-button>
+                <el-button type="primary" style="width: 40%" @click="preservePasswd">保存</el-button>
             </el-form-item> 
         </el-form>
     </div>
@@ -56,7 +59,7 @@
                 userID:sessionStorage.getItem("userID"),
             }).then(res=>{
                 if(res.code === 200){
-                    _this.perInfo.userName= res.data.userName;
+                    _this.perInfo.nickName= res.data.nickName;
                     _this.perInfo.realName= res.data.realName;
                     _this.perInfo.email= res.data.email;
                     _this.perInfo.phoneNum= res.data.phoneNum;
@@ -71,11 +74,12 @@
             return {
                 perInfo: {
                     userID : '',
-                    userName : '',
+                    nickName : '',
                     realName : '',
                     email : '',
                     phoneNum : '',
                     url : '',
+                    oldPasswd: '',
                     passwd1 : '',
                     passwd2 : ''
                 }
@@ -149,7 +153,7 @@
                 }
             },
             preservePasswd() {
-                if(!this.user.passwd1) {
+                if(!this.perInfo.oldPasswd || !this.perInfo.passwd1) {
                     this.$message({
                         message: '密码不能为空',
                         type: 'warning'
@@ -162,11 +166,13 @@
                     });
                 }
                 else {
-                    var encryptionPasswd = this.$md5(this.user.passwd1);
+                    var encryptionPasswd1 = this.$md5(this.perInfo.oldPasswd)
+                    var encryptionPasswd2 = this.$md5(this.perInfo.passwd1)
                     var _this = this
                     this.$api.user.changPasswd({
                         userID:sessionStorage.getItem("userID"),
-                        passwd:encryptionPasswd
+                        oldPasswd:encryptionPasswd1,
+                        newPasswd:encryptionPasswd2
                     }).then(res=>{
                         if(res.code === 200){
                             _this.$message.success(res.msg);

@@ -3,8 +3,8 @@
     <el-form  class="Register-container" label-position="left"
               label-width="80px" v-loading="loading">
       <h3 class="Register_title">注册</h3>
-      <el-form-item prop="account" label="账号">
-        <el-input type="text" v-model="RegisterForm.userName" auto-complete="off" placeholder="账号"></el-input>
+      <el-form-item prop="account" label="用户名">
+        <el-input type="text" v-model="RegisterForm.userName" auto-complete="off" placeholder="用户名"></el-input>
       </el-form-item>
       <el-form-item prop="checkPass" label="密码">
         <el-input type="password" v-model="RegisterForm.passwd1" auto-complete="off" placeholder="请输入您的密码"></el-input>
@@ -39,11 +39,13 @@
           email: '',
           code: '',
         },
+        verification: '',
         loading: false
       }
     },
     methods: {
       submit(){
+        const emailPattern =  /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
         if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
           // alert("您已登录");
           this.$message({
@@ -52,10 +54,40 @@
           });
 //          this.$router.push("/homepage");
         }
-        else if (this.RegisterForm.passwd1!==this.RegisterForm.passwd2){
+        else if(!this.RegisterForm.userName) {
+          this.$message({
+            message: '用户名不能为空',
+            type: 'warning'
+          });
+        }
+        else if(!this.RegisterForm.passwd1) {
+          this.$message({
+            message: '密码不能为空',
+            type: 'warning'
+          });
+        }
+        else if (this.RegisterForm.passwd1!==this.RegisterForm.passwd2) {
           // alert("两次密码不一致，请重新输入");
           this.$message({
             message: '两次密码不一致，请重新输入',
+            type: 'warning'
+          });
+        }
+        else if(!emailPattern.test(this.RegisterForm.email)) {
+            this.$message({
+                message: '请输入正确的邮箱',
+                type: 'warning'
+            });
+        }
+        else if(!this.RegisterForm.code) {
+          this.$message({
+            message: '请输入验证码',
+            type: 'warning'
+          });
+        }
+        else if(this.verification!==this.RegisterForm.code) {
+          this.$message({
+            message: '验证码错误',
             type: 'warning'
           });
         }
@@ -68,7 +100,7 @@
               email: _this.RegisterForm.email,
               code: _this.RegisterForm.code
             }).then(res=>{ 
-                if (res.data.code === 200){
+                if (res.code === 200){
                   sessionStorage.setItem("userName", _this.RegisterForm.userName);
                   sessionStorage.setItem("userID",res.data.userID);
                   _this.$message({
@@ -88,20 +120,31 @@
         }
       },
       sendEmail(){
-        var _this = this
-        this.$api.user.sendEmail({
-          email: _this.RegisterForm.email
-        }).then(res=>{
-          if (res.code === 200) {
-              _this.$message({
-              message: '已发送，请接收',
-              type: 'success'
-            });     
-          }
-          else {
-            _this.$message.error("发送失败");
-          }
-        })
+        const emailPattern =  /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        if(!emailPattern.test(this.RegisterForm.email)) {
+          this.$message({
+              message: '请输入正确的邮箱',
+              type: 'warning'
+          });
+        }
+        else {
+          var _this = this
+          this.$api.user.sendEmail({
+            email: _this.RegisterForm.email
+          }).then(res=>{
+            if (res.code === 200) {
+                _this.verification = res.verification
+                _this.$message({
+                message: '已发送',
+                type: 'success'
+              });     
+            }
+            else {
+              _this.$message.error("发送失败");
+            }
+          })          
+        }
+
       }
     }
 }

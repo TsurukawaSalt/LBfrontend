@@ -13,9 +13,9 @@
                 <el-col :span="48" class="font3">{{perInfo.userID}}</el-col>
             </el-row>
             <el-row class="row">
-                <el-col :span="5" class="font1">用户名</el-col>
+                <el-col :span="5" class="font1">昵称</el-col>
                 <el-col :span="3" class="font2">:</el-col>
-                <el-col :span="48" class="font3">{{perInfo.userName}}</el-col>
+                <el-col :span="48" class="font3">{{perInfo.nickName}}</el-col>
             </el-row>
             <el-row class="row">
                 <el-col :span="5" class="font1">姓名</el-col>
@@ -52,7 +52,7 @@
             }).then(res=>{
                 if(res.code === 200){
                     _this.perInfo.userID= sessionStorage.getItem("userID");
-                    _this.perInfo.userName= res.data.userName;
+                    _this.perInfo.nickName= res.data.nickName;
                     _this.perInfo.realName= res.data.realName;
                     _this.perInfo.email= res.data.email;
                     _this.perInfo.phoneNum= res.data.phoneNum;
@@ -68,7 +68,7 @@
 
                 perInfo: {
                     userID : '',
-                    userName : '',
+                    nickName : '',
                     realName : '',
                     email : '',
                     phoneNum : '',

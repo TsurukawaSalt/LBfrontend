@@ -19,7 +19,7 @@ export const postRegisterForm = params => {
 }
 
 // 邮箱验证
-export const getCoAuthors = params => {
+export const sendEmail = params => {
   return axios({
     url: '/user/sendEmail',
     method: 'get',
