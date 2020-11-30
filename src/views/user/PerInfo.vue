@@ -46,22 +46,20 @@
             Header,
         },
         mounted() {
-            this.$http.get(this.requestUrl+"/getPerInfo",{
-                params:{
-                    userID:sessionStorage.getItem("userID"),
-                }
+            var _this = this
+            this.$api.user.getPerInfo({
+                 userID:sessionStorage.getItem("userID"),
             }).then(res=>{
-                if(res.data.success){
-                    this.perInfo.userID= sessionStorage.getItem("userID");
-                    this.perInfo.userName= res.data.userName;
-                    this.perInfo.realName= res.data.realName;
-                    this.perInfo.email= res.data.email;
-                    this.perInfo.phoneNum= res.data.phoneNum;
-                    this.perInfo.url= res.data.url;
+                if(res.code === 200){
+                    _this.perInfo.userID= sessionStorage.getItem("userID");
+                    _this.perInfo.userName= res.data.userName;
+                    _this.perInfo.realName= res.data.realName;
+                    _this.perInfo.email= res.data.email;
+                    _this.perInfo.phoneNum= res.data.phoneNum;
+                    _this.perInfo.url= res.data.url;
                 }
                 else{
-                    // alert(res.data.msg);
-                    this.$message.error(res.data.msg);
+                    _this.$message.error(res.msg);
                 }
             })
         },
