@@ -1,10 +1,11 @@
 <template>
   <div>
     <br>
-    <div style="width: 1000px; margin: 0 auto">
+    <div style="width: 1000px; margin: 0 auto;">
       <el-col :span="17">
         <el-row>
-          <div style="font-size: 35px; color: #0066cc; float: left;">
+          <div @click="jumptoLink(academic.link)"
+               style="font-size: 35px; color: #0066cc; float: left;cursor: pointer; ">
             {{academic.title}}
           </div>
         </el-row>
@@ -15,7 +16,7 @@
               作者：
             </span>
             </td>
-            <td style="float:left;">
+            <td style="float:left;cursor: pointer; ">
               <span v-for="expert in academic.experts" :key="expert"
                     class="expert">
                 {{expert.name}}
@@ -38,7 +39,7 @@
             <td>
               <span class="tableleft" >关键词：</span>
             </td>
-            <td style="float:left;">
+            <td style="float:left;cursor: pointer; ">
             <span v-for="word in academic.keywords" :key="word"
                   class="keyword">
               {{word}}
@@ -70,10 +71,18 @@
               {{academic.origin}}
             </td>
           </tr>
+          <tr>
+            <td>
+              <span class="tableleft" >浏览量：</span>
+            </td>
+            <td style="float:left;">
+              {{academic.views}}
+            </td>
+          </tr>
         </table>
         <el-row style="margin-top: 20px">
           <el-col :offset="2" :span="4">
-            <el-button type="primary" plain>查看全文</el-button>
+            <el-button type="primary" plain @click="jumptoLink(academic.link)">查看全文</el-button>
           </el-col>
           <el-col :span="4">
             <el-button type="primary" round>收藏</el-button>
@@ -90,24 +99,33 @@
         </el-row>
         <hr color="#9c9e9c">
         <p style="text-align: left;font-size: 25px">相关推荐</p>
-        这里还没写，就用那个插件
+
+        <div v-for="(result_item,index) in relation_list" v-bind:key="index">
+          <academic-item :item = result_item></academic-item>
+        </div>
+
       </el-col>
       <el-col :offset="2" :span="5" align="left">
         这里是右侧<br>
 
         假装有广告
-        <el-image src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606065792082&di=7d187b0d11086ec9c4c70aa75dff916f&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fa4157de7d4305c8cd4747ccbd137e6301c0f0f5fc746-evgJqN_fw658"></el-image>
+        <el-image :src="img"></el-image>
+        <el-image :src="img"></el-image>
       </el-col>
     </div>
   </div>
 </template>
 
 <script>
-
+  import AcademicItem from "@/components/AcademicItem";
   export default {
     name: "AcademicShow",
+    components: {
+      AcademicItem
+    },
     data() {
       return {
+        img:require('../../../src/assets/adver.jpg'),
         academic: {
           title: "this is the title",
           summary: "摘要 this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary",
@@ -120,8 +138,27 @@
           link: "this is the link",
           cited_quantity: 100,
           time: 1990,
-          origin: "中国知网"
+          origin: "中国知网",
+          views:123
         },
+        relation_list:[],
+      }
+    },
+    methods:{
+      jumptoLink(url){
+        console.log(url)
+        if(window.open(url) === null){
+          window.location.herf = url;
+        }
+      },
+      getRelation(){
+        let vue = this;
+        this.$api.academic.getSearchResult().then(
+            res=>{
+              vue.relation_list = res.data.result_list
+              console.log(vue.relation_list)
+            }
+        )
       }
     },
     mounted() {
@@ -130,11 +167,10 @@
           {id:"123"}
       ).then(
           res =>{
-            console.log(res);
-            console.log(res.data);
             vue.academic = res.data;
           }
       ).catch(err=>{console.log(err)})
+      this.getRelation();
     }
   }
 </script>
