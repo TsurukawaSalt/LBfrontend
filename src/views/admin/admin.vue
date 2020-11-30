@@ -2,23 +2,23 @@
   <div>
     <Header></Header>
     <el-container>
-      <el-aside style="width: 15%">
+      <el-aside style="width: 14%">
         <el-menu default-active="1-1">
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-message"></i>认领门户</template>
-            <el-menu-item index="1-1" @click="showNum=toDealAppExperts">
+            <el-menu-item index="1-1" @click="changeState('1-1')">
               <template slot="title">待处理申请</template>
             </el-menu-item>
-            <el-menu-item index="1-2" @click="showApp=allAppExperts">
+            <el-menu-item index="1-2" @click="changeState('1-2')">
               <template slot="title">全部申请</template>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-message"></i>认领文献</template>
-            <el-menu-item index="2-1" @click="showNum=toDealAppAcademic">
+            <el-menu-item index="2-1" @click="changeState('2-1')">
               <template slot="title">待处理申请</template>
             </el-menu-item>
-            <el-menu-item index="2-2" @click="showApp=allAppAcademic">
+            <el-menu-item index="2-2" @click="changeState('2-2')">
               <template slot="title">全部申请</template>
             </el-menu-item>
           </el-submenu>
@@ -33,11 +33,7 @@
           </el-table-column>
           <el-table-column
                   prop="objectName"
-                  label="申请名">
-          </el-table-column>
-          <el-table-column
-                  prop="flag"
-                  label="类型">
+                  :label="openExperts?'学者名':'文献标题'">
           </el-table-column>
           <el-table-column
                   prop="time"
@@ -46,6 +42,9 @@
           <el-table-column
                   prop="result"
                   label="状态">
+            <template slot-scope="scope">
+              {{scope.row.result===0?'未审核':'已审核'}}
+            </template>
           </el-table-column>
           <el-table-column
                   prop="msg"
@@ -53,14 +52,34 @@
                   width="300">
           </el-table-column>
           <el-table-column width="80">
-            <el-button type="primary" plain>通过</el-button>
+            <template slot-scope="scope">
+              <el-button type="primary" plain @click="agreeSubmit(scope.row)">通过</el-button>
+            </template>
           </el-table-column>
           <el-table-column width="80">
-            <el-button type="danger" plain>拒绝</el-button>
+            <template slot-scope="scope">
+              <el-button type="danger" plain @click="reject(scope.row)">拒绝</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-main>
     </el-container>
+
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%">
+      <el-input
+              placeholder="请输入拒绝原因"
+              v-model="rejectReason"
+              clearable>
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="rejectSubmit">确 定</el-button>
+  </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -73,15 +92,56 @@
     },
     data(){
       return {
-        showNum:1,
         allAppExperts:[],
         toDealAppExperts:[],
         allAppAcademic:[],
         toDealAppAcademic:[],
-        showApp:[]
+        showApp:[],
+
+        openExperts:true,
+        dialogVisible:false,
+        rejectItem:null,
+        rejectReason:null,
       }
     },
     methods:{
+      reject(row){
+        this.dialogVisible = true;
+        this.rejectItem = row;
+      },
+      rejectSubmit(){
+        this.dialogVisible = false
+        console.log(this.rejectItem+this.rejectReason)
+        this.$message({
+          message: '已拒绝该申请',
+          type: 'warning'
+        });
+      },
+      agreeSubmit(row){
+        row;
+        this.$message({
+          message: '已同意该申请',
+          type: 'success'
+        });
+      },
+      changeState(id){
+        if(id === '1-1'){
+          this.showApp = this.toDealAppExperts
+          this.openExperts = true
+        }
+        if(id === '1-2'){
+          this.showApp = this.allAppExperts;
+          this.openExperts = true
+        }
+        if(id === '2-1'){
+          this.showApp = this.toDealAppAcademic
+          this.openExperts = false
+        }
+        if(id === '2-2'){
+          this.showApp = this.allAppAcademic
+          this.openExperts = false
+        }
+      },
       getAllApp(){
         this.getOneApp(true,1,10,1);
         this.getOneApp(false,1,10,1);
@@ -103,11 +163,10 @@
               vue.allAppExperts = res.data;
             if(isAll && flag === 0) {
               vue.allAppAcademic = res.data;
-              console.log(2)
             }
             if((isAll === false) && flag === 1) {
               vue.toDealAppExperts = res.data;
-              console.log(3)
+              vue.showApp = res.data;
             }
             if((isAll === false) && flag === 0)
               vue.toDealAppAcademic = res.data;
