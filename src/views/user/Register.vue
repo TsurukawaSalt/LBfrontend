@@ -14,7 +14,8 @@
       </el-form-item>
       <el-form-item prop="checkPass" label="邮箱">
         <el-input type="email" v-model="RegisterForm.email" auto-complete="off" placeholder="请输入您的邮箱" style="float:left;width: 160px"></el-input>
-        <el-button type="primary" style="float: right;font-size: 5px" @click="sendEmail">发送验证码</el-button>
+        <el-button type="primary" v-show="show" style="float: right;font-size: 5px;width: 95px" @click="sendEmail">发送验证码</el-button>
+        <el-button type="primary" v-show="!show" style="float: right;font-size: 5px;width: 95px" disabled="disabled">{{count}}</el-button>
       </el-form-item>
       <el-form-item prop="checkPass" label="验证码">
         <el-input type="text" v-model="RegisterForm.code" auto-complete="off" placeholder="请输入验证码" ></el-input>
@@ -39,6 +40,9 @@
           email: '',
           code: '',
         },
+        show: true,
+        count: '',
+        timer: null,
         verification: '',
         loading: false
       }
@@ -129,20 +133,34 @@
         }
         else {
           var _this = this
-          this.$api.user.sendEmail({
-            email: _this.RegisterForm.email
-          }).then(res=>{
-            if (res.code === 200) {
-                _this.verification = res.verification
-                _this.$message({
-                message: '已发送',
-                type: 'success'
-              });     
-            }
-            else {
-              _this.$message.error("发送失败");
-            }
-          })          
+          const TIME_COUNT = 60
+          if(!this.timer) {
+            this.$api.user.sendEmail({
+              email: _this.RegisterForm.email
+            }).then(res=>{
+              if (res.code === 200) {
+                  _this.verification = res.verification
+                  _this.$message({
+                  message: '已发送',
+                  type: 'success'
+                });
+              }
+              else {
+                _this.$message.error("发送失败");
+              }
+            })  
+            this.count = TIME_COUNT;
+            this.show = false;
+            this.timer = setInterval(() => {
+            if(this.count > 0 && this.count <= TIME_COUNT) {
+              this.count--;
+              } else {
+              this.show = true;
+              clearInterval(this.timer);
+              this.timer = null;
+              }
+            }, 1000)
+          }        
         }
 
       }
