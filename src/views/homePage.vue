@@ -18,9 +18,11 @@
     </div>
     <div class="middle_block">
       <div class="left_block">
+        <h4>热门文献</h4>
         <div class="list_left">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(0, 5)" :key="index">
             <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
             <br>
             <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
           </el-row>
@@ -28,13 +30,17 @@
         <div class="list_right">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(5, 10)" :key="index">
             <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
             <br>
             <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
           </el-row>
         </div>
       </div>
       <div class="right_block">
-
+        <h4>热门关键词</h4>
+        <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
+            <el-link class="keyword" :underline="false">{{o}}</el-link>
+        </el-row>
       </div>
     </div>
   </div>
@@ -47,7 +53,7 @@ export default {
     return {
       keyword:'',
       academic_list:[
-        {title:'123456', year:2020, author:'ABC', cited:195},
+        {title:'1234566666666666', year:2020, author:'ABC', cited:195},
         {title:'654321', year:2020, author:'ABC', cited:195},
         {title:'111111', year:2020, author:'ABC', cited:195},
         {title:'222222', year:2020, author:'ABC', cited:195},
@@ -58,6 +64,17 @@ export default {
         {title:'666666', year:2020, author:'ABC', cited:195},
         {title:'888888', year:2020, author:'ABC', cited:195},
         {title:'777777', year:2020, author:'ABC', cited:195},
+      ],
+      hot_keywords:[
+          'ABC',
+          'DEF',
+          'GHI',
+          'JKL',
+          'MNO',
+          'PQR',
+          'STU',
+          'VWX',
+          'YZ',
       ]
     }
   },
@@ -159,6 +176,7 @@ export default {
     padding: 0;
     position: absolute;
     top: 70%;
+    /*max-width: 1000px;*/
     /*left: 10%;*/
     width: 80%;
     height: 100%;
@@ -170,55 +188,81 @@ export default {
     padding: 0;
     position: absolute;
     /*top: 80%;*/
-    float: left;
+    left: 5%;
     width: 100%;
     height: 100%;
+    /*max-width: 1200px;*/
+  }
+  .left_block h4 {
+    position: absolute;
+    //background: #005cd9;
+    text-align: left;
+    top: -3%;
+    width: 20%;
+    left: 10%;
   }
   .left_block .el-row {
+    top: 5%;
     left: -25%;
-    margin-bottom: 20px;
   }
   .list_left {
     position: absolute;
     /*float: left;*/
     /*background-color: black;*/
+    text-align: left;
+    max-width: 400px;
     height: 70%;
-    width: 30%;
-    left: 15%;
+    width: 35%;
+    left: 18%;
   }
   .list_right {
     position: absolute;
     /*float: left;*/
     /*background-color: red;*/
+    text-align: left;
+    max-width: 400px;
     height: 70%;
-    width: 30%;
-    left: 45%;
+    width: 35%;
+    left: 62%;
   }
   .list_item {
-    background: #9c9e9c;
+    /*background: #9c9e9c;*/
     height: 15%;
   }
 
   .list_title {
-    background: #8c939d;
-    font-size: 20px;
+    /*background: #8c939d;*/
+    font-size: 18px;
     height: 60px;
   }
   .list_author{
-    background: #9fa19f;
-    left: -5px;
+    //background: #9fa19f;
+    left: 5px;
+    top: -10%;
     font-size: 5px;
+  }
+  .list_cited {
+    font-size: 7px;
+    float: right;
+    top: 27%;
   }
 
   .right_block {
-    background: blue;
+    //background: blue;
     /*margin: -8px;*/
     padding: 0;
     position: absolute;
     /*top: 80%;*/
     float: left;
-    margin-left: 80%;
+    /*margin-left: 90%;*/
+    left: 95%;
     width: 30%;
     height: 100%;
+  }
+  .keyword_list {
+    height: 45px;
+  }
+  .keyword {
+    font-size: 20px;
   }
 </style>
