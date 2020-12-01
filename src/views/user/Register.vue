@@ -167,7 +167,7 @@
     }
 }
 </script>
-<style>
+<style scoped>
   .Register-container {
     border-radius: 15px;
     background-clip: padding-box;

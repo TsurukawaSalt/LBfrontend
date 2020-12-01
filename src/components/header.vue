@@ -1,12 +1,14 @@
 <template>
-  <el-header class="header">
-    <el-input class="search" placeholder="请输入你要查找的内容" v-model="input">
-      <el-button slot="append" icon="el-icon-search"></el-button>
-    </el-input>
+  <div>
+    <el-header class="header">
+      <el-input class="h_search" placeholder="请输入你要查找的内容"  v-model="keyword" @keyup.enter.native="goSearch()">
+        <el-button slot="append" icon="el-icon-search" @click="goSearch()"></el-button>
+      </el-input>
 
-    <el-link class="r_con" :underline="false">登录</el-link>
-    <el-link class="r_con" :underline="false">注册</el-link>
-  </el-header>
+      <el-link class="r_con" :underline="false">登录</el-link>
+      <el-link class="r_con" :underline="false">注册</el-link>
+    </el-header>
+  </div>
 </template>
 
 <script>
@@ -14,8 +16,22 @@ export default {
   name: "header",
   data(){
     return {
-      input:'',
+      keyword:'',
     }
+  },
+  methods:{
+    goSearch(){
+      if (!this.keyword) {
+        alert("搜索内容为空")
+      } else {
+        this.$router.push({
+          name:"AcademicSearch",
+          params:{
+            keyword:this.keyword
+          }
+        })
+      }
+    },
   }
 }
 </script>
@@ -29,7 +45,7 @@ export default {
     /*//padding: 0;*/
     /*//text-align: center;*/
   }
-  .search {
+  .h_search {
     width: 40%;
     margin: 10px;
   }
