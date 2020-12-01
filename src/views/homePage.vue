@@ -18,11 +18,20 @@
     </div>
     <div class="middle_block">
       <div class="left_block">
-        <el-row v-for="(o) in this.academic_list" :key="o.title">
-          <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
-          <br>
-          <el-link class="list_author" :underline="false">{{o.author}}{{o.year}}</el-link>
-        </el-row>
+        <div class="list_left">
+          <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(0, 5)" :key="index">
+            <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <br>
+            <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
+          </el-row>
+        </div>
+        <div class="list_right">
+          <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(5, 10)" :key="index">
+            <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <br>
+            <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
+          </el-row>
+        </div>
       </div>
       <div class="right_block">
 
@@ -73,9 +82,9 @@ export default {
   .page{
     position: relative;
     min-width: 940px;
-    //max-width: 1500px;
+    /*max-width: 1500px;*/
     min-height: 800px;
-    //left: 10%;
+    /*left: 10%;*/
   }
 
   .title {
@@ -117,13 +126,13 @@ export default {
     color: white;
   }
   .top_block {
-    //background: blue;
+    /*background: blue;*/
     margin: -8px;
     padding: 0;
     position: absolute;
     top: 50%;
     left: 10%;
-    //right: 10%;
+    /*right: 10%;*/
     width: 80%;
     height: 20%;
   }
@@ -145,22 +154,22 @@ export default {
   }
 
   .middle_block {
-    //background: red;
+    /*background: red;*/
     margin: -8px;
     padding: 0;
     position: absolute;
     top: 70%;
-    //left: 10%;
+    /*left: 10%;*/
     width: 80%;
     height: 100%;
-    //display: flex;
+    /*display: flex;*/
   }
   .left_block {
-    //background: black;
-    //margin: -8px;
+    /*background: black;*/
+    /*margin: -8px;*/
     padding: 0;
     position: absolute;
-    //top: 80%;
+    /*top: 80%;*/
     float: left;
     width: 100%;
     height: 100%;
@@ -169,24 +178,44 @@ export default {
     left: -25%;
     margin-bottom: 20px;
   }
-  .left_block .el-row .el-link {
-
+  .list_left {
+    position: absolute;
+    /*float: left;*/
+    /*background-color: black;*/
+    height: 70%;
+    width: 30%;
+    left: 15%;
+  }
+  .list_right {
+    position: absolute;
+    /*float: left;*/
+    /*background-color: red;*/
+    height: 70%;
+    width: 30%;
+    left: 45%;
+  }
+  .list_item {
+    background: #9c9e9c;
+    height: 15%;
   }
 
   .list_title {
+    background: #8c939d;
     font-size: 20px;
+    height: 60px;
   }
   .list_author{
+    background: #9fa19f;
     left: -5px;
     font-size: 5px;
   }
 
   .right_block {
     background: blue;
-    //margin: -8px;
+    /*margin: -8px;*/
     padding: 0;
     position: absolute;
-    //top: 80%;
+    /*top: 80%;*/
     float: left;
     margin-left: 80%;
     width: 30%;
