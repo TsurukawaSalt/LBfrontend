@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <Header status="2"></Header>
     <el-link class="title" :underline="false">
       Logo
     </el-link>
@@ -21,7 +22,7 @@
         <h4>热门文献</h4>
         <div class="list_left">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(0, 5)" :key="index">
-            <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
             <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
             <br>
             <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
@@ -29,7 +30,7 @@
         </div>
         <div class="list_right">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(5, 10)" :key="index">
-            <el-link class="list_title" :underline="false">{{ o.title }}</el-link>
+            <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
             <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
             <br>
             <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
@@ -39,7 +40,7 @@
       <div class="right_block">
         <h4>热门关键词</h4>
         <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
-            <el-link class="keyword" :underline="false">{{o}}</el-link>
+            <el-link class="keyword" :underline="false" @click="goSearch(o)">{{o}}</el-link>
         </el-row>
       </div>
     </div>
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+import Header from "@/components/header";
 export default {
   name:"homePage",
   data() {
@@ -79,7 +81,10 @@ export default {
     }
   },
   methods: {
-    goSearch(){
+    goSearch(keyword){
+      if (keyword !== null){
+        this.keyword = keyword
+      }
       if (!this.keyword) {
         alert("搜索内容为空")
       } else {
@@ -91,6 +96,17 @@ export default {
         })
       }
     },
+    goArticle(url){
+      this.$router.push({
+        name:"AcademicShow",
+        params:{
+          id:url
+        }
+      })
+    }
+  },
+  components:{
+    Header,
   }
 }
 </script>

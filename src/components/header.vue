@@ -1,12 +1,24 @@
 <template>
   <div>
-    <el-header class="header">
+    <el-header v-if="this.status == 1" class="header_1">
       <el-input class="h_search" placeholder="请输入你要查找的内容"  v-model="keyword" @keyup.enter.native="goSearch()">
         <el-button slot="append" icon="el-icon-search" @click="goSearch()"></el-button>
       </el-input>
+      <div class="r_con">
+        <el-link v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-link>
+        <el-link v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-link>
+        <el-link v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-link>
+        <el-link v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-link>
+      </div>
+    </el-header>
 
-      <el-link class="r_con" :underline="false">登录</el-link>
-      <el-link class="r_con" :underline="false">注册</el-link>
+    <el-header v-if="this.status == 2" class="header_2">
+      <div class="r_con">
+        <el-link v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-link>
+        <el-link v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-link>
+        <el-link v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-link>
+        <el-link v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-link>
+      </div>
     </el-header>
   </div>
 </template>
@@ -17,6 +29,15 @@ export default {
   data(){
     return {
       keyword:'',
+      isLogin:false,
+      userName:'',
+    }
+  },
+  props: {
+    status: {
+      // type: String,
+      required: false,
+      default: "1",
     }
   },
   methods:{
@@ -32,26 +53,65 @@ export default {
         })
       }
     },
+    goUser() {
+      this.$router.push({
+        name:"PerInfo"
+      })
+    },
+    goLogin() {
+      this.$router.push({
+        name:"Login"
+      })
+    },
+    goRegister() {
+      this.$router.push({
+        name:"Register"
+      })
+    },
+    reLogin() {
+      sessionStorage.clear()
+      location.reload()
+    }
+  },
+  mounted() {
+    if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
+      this.isLogin = true
+      this.userName = sessionStorage.getItem("userName")
+    }
   }
 }
 </script>
 
 <style scoped>
-  .header {
+  .header_1 {
     background-color: #2c3e50;
     margin: -10px -10px 0 -10px;
     padding: 0;
-    /*//margin: 0;*/
-    /*//padding: 0;*/
-    /*//text-align: center;*/
   }
   .h_search {
     width: 40%;
     margin: 10px;
   }
-  .r_con {
-    margin: 20px;
-    float: right;
 
+  .r_con {
+    position: absolute;
+    top: 19px;
+    right: 4%;
+  }
+  .r_con_user {
+    margin-right: 15px;
+  }
+  .r_con_reLogin {
+    left: 10%;
+  }
+  .r_con_login {
+    margin-right: 10px;
+  }
+  .r_con_Register {
+  }
+
+  .header_2 {
+    margin: -10px -10px 0 -10px;
+    padding: 0;
   }
 </style>
