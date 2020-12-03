@@ -1,20 +1,24 @@
 <template>
   <el-card class="card-body">
+    <!--title属性-->
     <div class="nav-title" @click="changeHide">
       <i ref="icon" class="el-icon-arrow-up" style="float: right" id="icon"></i>
       {{ this.filter_item.title }}
     </div>
+    <!--list属性-->
     <div class="nav-list" v-if="isVisible">
-      <div class="nav-list-item" v-for="(item, index) in this.showList" :key="index" @click="clickFilter(item.value)">
+      <div class="nav-list-item is-hover" v-for="(item, index) in this.showList" :key="index" @click="clickFilter(item.value)">
         <span>{{ item.value }}</span>
         <span id="item-nums">( {{ item.nums }} )</span>
       </div>
     </div>
+    <!--选中某一项-->
     <div class="nav-select" v-if="isClicked">
       <span class="nav-select-item">{{ this.select_item }}</span>
-      <i class="el-icon-close" @click="clickCancel"></i>
+      <i class="el-icon-close is-hover" @click="clickCancel"></i>
     </div>
-    <div ref="show-more" class="list-show" v-if="isVisible && (listLength > 3)" @click="changeShowNums">{{ showMore === false ? "+" : "-" }}</div>
+    <!--+-按键-->
+    <div ref="show-more" class="list-show  is-hover" v-if="isVisible && (listLength > 3)" @click="changeShowNums">{{ showMore === false ? "+" : "-" }}</div>
   </el-card>
 </template>
 
@@ -155,5 +159,8 @@ export default {
   .el-icon-close{
     padding-top: 10px;
     float: right;
+  }
+  .is-hover:hover{
+    cursor: pointer;
   }
 </style>

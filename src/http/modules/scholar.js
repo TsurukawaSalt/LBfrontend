@@ -35,3 +35,21 @@ export const getCoAffiliate = params => {
     params
   })
 }
+
+// 关注科研门户
+export const focusScholar = params => {
+  return axios({
+    url: '/scholar/focusScholar',
+    method: 'get',
+    params
+  })
+}
+
+// 认证科研门户
+export const authenScholar = data => {
+  return axios({
+    url: '/scholar/authenScholar',
+    method: 'post',
+    data
+  })
+}

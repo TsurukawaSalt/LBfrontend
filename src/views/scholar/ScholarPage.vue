@@ -5,12 +5,22 @@
         <!--科研人员信息-->
         <div id="author-info">
           <div class="person-image">
-            <div class="person-portrait"></div>
-            <div class="person-authen">
-              <el-button type="small">我要认证</el-button>
+            <!--头像-->
+            <div class="person-portrait">
+              <div class="person-avatar-wr">
+                <el-avatar class="person-avatar" :size="100" :src="sourceUrl"></el-avatar>
+              </div>
             </div>
-            <div class="person-focus">
-              <el-button type="small">我要关注</el-button>
+            <!--认证按钮-->
+            <div class="person-authen is-hover" v-show="!is_authen">
+              <p class="authen-button" @click="handleAuthen">我要认证</p>
+            </div>
+            <!--关注按钮-->
+            <div class="person-focus is-hover">
+              <p class="focus-button" @click="handleFocus" v-show="!is_focus">关注</p>
+              <p class="unfocus-button" @click="handleFocus" v-show="is_focus">已关注
+              <i class="el-icon-check"></i>
+              </p>
             </div>
           </div>
           <div class="person-baseinfo">
@@ -103,9 +113,22 @@
               </div>
               <!--文献列表-->
               <div id="content-result">
-                <div ></div>
-                <div v-for="(result_item,index) in result_list" v-bind:key="index">
-                  <academic-item :item = result_item></academic-item>
+                <div class="result-list">
+                  <div v-for="(result_item,index) in result_list" v-bind:key="index">
+                    <academic-item :item = result_item></academic-item>
+                  </div>
+                </div>
+                <div class="result-page" v-show="total_rs>10">
+                  <el-pagination
+                      background
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page.sync="currentPage"
+                      :page-size="10"
+                      layout="prev, pager, next, jumper"
+                      :total=total_rs
+                      class="page">
+                  </el-pagination>
                 </div>
               </div>
             </div>
@@ -115,11 +138,16 @@
         <div id="main-content-right">
           <!--合作学者展示-->
           <div class="co-author-wr">
+            <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="total_co_authors>4">更多</i>
             <h3>合作学者</h3>
+
             <div class="co-author-list">
-              <div v-for="(item, index) in co_authors_list" :key="index">
+              <div v-for="(item, index) in co_authors_list_show" :key="index">
+                <div class="co-author-avatar is-hover"  @click="toScholarPage(item.scholar_id)">
+                  <el-avatar shape="square" :size="50" :src="sourceUrl"></el-avatar>
+                </div>
                 <div class="co-author-item">
-                  <div class="co-author-name">{{ item.name }}</div>
+                  <div class="co-author-name" @click="toScholarPage(item.scholar_id)">{{ item.name }}</div>
                   <div class="co-author-affiliate">{{ item.affiliate }}</div>
                 </div>
               </div>
@@ -153,6 +181,9 @@ export default {
   },
   data() {
     return {
+      user_id: '0',
+      is_authen: false,
+      is_focus: true,
       scholar_id: '0',
       scholar_info: {
         name: '张三',
@@ -190,6 +221,7 @@ export default {
           affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
         }
       ],
+      co_authors_list_show:[],
       co_affiliate_list: [
         {
           aff_id: '13451',
@@ -202,6 +234,7 @@ export default {
           count: 42654
         }
       ],
+      co_affiliate_list_show: [],
       result_list:[
         {
           title : "1. this is the title",
@@ -265,10 +298,45 @@ export default {
         paper_type: '0',
         first_author : '0',
         sc_sort: 'time',
-      }
+      },
+      currentPage: 1,
+      total_rs: 100,
+      total_co_authors: 5,
+      total_co_affs: 5,
+      sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
     }
   },
   methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    toScholarPage(scholar_id) {
+      this.scholar_id = scholar_id
+    },
+    handleAuthen(){
+      // var _this = this
+      this.is_authen = !this.is_authen
+    },
+    handleFocus() {
+      // var _this = this
+      // this.$api.scholar.focusScholar({
+      //   scholar_id: _this.scholar_id,
+      //   user_id: _this.user_id
+      // }).then(res=>{
+      //   if (res.code === 200){
+      //     _this.is_focus = res.data.is_focus
+      //   } else {
+      //     _this.$message({
+      //       message: res.message,
+      //       type: 'error'
+      //     })
+      //   }
+      // })
+      this.is_focus = !this.is_focus
+    },
     paperTo0() {
       this.sort_words.paper_type = '0';
     },
@@ -312,10 +380,12 @@ export default {
       var _this = this
       this.$api.scholar.getRelateSc({
         scholar_id: _this.scholar_id,
-        sort_words: _this.sort_words
+        sort_words: _this.sort_words,
+        page: _this.currentPage
       }).then(res => {
         if (res.code === 200){
           _this.result_list = res.data.result_list
+          // _this.total = res.data.total
         }else {
           _this.$message({
             message: res.message,
@@ -330,7 +400,14 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === 200) {
-          _this.co_authors_list = res.data
+          _this.co_authors_list = res.data.result_list
+          // _this.total_co_authors = res.data.total_rs
+          _this.total_co_authors = 2
+          if (_this.total_co_authors > 4){
+            _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
+          } else{
+            _this.co_authors_list_show = _this.co_authors_list
+          }
         } else {
           _this.$message({
             message: res.message,
@@ -345,7 +422,8 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === 200) {
-          _this.co_affiliate_list = res.data
+          _this.co_affiliate_list = res.data.result_list
+          // _this.total_co_affs = res.data.total_rs
         } else {
           _this.$message({
             message: res.message,
@@ -403,14 +481,49 @@ export default {
     }
   },
   watch: {
+    is_focus: function () {
+      // 监听：关注状态
+    },
+    is_authen: function () {
+      // 监听：认证状态
+    },
     sort_words: {
+      // 监听：过滤关键词
       handler: function () {
-        this.loadRelateDate()
+        this.loadRelateSc()
       },
       deep: true
+    },
+    currentPage: function () {
+      // 监听：页码
+      var _this = this
+      this.$api.scholar.getRelateSc({
+        scholar_id: _this.scholar_id,
+        sort_words: _this.sort_words,
+        page: _this.currentPage
+      }).then(res=>{
+        if(res.code === 200){
+          _this.result_list = res.data.result_list
+        }else{
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
+      })
+    },
+    scholar_id: function () {
+      this.currentPage = 1
+      this.loadInfo()
+      this.loadRelateSc()
+      this.loadCoAuthorsList()
+      this.loadCoAffList()
     }
   },
   mounted() {
+    this.user_id = sessionStorage.getItem('userID')
+    this.scholar_id = this.$route.params.scholar_id
+    this.currentPage = 1
     this.loadInfo()
     this.loadRelateSc()
     this.loadCoAuthorsList()
@@ -443,9 +556,10 @@ export default {
     width: 370px;
   }
   .person-image{
+    width: 125px;
     float: left;
-    width: 200px;
     text-align: center;
+    margin-right: 20px;
     /*min-height: 250px;*/
   }
   .person-portrait{
@@ -454,13 +568,48 @@ export default {
     width: 112px;
     height: 112px;
   }
+  .person-avatar{
+    border: 6px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+  }
+  .person-authen,.person-focus{
+    width: 90px;
+    display: inline-block;
+  }
   .person-authen{
-    /*display: inline-block;*/
+    display: inline-block;
+  }
+  .authen-button{
+    display: inline-block;
+    color: #ffffff;
+    height: 34px;
+    width: 94px;
+    line-height: 34px;
+    font-size: 14px;
+    background-color: #0066cc;
+    border-radius: 2px;
+    text-align: center;
+    margin: 0;
   }
   .person-focus{
-    /*position: relative;*/
-    /*display: inline-block;*/
-    margin-top: 10px;
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    /*height: 23px;*/
+  }
+  .focus-button{
+    color: #06c;
+    border: 1px solid #87bcf0;
+    border-radius: 23px;
+    height: 23px;
+    line-height: 23px;
+  }
+  .unfocus-button{
+    height: 23px;
+    line-height: 23px;
+    color: #999;
+    border: 1px solid #e5e5e5;
+    border-radius: 23px;
   }
   .person-baseinfo{
     float: left;
@@ -550,8 +699,18 @@ export default {
     padding: 0;
     font-size: 12px;
   }
+  .co-author-wr{
+    border-bottom: 1px dotted #bfbfbf;
+    padding-bottom: 15px;
+  }
+  .co-author-avatar{
+    display: inline-block;
+  }
   .co-author-item{
     margin-bottom: 10px;
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: top;
   }
   .co-author-name{
     color: #005cd9;
@@ -566,6 +725,16 @@ export default {
   }
   .co_affiliate_line{
     float: right;
+  }
+  .result-page{
+    width: 610px;
+  }
+  .page{
+    margin-top: 16px;
+    text-align: center;
+  }
+  .is-hover:hover{
+    cursor: pointer;
   }
 </style>
 <style>
