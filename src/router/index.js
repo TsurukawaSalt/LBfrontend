@@ -17,12 +17,27 @@ Vue.use(VueRouter)
     {
       path: '/perInfo',
       name:'PerInfo',
-      component: () => import('../views/user/PerInfo.vue')
+      component: () => import('../views/user/PerInfo.vue'),
     },
     {
       path: '/changeInfo',
       name:'ChangeInfo',
       component: () => import('../views/user/ChangeInfo.vue')
+    },
+    {
+      path: '/myStar',
+      name:'MyStar',
+      component: () => import('../views/user/MyStar.vue')
+    },
+    {
+      path: '/myFocus',
+      name:'MyFocus',
+      component: () => import('../views/user/MyFocus.vue')
+    },
+    {
+      path: '/myHistory',
+      name:'MyHistory',
+      component: () => import('../views/user/MyHistory.vue')
     },
     {
       path: '/test',
