@@ -9,11 +9,11 @@
             <i class="el-icon-user"></i>
             <template slot="title">个人信息</template>
         </el-menu-item>
-        <el-menu-item index="/myStar" @click="gotoMyStar">
+        <el-menu-item index="/myCollection" @click="gotoMyCollection">
             <i class="el-icon-star-off"></i>
             <template slot="title">我的收藏</template>
         </el-menu-item>
-        <el-menu-item index="/myFocus" @click="gotoMyFocus">
+        <el-menu-item index="/myFollow" @click="gotoMyFollow">
             <i class="el-icon-collection-tag"></i>
             <template slot="title">我的关注</template>
         </el-menu-item>
@@ -43,11 +43,11 @@ export default {
       gotoPerInfo() {
           this.$router.push({path: '/perInfo'});
       },
-      gotoMyStar() {
-          this.$router.push({path: '/myStar'});
+      gotoMyCollection() {
+          this.$router.push({path: '/myCollection'});
       },
-      gotoMyFocus() {
-          this.$router.push({path: '/myFocus'});
+      gotoMyFollow() {
+          this.$router.push({path: '/myFollow'});
       },
       gotoMyHistory() {
           this.$router.push({path: '/myHistory'});

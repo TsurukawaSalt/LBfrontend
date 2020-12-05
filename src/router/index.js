@@ -25,14 +25,14 @@ Vue.use(VueRouter)
       component: () => import('../views/user/ChangeInfo.vue')
     },
     {
-      path: '/myStar',
-      name:'MyStar',
-      component: () => import('../views/user/MyStar.vue')
+      path: '/myCollection',
+      name:'MyCollection',
+      component: () => import('../views/user/MyCollection.vue')
     },
     {
-      path: '/myFocus',
-      name:'MyFocus',
-      component: () => import('../views/user/MyFocus.vue')
+      path: '/myFollow',
+      name:'MyFollow',
+      component: () => import('../views/user/MyFollow.vue')
     },
     {
       path: '/myHistory',

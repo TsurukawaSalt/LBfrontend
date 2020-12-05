@@ -6,20 +6,17 @@
             <Aside>
             </Aside>
             <el-main>
-                <div style="text-align:left;font-size:20px">浏览历史</div>
+                <div style="text-align:left;font-size:20px">我的关注</div>
                 <ul class="collection-sublist">
-                    <li v-for="(item,index) in history_list" :key="index">
+                    <li v-for="(item,index) in follow_list" :key="index">
                         <div>
-                            <div class="collect-detail-left">
-                                {{item.time}}
-                            </div>
-                            <span class="collection-dir"> 
+                            <span class="collection-dir">
                                 <span class="subtitle">
-                                    {{item.title}}
-                                </span>                          
+                                    {{item.name}}
+                                </span>                                
                             </span>
                             <div class="collect-detail-right">
-                                <el-button class="delHistory" @click="delHistory(index)">删除</el-button>
+                                <el-button class="delFollow" @click="delFollow(index)">取消关注</el-button>
                             </div>
                         </div>
                     </li>
@@ -32,7 +29,7 @@
     import Header from "@/components/header.vue";
     import Aside from "@/components/UserAside.vue";
     export default {
-        name: "MyHistory",
+        name: "MyFollow",
         components: {
             Header,
             Aside,
@@ -42,35 +39,31 @@
         },
         data() {
             return {
-                history_list:[
+                follow_list:[
                     {
                         id:1,
-                        title:"title1",
-                        time:"2020.12.5"
+                        name:"张"
                     },
                     {
                         id:2,
-                        title:"title2",
-                        time:"2020.12.4"
+                        name:"王"
                     },
                     {
                         id:3,
-                        title:"title3",
-                        time:"2020.12.3",
+                        name:"李"
                     },
                     {
                         id:4,
-                        title:"title4",
-                        time:"2020.12.2"
+                        name:"天"
                     }                               
-                ]                
+                ]
             };
         },
         methods: {
-             delHistory(index) {
-                this.$message('删除成功');
-                this.history_list.splice(index,1);                
-            }        
+            delFollow(index) {
+                this.$message('取消关注成功');
+                this.follow_list.splice(index,1);                
+            }
         }
     }
 </script>
@@ -113,33 +106,23 @@
         display: inline;
         cursor: pointer;
     }
-    .collection-sublist li .collect-detail-left {
-        position: absolute;
-        left: 10px;
-        width: 100px;
-        height: 100%;
-        top: 0px;
-        text-align: left;
-        line-height: 52px;
-        padding-right: 18px;
-    }
     .collection-sublist li .collect-detail-right {
         position: absolute;
         right: 0;
         width: 150px;
         height: 100%;
-        top: 3px;
+        top: 0px;
         text-align: right;
         line-height: 52px;
         padding-right: 18px;
     }
-    .delHistory {
+    .delFollow {
         border: 1px solid #999;
-        color: white;
-        background-color: red;
+        color: #999;
+        background-color: #fff;
         border-radius: 16px;
     }
-    .delHistory:hover {
+    .delFollow:hover {
         border: 1px solid red;
         color: red;
         background-color: #fff;
