@@ -29,7 +29,8 @@
       <!-- source操作部分 -->
       <div class="sc_ext">
         <!-- 收藏/引用/批量引用/（免费下载）-->
-        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()">收藏</el-button>
+        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-show="!item.is_favor">收藏</el-button>
+        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="item.is_favor">取消收藏</el-button>
         <el-button class="ext-button" id="button-quote" type="mini" round icon="el-icon-share" @click="quote()">引用</el-button>
         <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>
         <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="download()">免费下载</el-button>
@@ -41,14 +42,16 @@
   export default {
     name: "AcademicItem",
     props: {
-      item: {
+      c_sc: {
         type: Object,
         default: null
       }
     },
     data() {
       return {
+        item: {
 
+        }
       }
     },
     methods: {
@@ -70,8 +73,18 @@
         console.log("跳转来源网站详情页！")
       },
       favor() {
-        console.log("收藏文章！");
+        console.log("收藏/取消收藏文章！");
+        var _this = this
+        this.$api.academic.favorSc({
+          document_id: _this.item.id,
+          user_id: sessionStorage.getItem("userID")
+        }).then(res => {
+          if (res.code === 200){
+            _this.item.is_favor = res.data.is_favor
+          }
+        })
         document.getElementById("button-favor").blur();
+
       },
       quote() {
         console.log("引用文章！");
@@ -85,6 +98,9 @@
         console.log("免费下载！");
         document.getElementById("button-download").blur();
       }
+    },
+    mounted() {
+      this.item = this.c_sc
     }
   }
 </script>

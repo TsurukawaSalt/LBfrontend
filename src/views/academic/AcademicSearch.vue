@@ -5,6 +5,7 @@
         这里是右侧
       </div>
       <div class="content-left">
+        <!-- filter -->
         <div class="content-left-nav">
           <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
             <filter-item
@@ -14,6 +15,7 @@
                 v-on:cancelSelect="handleCancel"></filter-item>
           </div>
         </div>
+        <!-- 搜索结果 -->
         <div class="content-left-rs">
           <div class="rs-list">
             <div class="toolbar">
@@ -22,8 +24,8 @@
                     placement="top-start"
                     width="70"
                     trigger="hover">
-                  <div class="sort-item" @click="sortByRelative()" >按相关性</div>
-                  <div class="sort-item" @click="sortByCited()">按被引量</div>
+                  <div class="sort-item" @click="sortByRelative" >按相关性</div>
+                  <div class="sort-item" @click="sortByCited">按被引量</div>
                   <div class="sort-item" @click="sortByTime">按时间降序</div>
                   <el-button class="button-sort" slot="reference">
                     <i class="el-icon-sort">按{{ this.getSortMethod }}</i>
@@ -38,6 +40,7 @@
           </div>
         </div>
         <div style="clear: both"></div>
+        <!-- 页码 -->
         <p class="page">
           <el-pagination
               background
@@ -67,6 +70,7 @@
       return {
         result_list:[
           {
+            id: "45145141",
             title : "1. this is the title",
             abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
                 "this is the abstract this is the abstract this is the abstract this is the abstract",
@@ -78,7 +82,8 @@
             source: "this is the source",
             n_citation: 100,
             year: 1990,
-            version: "中国知网"
+            version: "中国知网",
+            is_favor: false
           },
           {
             title : "这是标题",
@@ -123,216 +128,159 @@
             version: "中国知网"
           },
         ],
-        result_length: 0,
+        total_rs: 1000,// 搜索结果数目，非当前页面展示数量
+        result_length: 0,// 当前页的显示数量
         filter_list: [
           {
             filter_name: 'year',
             title: "时间",
-            list: [
+            filter_itemList: [
               {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
+                content: "fbadf",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 3,
-                value: 2000,
-                nums: 300,
+                content: "adfbadfb",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 4,
-                value: 2000,
-                nums: 200
+                content: "ntaan",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 5,
-                value: 2000,
-                nums: 300,
+                content: "artgna",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 6,
-                value: 2000,
-                nums: 200
+                content: "artfn",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 7,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 8,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 9,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 10,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 11,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 12,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 13,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 14,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               }
             ]
           },
           {
             filter_name: 'cate',
-            title: "时间",
-            list: [
+            title: "类型",
+            filter_itemList: [
               {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
+                content: "fana",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
+                content: "agtnargt",
+                count: "42545",
               }
             ]
           },
           {
             filter_name: 'affs',
-            title: "时间",
-            list: [
+            title: "作者",
+            filter_itemList: [
               {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
+                content: "afg",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
+                content: "fgb",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 3,
-                value: 2000,
-                nums: 300,
+                content: "afgn",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 4,
-                value: 2000,
-                nums: 200
+                content: "afgn",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 5,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 6,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 7,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 8,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 9,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 10,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 11,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2020,
-                kind: 12,
-                value: 2000,
-                nums: 200
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 13,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               },
               {
-                name: 2021,
-                kind: 14,
-                value: 2000,
-                nums: 300,
+                content: "dfafga",
+                count: "42545",
               }
             ]
           }
         ],
-        total_rs: 1000,// 搜索结果数目，非当前页面展示数量
         currentPage: 1,
         sort: "relate",
         search_words: {
-          kw: 'big data',
-          au: '李华'
+          experts: '李华',
+          origin: '',
+          kw:'计算机',
+          startTime: '',
+          endTime: ''
         },
         filter_words: {
-          year: '2020',
+          year: '',
           cate: '',
           level: '',
           savetype: '',
@@ -382,8 +330,8 @@
           if (res.code === 200){
             _this.result_list = res.data.result_list;
             // _this.filter_list = res.data.filter_list;
-            _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
+            _this.result_length = _this.result_list.length;
           }else {
             _this.$message({
               message: res.message,

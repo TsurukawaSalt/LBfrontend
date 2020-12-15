@@ -8,17 +8,17 @@
             <!--头像-->
             <div class="person-portrait">
               <div class="person-avatar-wr">
-                <el-avatar class="person-avatar" :size="100" :src="sourceUrl"></el-avatar>
+                <el-avatar class="person-avatar" :size="110" :src="sourceUrl"></el-avatar>
               </div>
             </div>
             <!--认证按钮-->
-            <div class="person-authen is-hover" v-show="!is_authen">
+            <div class="person-authen is-hover" v-show="!scholar_info.is_authen">
               <p class="authen-button" @click="handleAuthen">我要认证</p>
             </div>
             <!--关注按钮-->
             <div class="person-focus is-hover">
-              <p class="focus-button" @click="handleFocus" v-show="!is_focus">关注</p>
-              <p class="unfocus-button" @click="handleFocus" v-show="is_focus">已关注
+              <p class="focus-button" @click="handleFocus" v-show="!scholar_info.is_focus">关注</p>
+              <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.is_focus">已关注
               <i class="el-icon-check"></i>
               </p>
             </div>
@@ -46,10 +46,10 @@
         <!--成就统计 & 相关文献-->
         <div id="main-content-left">
           <!--成就展示-->
-          <div id="achievement">
-            <div class="achievement-pie"></div>
-            <div class="achievement-line"></div>
-          </div>
+<!--          <div id="achievement">-->
+<!--            <div class="achievement-pie"></div>-->
+<!--            <div class="achievement-line"></div>-->
+<!--          </div>-->
           <!--相关文献-->
           <div id="article-list">
             <div id="article-list-container">
@@ -144,7 +144,7 @@
             <div class="co-author-list">
               <div v-for="(item, index) in co_authors_list_show" :key="index">
                 <div class="co-author-avatar is-hover"  @click="toScholarPage(item.scholar_id)">
-                  <el-avatar shape="square" :size="50" :src="sourceUrl"></el-avatar>
+                  <el-avatar shape="square" :size="40" :src="sourceUrl"></el-avatar>
                 </div>
                 <div class="co-author-item">
                   <div class="co-author-name" @click="toScholarPage(item.scholar_id)">{{ item.name }}</div>
@@ -182,8 +182,6 @@ export default {
   data() {
     return {
       user_id: '0',
-      is_authen: false,
-      is_focus: true,
       scholar_id: '0',
       scholar_info: {
         name: '张三',
@@ -207,7 +205,9 @@ export default {
             title: 'd指数',
             num: 597
           }
-        ]
+        ],
+        is_authen: false,
+        is_focus: true
       },
       co_authors_list:[
         {
@@ -317,25 +317,59 @@ export default {
       this.scholar_id = scholar_id
     },
     handleAuthen(){
-      // var _this = this
-      this.is_authen = !this.is_authen
+      console.log("点击了申请认领门户");
+      var _this = this
+      this.$prompt('请输入邮箱', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: '邮箱格式不正确'
+      }).then(({ value }) => {
+        _this.authen(value);
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
+    },
+    authen(value){
+      var _this = this
+      this.$api.application.create({
+        token: sessionStorage.getItem("token"),
+        userID: sessionStorage.getItem("userID"),
+        objectID: _this.scholar_id,
+        flag: 1,
+        email: value
+      }).then(res => {
+        if (res.code === 200){
+          _this.$message({
+            type: "success",
+            message: '成功提交申请'
+          });
+        } else {
+          _this.$message({
+            type: "error",
+            message: res.message
+          })
+        }
+      })
     },
     handleFocus() {
-      // var _this = this
-      // this.$api.scholar.focusScholar({
-      //   scholar_id: _this.scholar_id,
-      //   user_id: _this.user_id
-      // }).then(res=>{
-      //   if (res.code === 200){
-      //     _this.is_focus = res.data.is_focus
-      //   } else {
-      //     _this.$message({
-      //       message: res.message,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
-      this.is_focus = !this.is_focus
+      var _this = this
+      this.$api.scholar.focusScholar({
+        scholar_id: _this.scholar_id,
+        user_id: _this.user_id
+      }).then(res=>{
+        if (res.code === 200){
+          _this.is_focus = res.data.is_focus
+        } else {
+          _this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
     },
     paperTo0() {
       this.sort_words.paper_type = '0';
@@ -378,20 +412,16 @@ export default {
     },
     loadRelateSc(){
       var _this = this
-      this.$api.scholar.getRelateSc({
-        scholar_id: _this.scholar_id,
-        sort_words: _this.sort_words,
+      this.$api.academic.getSearchResult({
+        search_words: {
+          expert: _this.scholar_info.name,
+        },
+        filter_words: {
+          year: _this.sort_words.sc_year,
+          type: _this.sort_words.paper_type,
+        },
+        sort: "",
         page: _this.currentPage
-      }).then(res => {
-        if (res.code === 200){
-          _this.result_list = res.data.result_list
-          // _this.total = res.data.total
-        }else {
-          _this.$message({
-            message: res.message,
-            type: "error"
-          })
-        }
       })
     },
     loadCoAuthorsList(){
@@ -565,8 +595,8 @@ export default {
   .person-portrait{
     position: relative;
     display: inline-block;
-    width: 112px;
-    height: 112px;
+    width: 122px;
+    height: 132px;
   }
   .person-avatar{
     border: 6px solid #fff;

@@ -7,3 +7,12 @@ export const getAll = params =>{
     params
   })
 }
+
+// 新建申请
+export const create = data => {
+  return axios({
+    url: '/application/create',
+    method: 'post',
+    data
+  })
+}
