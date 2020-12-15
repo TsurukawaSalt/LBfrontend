@@ -7,14 +7,14 @@
           <span class="title-click" @click="toDetailPage">{{ item.title }}</span>
         </div>
         <!-- 摘要 -->
-        <div class="abstract" style="word-break: break-all;white-space: normal">{{ item.abstract }}</div>
+        <div class="abstract" style="word-break: break-all;white-space: normal">{{ item.summary }}</div>
         <!-- 其他信息：所有作者/来源(期刊/出版社/或无)/被引量/年份-->
         <div class="info">
           <span v-for="(item, index) in item.authors" :key="index">
-            <span class="name-click" @click="toAuthorPage()">{{ item.name }} </span>
+            <span class="name-click" @click="toAuthorPage(item.name)">{{ item.name }} </span>
           </span>
           <span> - </span>
-          <span class="source-click" @click="toSourcePage()">{{ item.source }}</span>
+          <span class="source-click" @click="toSourcePage(item.source)">{{ item.source }}</span>
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.n_citation}}</span>
           <span> - </span>
@@ -30,7 +30,7 @@
       <div class="sc_ext">
         <!-- 收藏/引用/批量引用/（免费下载）-->
         <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-show="!item.is_favor">收藏</el-button>
-        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="item.is_favor">取消收藏</el-button>
+        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="item.is_favor">已收藏</el-button>
         <el-button class="ext-button" id="button-quote" type="mini" round icon="el-icon-share" @click="quote()">引用</el-button>
         <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>
         <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="download()">免费下载</el-button>
@@ -57,13 +57,21 @@
     methods: {
       toDetailPage() {
         console.log("跳转文章详情页！");
+        this.$router.push({
+          name: "AcademicShow",
+          params: {
+            id: this.item.id
+          }
+        })
       },
-      toAuthorPage() {
-        console.log("跳转学者详情页！")
+      toAuthorPage(val) {
+        console.log("跳转学者搜索！")
+        this.$emit("toAuthorPage", val);
       },
-      toSourcePage() {
+      toSourcePage(val) {
         // 出版社/杂志期刊
-        console.log("跳转来源详情页！")
+        console.log("跳转来源搜索！")
+        this.$emit("toSourcePage", val);
       },
       toCitedPage() {
         // 到来源网站查看文章

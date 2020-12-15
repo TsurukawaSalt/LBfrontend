@@ -106,7 +106,7 @@ export default {
   },
   mounted() {
     // 判断该条目是否被选中
-    this.handleSelect()
+    this.handleSelect();
     // 默认只显示三条
     this.showMore = false;
     this.listLength = this.filter_item.filter_itemList.length;
