@@ -7,3 +7,17 @@ export const getAll = params =>{
     params
   })
 }
+export const agree = params =>{
+  return axios({
+    url:'/application/agree',
+    method:'post',
+    params
+  })
+}
+export const reject = params =>{
+  return axios({
+    url:'/application/reject',
+    method:'post',
+    params
+  })
+}
