@@ -139,7 +139,7 @@
               email: _this.RegisterForm.email
             }).then(res=>{
               if (res.code === 200) {
-                  _this.verification = res.verification
+                  _this.verification = res.data.verification
                   _this.$message({
                   message: '已发送',
                   type: 'success'
