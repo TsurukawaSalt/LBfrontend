@@ -1,15 +1,15 @@
 <template>
   <el-card class="card-body">
-    <!--title属性-->
+    <!-- title属性 汉字名 -->
     <div class="nav-title" @click="changeHide">
       <i ref="icon" class="el-icon-arrow-up" style="float: right" id="icon"></i>
       {{ this.filter_item.title }}
     </div>
-    <!--list属性-->
+    <!-- filter_itemList -->
     <div class="nav-list" v-if="isVisible">
-      <div class="nav-list-item is-hover" v-for="(item, index) in this.showList" :key="index" @click="clickFilter(item.value)">
-        <span>{{ item.value }}</span>
-        <span id="item-nums">( {{ item.nums }} )</span>
+      <div class="nav-list-item is-hover" v-for="(item, index) in this.showList" :key="index" @click="clickFilter(item.content)">
+        <span>{{ item.content }}</span>
+        <span id="item-nums">( {{ item.count }} )</span>
       </div>
     </div>
     <!--选中某一项-->
@@ -68,12 +68,12 @@ export default {
     changeShowNums() {
       if (this.showMore === false){
         this.showMore = true;
-        this.showList = this.filter_item.list.slice(0,Math.min(10, this.listLength));
+        this.showList = this.filter_item.filter_itemList.slice(0,Math.min(10, this.listLength));
       }else {
         this.showMore = false;
-        this.showList = this.filter_item.list.slice(0,Math.min(3, this.listLength));
+        this.showList = this.filter_item.filter_itemList.slice(0,Math.min(3, this.listLength));
       }
-      console.log(this.filter_item.list.length);
+      console.log(this.filter_item.filter_itemList.length);
     },
     handleSelect() {
       // 获取该filter的种类
@@ -106,12 +106,12 @@ export default {
   },
   mounted() {
     // 判断该条目是否被选中
-    this.handleSelect()
-    // 默认指显示三条
+    this.handleSelect();
+    // 默认只显示三条
     this.showMore = false;
-    this.listLength = this.filter_item.list.length;
-    // 默认指显示三条
-    this.showList = this.filter_item.list.slice(0,Math.min(3,this.listLength));
+    this.listLength = this.filter_item.filter_itemList.length;
+    // 默认只显示三条
+    this.showList = this.filter_item.filter_itemList.slice(0,Math.min(3,this.listLength));
   }
 }
 </script>

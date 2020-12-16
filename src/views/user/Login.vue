@@ -55,6 +55,7 @@
             if (res.code === 200) {
               sessionStorage.setItem("userName",_this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
+              sessionStorage.setItem("token",res.data.token);
               _this.$router.push("/test");
             }
             else {

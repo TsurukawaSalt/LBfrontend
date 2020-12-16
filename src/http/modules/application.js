@@ -7,6 +7,7 @@ export const getAll = params =>{
     params
   })
 }
+
 export const agree = params =>{
   return axios({
     url:'/application/agree',
@@ -21,3 +22,12 @@ export const reject = params =>{
     params
   })
 }
+// 新建申请
+export const create = data => {
+  return axios({
+    url: '/application/create',
+    method: 'post',
+    data
+  })
+}
+

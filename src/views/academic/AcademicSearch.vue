@@ -5,6 +5,7 @@
         这里是右侧
       </div>
       <div class="content-left">
+        <!-- filter -->
         <div class="content-left-nav">
           <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
             <filter-item
@@ -14,16 +15,18 @@
                 v-on:cancelSelect="handleCancel"></filter-item>
           </div>
         </div>
+        <!-- 搜索结果 -->
         <div class="content-left-rs">
           <div class="rs-list">
+            <!-- 工具栏 -->
             <div class="toolbar">
               <div class="sort-container">
                 <el-popover
                     placement="top-start"
                     width="70"
                     trigger="hover">
-                  <div class="sort-item" @click="sortByRelative()" >按相关性</div>
-                  <div class="sort-item" @click="sortByCited()">按被引量</div>
+                  <div class="sort-item" @click="sortByViews" >按浏览量</div>
+                  <div class="sort-item" @click="sortByCited">按被引量</div>
                   <div class="sort-item" @click="sortByTime">按时间降序</div>
                   <el-button class="button-sort" slot="reference">
                     <i class="el-icon-sort">按{{ this.getSortMethod }}</i>
@@ -32,12 +35,17 @@
               </div>
               <span class="nums">找到约{{ this.total_rs }}条相关结果</span>
             </div>
+            <!-- 列表 -->
             <div v-for="(result_item,index) in result_list" v-bind:key="index">
-              <academic-item :item = result_item></academic-item>
+              <academic-item
+                  :c_sc = result_item
+                  v-on:toAuthorPage = "searchAuthor"
+                  v-on:toSourcePage = "searchSource"></academic-item>
             </div>
           </div>
         </div>
         <div style="clear: both"></div>
+        <!-- 页码 -->
         <p class="page">
           <el-pagination
               background
@@ -66,273 +74,176 @@
     data() {
       return {
         result_list:[
-          {
-            title : "1. this is the title",
-            abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-                "this is the abstract this is the abstract this is the abstract this is the abstract",
-            authors: [
-              {name: "学者1"},
-              {name: "学者2"},
-              {name: "学者3"}
-            ],
-            source: "this is the source",
-            n_citation: 100,
-            year: 1990,
-            version: "中国知网"
-          },
-          {
-            title : "这是标题",
-            abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-                "this is the abstract this is the abstract this is the abstract this is the abstract",
-            authors: [
-              {name: "学者4"},
-              {name: "学者5"},
-              {name: "学者6"}
-            ],
-            source: "this is the source",
-            n_citation: 100,
-            year: 1990,
-            version: "中国知网"
-          },
-          {
-            title : "3. this is the title",
-            abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-                "this is the abstract this is the abstract this is the abstract this is the abstract",
-            authors: [
-              {name: "学者7"},
-              {name: "学者8"},
-              {name: "学者9"}
-            ],
-            source: "this is the source",
-            n_citation: 100,
-            year: 1990,
-            version: "中国知网"
-          },
-          {
-            title : "4. this is the title",
-            abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-                "this is the abstract this is the abstract this is the abstract this is the abstract",
-            authors: [
-              {name: "学者1"},
-              {name: "学者2"},
-              {name: "学者3"}
-            ],
-            source: "this is the source",
-            n_citation: 100,
-            year: 1990,
-            version: "中国知网"
-          },
-        ],
-        result_length: 0,
-        filter_list: [
-          {
-            filter_name: 'year',
-            title: "时间",
-            list: [
-              {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
-              },
-              {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 3,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 4,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 5,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 6,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 7,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 8,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 9,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 10,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 11,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 12,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 13,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2021,
-                kind: 14,
-                value: 2000,
-                nums: 300,
-              }
-            ]
-          },
-          {
-            filter_name: 'cate',
-            title: "时间",
-            list: [
-              {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
-              },
-              {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
-              }
-            ]
-          },
-          {
-            filter_name: 'affs',
-            title: "时间",
-            list: [
-              {
-                name: 9102,
-                kind: 1,
-                value: 2000,
-                nums: 100
-              },
-              {
-                name: 2020,
-                kind: 2,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 3,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 4,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 5,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 6,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 7,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 8,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 9,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 10,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 11,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2020,
-                kind: 12,
-                value: 2000,
-                nums: 200
-              },
-              {
-                name: 2021,
-                kind: 13,
-                value: 2000,
-                nums: 300,
-              },
-              {
-                name: 2021,
-                kind: 14,
-                value: 2000,
-                nums: 300,
-              }
-            ]
-          }
+          // {
+          //   id: "45145141",
+          //   title : "1. this is the title",
+          //   summary : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
+          //       "this is the abstract this is the abstract this is the abstract this is the abstract",
+          //   authors: [
+          //     {name: "学者1"},
+          //     {name: "学者2"},
+          //     {name: "学者3"}
+          //   ],
+          //   source: "this is the source",
+          //   n_citation: 100,
+          //   year: 1990,
+          //   version: "中国知网",
+          //   is_favor: false
+          // }
         ],
         total_rs: 1000,// 搜索结果数目，非当前页面展示数量
+        result_length: 0,// 当前页的显示数量
+        filter_list: [
+          // {
+          //   filter_name: 'year',
+          //   title: "时间",
+          //   filter_itemList: [
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "fbadf",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "adfbadfb",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "ntaan",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "artgna",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "artfn",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     }
+          //   ]
+          // },
+          // {
+          //   filter_name: 'cate',
+          //   title: "类型",
+          //   filter_itemList: [
+          //     {
+          //       content: "fana",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "agtnargt",
+          //       count: "42545",
+          //     }
+          //   ]
+          // },
+          // {
+          //   filter_name: 'affs',
+          //   title: "作者",
+          //   filter_itemList: [
+          //     {
+          //       content: "afg",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "fgb",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "afgn",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "afgn",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     },
+          //     {
+          //       content: "dfafga",
+          //       count: "42545",
+          //     }
+          //   ]
+          // }
+        ],
         currentPage: 1,
-        sort: "relate",
+        sort: "views",
         search_words: {
-          kw: 'big data',
-          au: '李华'
+          experts: '李华',
+          origin: '',
+          kw:'计算机',
+          startTime: '',
+          endTime: ''
         },
         filter_words: {
-          year: '2020',
+          year: '',
           cate: '',
           level: '',
           savetype: '',
@@ -353,9 +264,19 @@
         console.log(name + "父组件监听成功！取消了筛选！");
         this.filter_words[name] = '';
       },
-      sortByRelative() {
-        console.log("按相关性排序！");
-        this.sort = "relate";
+      searchAuthor(val){
+        this.search_words = {
+          experts: val
+        };
+      },
+      searchSource(val) {
+        this.search_words = {
+          kw: val
+        }
+      },
+      sortByViews() {
+        console.log("按浏览量排序！");
+        this.sort = "views";
       },
       sortByCited() {
         console.log("按被引量排序！");
@@ -374,16 +295,17 @@
       loadSearchSc(){
         var _this = this;
         this.$api.academic.getSearchResult({
-          search_word: _this.search_words,// 不同检索的字段名
+          search_word: _this.search_words,
           filter_words: _this.filter_words,
-          sort: _this.sort,// 排序方式
-          page: _this.currentPage// 页码
+          sort: _this.sort,
+          page: _this.currentPage,
+          userID: sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === 200){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
-            _this.result_length = _this.result_list.length;
+            _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
+            _this.result_length = _this.result_list.length;
           }else {
             _this.$message({
               message: res.message,
@@ -396,8 +318,8 @@
     },
     computed: {
       getSortMethod: function () {
-        if (this.sort === "relate"){
-          return "相关性";
+        if (this.sort === "views"){
+          return "浏览量";
         } else if (this.sort === "cited"){
           return "被引量";
         } else {
@@ -413,13 +335,14 @@
           search_words: _this.search_words,
           filter_words: _this.filter_words,
           sort: _this.sort,
-          page: _this.currentPage
+          page: _this.currentPage,
+          userID: sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === 200){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
-            _this.result_length = _this.result_list.length;
+            _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
+            _this.result_length = _this.result_list.length;
           } else {
             _this.$message({
               message: res.message,
@@ -436,7 +359,8 @@
           search_words: _this.search_words,
           filter_words: _this.filter_words,
           sort: _this.sort,
-          page: _this.currentPage
+          page: _this.currentPage,
+          userID: sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === 200){
             _this.result_list = res.data.result_list;
@@ -463,11 +387,12 @@
             search_words: _this.search_words,
             filter_words: _this.filter_words,
             sort: _this.sort,
-            page: _this.currentPage
+            page: _this.currentPage,
+            userID: sessionStorage.getItem("userID")
           }).then(res => {
             if (res.code === 200){
               _this.result_list = res.data.result_list;
-              // _this.filter_list = res.data.filter_list;
+              _this.filter_list = res.data.filter_list;
               _this.result_length = _this.result_list.length;
               _this.total_rs = res.data.total;
             } else {
@@ -480,11 +405,37 @@
           })
         },
         deep: true
+      },
+      search_words: {
+        handler () {
+          var _this = this
+          this.result_list = {};
+          this.$api.academic.getSearchResult({
+            search_words: _this.search_words,
+            filter_words: {},
+            sort: "views",
+            page: 1,
+            userID: sessionStorage.getItem("userID")
+          }).then(res => {
+            if (res.code === 200){
+              _this.result_list = res.data.result_list;
+              _this.filter_list = res.data.filter_list;
+              _this.result_length = _this.result_list.length;
+              _this.total_rs = res.data.total;
+            } else {
+              _this.$message({
+                message: res.message,
+                type: "error"
+              })
+              console.log("Request => getSearchResult : not 200");
+            }
+          })
+        }
       }
     },
     mounted() {
-      this.search_words.kw = this.$route.params.keyword // todo:rbl修改
-      console.log("获取关键词：" + this.search_words.kw)
+      this.search_words = this.$route.query;
+      console.log("获取关键词：" + this.search_words)
       this.currentPage = 1;
       // 加载检索数据
       this.loadSearchSc()
