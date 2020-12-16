@@ -62,3 +62,21 @@ export const changePasswd = params => {
         params
     })
 }
+
+// 获取收藏列表
+export const getCollectionList = params => {
+  return axios({
+      url: '/user/getCollectionList',
+      method: 'get',
+      params
+  })
+}
+
+// 获取关注列表
+export const getFollowList = params => {
+  return axios({
+      url: '/user/getFollowList',
+      method: 'get',
+      params
+  })
+}

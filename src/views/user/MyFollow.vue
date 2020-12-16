@@ -35,34 +35,35 @@
             Aside,
         },
         mounted() {
-
+            var _this = this
+            this.$api.user.getFollowList({
+                userID : sessionStorage.getItem("userID")
+            }).then(res=>{
+                if(res.code === 200) {
+                    _this.follow_list = res.data.followList;
+                }
+                else {
+                    _this.$message.error(res.msg);
+                }
+            })
         },
         data() {
             return {
-                follow_list:[
-                    {
-                        id:1,
-                        name:"张"
-                    },
-                    {
-                        id:2,
-                        name:"王"
-                    },
-                    {
-                        id:3,
-                        name:"李"
-                    },
-                    {
-                        id:4,
-                        name:"天"
-                    }                               
-                ]
+                follow_list:[]
             };
         },
         methods: {
             delFollow(index) {
-                this.$message('取消关注成功');
-                this.follow_list.splice(index,1);                
+                var _this = this
+                this.$api.scholar.focusScholar({
+                    scholar_id : _this.follow_list[index].id,
+                    user_id : sessionStorage.getItem("userID")
+                }).then(res=>{
+                    if(res.code === 200){
+                        _this.$message(res.message);
+                        _this.follow_list.splice(index,1);
+                    }
+                })
             }
         }
     }

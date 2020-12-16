@@ -35,7 +35,17 @@
             Aside,
         },
         mounted() {
-
+            var _this = this
+            this.$api.user.getCollectionList({
+                userID : sessionStorage.getItem("userID")
+            }).then(res=>{
+                if(res.code === 200) {
+                    _this.collection_list = res.data.collectionList;
+                }
+                else {
+                    _this.$message.error(res.msg);
+                }
+            })
         },
         data() {
             return {
@@ -61,8 +71,16 @@
         },
         methods: {
             delCollection(index) {
-                this.$message('取消收藏成功');
-                this.collection_list.splice(index,1);
+                var _this = this
+                this.$api.academic.favorSc({
+                    document_id : _this.collection_list[index].id,
+                    user_id : sessionStorage.getItem("userID")
+                }).then(res=>{
+                    if(res.code === 200){
+                        _this.$message(res.message);
+                        _this.collection_list.splice(index,1);
+                    }
+                })
             }
         }
     }

@@ -56,11 +56,10 @@
               sessionStorage.setItem("userName",_this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
               sessionStorage.setItem("token",res.data.token);
-              _this.$router.push("/test");
+              _this.$router.push("/academicSearch");
             }
             else {
               _this.$message.error(res.msg);
-              _this.$router.push("/login");
             }
           })
         }

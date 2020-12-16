@@ -111,14 +111,13 @@
                       message: res.msg,
                       type: 'success'
                   });
-                    _this.$router.push("/homepage");
+                    _this.$router.push("/login");
                 }
                 else{
                   _this.$message.error({
                       message: res.msg,
                       type: 'danger'
                   });
-                  _this.$router.push("/register");
                 }
           })
         }
@@ -140,6 +139,7 @@
             }).then(res=>{
               if (res.code === 200) {
                   _this.verification = res.data.verification
+                  //console.log(_this.verification)
                   _this.$message({
                   message: '已发送',
                   type: 'success'
@@ -148,7 +148,7 @@
               else {
                 _this.$message.error("发送失败");
               }
-            })  
+            })
             this.count = TIME_COUNT;
             this.show = false;
             this.timer = setInterval(() => {
@@ -162,7 +162,6 @@
             }, 1000)
           }        
         }
-
       }
     }
 }
