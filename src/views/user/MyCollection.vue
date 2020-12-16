@@ -49,24 +49,7 @@
         },
         data() {
             return {
-                collection_list:[
-                    {
-                        id:1,
-                        title:"title1"
-                    },
-                    {
-                        id:2,
-                        title:"title2"
-                    },
-                    {
-                        id:3,
-                        title:"title3"
-                    },
-                    {
-                        id:4,
-                        title:"title4"
-                    }                               
-                ]
+                collection_list:[]
             };
         },
         methods: {
