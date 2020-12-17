@@ -113,7 +113,7 @@
             preserveInfo() {
                 const emailPattern =  /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 const phoneNumPattern = /^1[3|4|5|7|8][0-9]{9}$/;
-                if(!this.perInfo.nickName||!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
+                if(!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
                     this.$message({
                         message: '信息不能为空',
                         type: 'warning'
