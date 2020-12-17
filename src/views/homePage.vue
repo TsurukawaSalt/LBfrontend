@@ -17,10 +17,10 @@
         trigger="click">
       <el-form ref="search_words" :model="search_words" label-width="80px">
         <el-form-item label="检索词">
-          <el-input v-model="search_words.kw"></el-input>
+          <el-input v-model="search_words.kw" placeholder="多个检索词用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="作者">
-          <el-input v-model="search_words.expert"></el-input>
+          <el-input v-model="search_words.expert" placeholder="多个作者用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="来源">
           <el-input v-model="search_words.origin"></el-input>
