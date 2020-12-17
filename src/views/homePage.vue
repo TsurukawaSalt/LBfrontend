@@ -4,9 +4,27 @@
     <el-link class="title" :underline="false">
       Logo
     </el-link>
-    <el-input class="search" placeholder="请输入你要查找的内容" prefix-icon="el-icon-search" v-model="keyword" @keyup.enter.native="goSearch()">
-        <el-button class="button" slot="append" @click="goSearch()">搜索</el-button>
+    <el-input class="search" placeholder="请输入你要查找的内容" v-model="keyword" @keyup.enter.native="goSearch()">
+      <el-button v-popover:popover type="text" class="h_button" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
+      <el-button class="button" slot="append" @click="goSearch()">搜索</el-button>
     </el-input>
+    <el-popover
+        ref="popover"
+        placement="bottom"
+        width="200"
+        :offset="50"
+        title="高级搜索"
+        trigger="click">
+      <el-form ref="searchForm">
+        <el-form-item label="搜索名字">
+          <el-input v-model="searchForm.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="搜索">
+          <el-button @click="h_search()">搜索</el-button>
+        </el-form-item>
+      </el-form>
+    </el-popover>
     <div class="top_block">
       <el-row>
         <el-link :underline="false">站内功能</el-link>
@@ -77,7 +95,10 @@ export default {
           'STU',
           'VWX',
           'YZ',
-      ]
+      ],
+      searchForm: {
+        name:'',
+      }
     }
   },
   methods: {
@@ -103,6 +124,9 @@ export default {
           id:url
         }
       })
+    },
+    h_search(){
+      alert(this.searchForm.name)
     }
   },
   components:{
@@ -135,8 +159,8 @@ export default {
     width: 50%;
   }
   .search >>> .el-input__inner {
-    border-radius: 25px 0 0 25px;
-    border-width: 2px;
+    border-radius: 0 0 0 0;
+    border-width: 2px 0px 2px 0px;
     border-color: #245cc0;
     font-size: 18px;
     height: 60px;
@@ -149,15 +173,26 @@ export default {
     border-width: 0;
     background: rgba(0,0,0,0);
   }
-  .search >>> .el-input-group__append .el-button {
+  .search >>> .el-input-group__append {
     border-radius: 0 25px 25px 0;
-    border-width: 10px;
+    /*border-width: 2px;*/
     background: #245cc0;
     height: 60px;
-    width: 100px;
+    width: 80px;
     font-size: 18px;
     color: white;
   }
+  .search >>> .el-input-group__prepend{
+    border-radius: 25px 0 0 25px;
+    border-color: #245cc0 grey #245cc0 #245cc0;
+    border-width: 2px;
+    border-style: solid dotted solid solid;
+    width: 70px;
+    font-size: 16px;
+    background: white;
+    /*right: 100%;*/
+  }
+
   .top_block {
     /*background: blue;*/
     margin: -8px;
