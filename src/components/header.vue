@@ -31,11 +31,24 @@
 
     <el-header v-if="this.status == 2" class="header_2">
       <div class="r_con">
-        <el-link v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-link>
-        <el-link v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-link>
-        <el-link v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-link>
-        <el-link v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-link>
+        <el-button v-popover:popover type="text" class="r_con_mess">消息</el-button>
+        <el-button v-if="isLogin" class="r_con_user" type="text" @click="goUser()">{{this.userName}}</el-button>
+        <el-button v-if="isLogin" class="r_con_reLogin" type="text" @click="reLogin()">退出登录</el-button>
+        <el-button v-if="!isLogin" class="r_con_login" type="text" @click="goLogin()">登录</el-button>
+        <el-button v-if="!isLogin" class="r_con_Register" type="text" @click="goRegister()">注册</el-button>
       </div>
+      <el-popover
+          ref="popover"
+          title="消息"
+          placement="bottom"
+          width="200"
+          trigger="click"
+          content="123456789"
+      >
+        <el-row v-for="(o, index) in 4" :key="index">
+          <el-card>123456</el-card>
+        </el-row>
+      </el-popover>
     </el-header>
   </div>
 </template>
