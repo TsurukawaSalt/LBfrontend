@@ -4,24 +4,39 @@
     <el-link class="title" :underline="false">
       Logo
     </el-link>
-    <el-input class="search" placeholder="请输入你要查找的内容" v-model="keyword" @keyup.enter.native="goSearch()">
+    <el-input class="search" placeholder="请输入你要查找的内容" v-model="searchForm.keyword" @keyup.enter.native="goSearch(false)">
       <el-button v-popover:popover type="text" class="h_button" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
-      <el-button class="button" slot="append" @click="goSearch()">搜索</el-button>
+      <el-button class="button" slot="append" @click="goSearch(false)">搜索</el-button>
     </el-input>
     <el-popover
         ref="popover"
         placement="bottom"
-        width="200"
-        :offset="50"
+        width="400"
+        :offset="170"
         title="高级搜索"
         trigger="click">
-      <el-form ref="searchForm">
-        <el-form-item label="搜索名字">
-          <el-input v-model="searchForm.name"></el-input>
+      <el-form ref="searchForm" :model="searchForm" label-width="80px">
+        <el-form-item label="检索词">
+          <el-input v-model="searchForm.keyword"></el-input>
+        </el-form-item>
+        <el-form-item label="作者">
+          <el-input v-model="searchForm.author"></el-input>
+        </el-form-item>
+        <el-form-item label="机构">
+          <el-input v-model="searchForm.institutions"></el-input>
+        </el-form-item>
+        <el-form-item label="发表时间">
+          <el-col :span="11">
+            <el-date-picker type="date" placeholder="选择起始日期" v-model="searchForm.time[0]" style="width: 90%"></el-date-picker>
+          </el-col>
+<!--          <el-col class="line" :span="1"> - </el-col>-->
+          <el-col :span="11">
+            <el-date-picker type="date" placeholder="选择截至日期" v-model="searchForm.time[1]" style="width: 90%"></el-date-picker>
+          </el-col>
         </el-form-item>
 
-        <el-form-item label="搜索">
-          <el-button @click="h_search()">搜索</el-button>
+        <el-form-item>
+          <el-button @click="goSearch(true)">搜索</el-button>
         </el-form-item>
       </el-form>
     </el-popover>
@@ -71,7 +86,7 @@ export default {
   name:"homePage",
   data() {
     return {
-      keyword:'',
+      // keyword:'',
       academic_list:[
         {title:'1234566666666666', year:2020, author:'ABC', cited:195},
         {title:'654321', year:2020, author:'ABC', cited:195},
@@ -97,24 +112,55 @@ export default {
           'YZ',
       ],
       searchForm: {
-        name:'',
+        keyword:'',
+        author:'',
+        institutions:'',
+        time:[0,0],
       }
     }
   },
   methods: {
-    goSearch(keyword){
-      if (keyword !== null){
-        this.keyword = keyword
-      }
-      if (!this.keyword) {
-        alert("搜索内容为空")
+    goSearch(isAdvanced){
+      // if (keyword !== null){
+      //   this.keyword = keyword
+      // }
+      // if (!this.keyword) {
+      //   alert("搜索内容为空")
+      // } else {
+      //   this.$router.push({
+      //     name:"AcademicSearch",
+      //     params:{
+      //       keyword:this.keyword
+      //     }
+      //   })
+      // }
+      // let Form = this.searchForm
+      if (!isAdvanced) {
+        if (this.searchForm.keyword !== '') {
+          this.$router.push({
+            name:"AcademicSearch",
+            params:{
+              searchForm:this.searchForm
+            }
+          })
+        } else {
+          alert("搜索内容为空")
+        }
       } else {
-        this.$router.push({
-          name:"AcademicSearch",
-          params:{
-            keyword:this.keyword
-          }
-        })
+        if (this.searchForm.keyword === ''
+            && this.searchForm.author === ''
+            && this.searchForm.institutions === ''
+            && this.searchForm.time[0] === 0
+            && this.searchForm.time[1] === 0) {
+          alert("搜索内容为空")
+        } else {
+          this.$router.push({
+            name:"AcademicSearch",
+            params:{
+              searchForm:this.searchForm
+            }
+          })
+        }
       }
     },
     goArticle(url){
