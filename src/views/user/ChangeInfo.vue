@@ -166,7 +166,7 @@
                     var encryptionPasswd1 = this.$md5(this.perInfo.oldPasswd)
                     var encryptionPasswd2 = this.$md5(this.perInfo.passwd1)
                     var _this = this
-                    this.$api.user.changPasswd({
+                    this.$api.user.changePasswd({
                         userID:sessionStorage.getItem("userID"),
                         oldPasswd:encryptionPasswd1,
                         newPasswd:encryptionPasswd2
