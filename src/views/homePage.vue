@@ -4,7 +4,7 @@
     <el-link class="title" :underline="false">
       Logo
     </el-link>
-    <el-input class="search" placeholder="请输入你要查找的内容" v-model="searchForm.keyword" @keyup.enter.native="goSearch(false)">
+    <el-input class="search" placeholder="请输入你要查找的内容" v-model="search_words.kw" @keyup.enter.native="goSearch(false)">
       <el-button v-popover:popover type="text" class="h_button" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
       <el-button class="button" slot="append" @click="goSearch(false)">搜索</el-button>
     </el-input>
@@ -17,21 +17,21 @@
         trigger="click">
       <el-form ref="searchForm" :model="searchForm" label-width="80px">
         <el-form-item label="检索词">
-          <el-input v-model="searchForm.keyword"></el-input>
+          <el-input v-model="search_words.kw"></el-input>
         </el-form-item>
         <el-form-item label="作者">
-          <el-input v-model="searchForm.author"></el-input>
+          <el-input v-model="search_words.expert"></el-input>
         </el-form-item>
-        <el-form-item label="机构">
-          <el-input v-model="searchForm.institutions"></el-input>
+        <el-form-item label="来源">
+          <el-input v-model="search_words.origin"></el-input>
         </el-form-item>
         <el-form-item label="发表时间">
           <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择起始日期" v-model="searchForm.time[0]" style="width: 90%"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择起始日期" v-model="search_words.startTime" style="width: 90%"></el-date-picker>
           </el-col>
 <!--          <el-col class="line" :span="1"> - </el-col>-->
           <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择截至日期" v-model="searchForm.time[1]" style="width: 90%"></el-date-picker>
+            <el-date-picker type="date" placeholder="选择截至日期" v-model="search_words.endTime" style="width: 90%"></el-date-picker>
           </el-col>
         </el-form-item>
 
@@ -111,53 +111,41 @@ export default {
           'VWX',
           'YZ',
       ],
-      searchForm: {
-        keyword:'',
-        author:'',
-        institutions:'',
-        time:[0,0],
+      search_words: {
+        kw:'',
+        expert:'',
+        origin:'',
+        startTime: 0,
+        endTime: 0,
       }
     }
   },
   methods: {
     goSearch(isAdvanced){
-      // if (keyword !== null){
-      //   this.keyword = keyword
-      // }
-      // if (!this.keyword) {
-      //   alert("搜索内容为空")
-      // } else {
-      //   this.$router.push({
-      //     name:"AcademicSearch",
-      //     params:{
-      //       keyword:this.keyword
-      //     }
-      //   })
-      // }
-      // let Form = this.searchForm
       if (!isAdvanced) {
-        if (this.searchForm.keyword !== '') {
+        if (this.searchForm.kw !== '') {
           this.$router.push({
             name:"AcademicSearch",
             params:{
-              searchForm:this.searchForm
+              search_words:this.search_words
             }
           })
         } else {
           alert("搜索内容为空")
         }
       } else {
-        if (this.searchForm.keyword === ''
-            && this.searchForm.author === ''
-            && this.searchForm.institutions === ''
-            && this.searchForm.time[0] === 0
-            && this.searchForm.time[1] === 0) {
+        if (this.search_words.kw === ''
+            && this.search_words.expert === ''
+            && this.search_words.origin === ''
+            && this.search_words.startTime === 0
+            && this.search_words.endTime === 0) {
           alert("搜索内容为空")
         } else {
+          alert(this.search_words.startTime)
           this.$router.push({
             name:"AcademicSearch",
             params:{
-              searchForm:this.searchForm
+              search_words:this.search_words
             }
           })
         }
@@ -171,9 +159,6 @@ export default {
         }
       })
     },
-    h_search(){
-      alert(this.searchForm.name)
-    }
   },
   components:{
     Header,
