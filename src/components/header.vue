@@ -6,11 +6,13 @@
       </el-input>
 
       <div class="r_con">
-        <el-button type="text" v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-button>
-        <el-button v-popover:popover type="text" class="r_con_user">消息</el-button>
-        <el-button type="text" v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-button>
-        <el-button type="text" v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-button>
-        <el-button type="text" v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-button>
+<!--        <el-badge is-dot>-->
+          <el-button v-popover:popover type="text" class="r_con_mess">消息</el-button>
+<!--        </el-badge>-->
+        <el-button type="text" v-if="isLogin" class="r_con_user" @click="goUser()">{{this.userName}}</el-button>
+        <el-button type="text" v-if="isLogin" class="r_con_reLogin" @click="reLogin()">退出登录</el-button>
+        <el-button type="text" v-if="!isLogin" class="r_con_login" @click="goLogin()">登录</el-button>
+        <el-button type="text" v-if="!isLogin" class="r_con_Register" @click="goRegister()">注册</el-button>
       </div>
       <el-popover
           ref="popover"
@@ -20,6 +22,9 @@
           trigger="click"
           content="123456789"
       >
+        <el-row v-for="(o, index) in 4" :key="index">
+          <el-card>123456</el-card>
+        </el-row>
       </el-popover>
 
     </el-header>
@@ -97,7 +102,7 @@ export default {
 <style scoped>
   .header_1 {
     background-color: #2c3e50;
-    margin: -10px -10px 0 -10px;
+    margin: -10px -8px 0 -10px;
     padding: 0;
   }
   .h_search {
@@ -108,7 +113,10 @@ export default {
   .r_con {
     position: absolute;
     top: 8px;
-    right: 4%;
+    right:4%;
+  }
+  .r_con_mess {
+    margin-right: 10px;
   }
   .r_con_user {
     margin-right: 15px;
