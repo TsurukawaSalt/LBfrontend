@@ -55,7 +55,7 @@
             this.$api.user.getPerInfo({
                 userID:sessionStorage.getItem("userID"),
             }).then(res=>{
-                if(res.code === 200){
+                if(Number(res.code) === 200){
                     _this.perInfo.nickName= res.data.nickName;
                     _this.perInfo.realName= res.data.realName;
                     _this.perInfo.email= res.data.email;
@@ -90,7 +90,7 @@
                     userID:sessionStorage.getItem("userID"),
                     url:_this.perInfo.url
                 }).then(res=>{
-                    if(res.code === 200){
+                    if(Number(res.code) === 200){
                         _this.$message.success(res.msg);
                     }
                     else{
@@ -140,7 +140,7 @@
                         email: _this.perInfo.email,
                         phoneNum: _this.perInfo.phoneNum
                     }).then(res=>{
-                        if(res.code === 200){
+                        if(Number(res.code) === 200){
                             _this.$message.success(res.msg);
                         }
                         else{
@@ -171,7 +171,7 @@
                         oldPasswd:encryptionPasswd1,
                         newPasswd:encryptionPasswd2
                     }).then(res=>{
-                        if(res.code === 200){
+                        if(Number(res.code) === 200){
                             _this.$message.success(res.msg);
                         }
                         else{

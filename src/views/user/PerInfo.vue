@@ -59,7 +59,7 @@
                  userID:sessionStorage.getItem("userID"),
             }).then(res=>{
                 console.log(res)
-                if(res.code === 200){
+                if(Number(res.code) === 200){
                     _this.perInfo.userID= sessionStorage.getItem("userID");
                     _this.perInfo.userName= sessionStorage.getItem("userName");
                     _this.perInfo.realName= res.data.realName;

@@ -39,7 +39,7 @@
             this.$api.user.getCollectionList({
                 userID : sessionStorage.getItem("userID")
             }).then(res=>{
-                if(res.code === 200) {
+                if(Number(res.code) === 200) {
                     _this.collection_list = res.data.collectionList;
                 }
                 else {
@@ -49,24 +49,7 @@
         },
         data() {
             return {
-                collection_list:[
-                    {
-                        id:1,
-                        title:"title1"
-                    },
-                    {
-                        id:2,
-                        title:"title2"
-                    },
-                    {
-                        id:3,
-                        title:"title3"
-                    },
-                    {
-                        id:4,
-                        title:"title4"
-                    }                               
-                ]
+                collection_list:[]
             };
         },
         methods: {
@@ -76,7 +59,7 @@
                     document_id : _this.collection_list[index].id,
                     user_id : sessionStorage.getItem("userID")
                 }).then(res=>{
-                    if(res.code === 200){
+                    if(Number(res.code) === 200){
                         _this.$message(res.message);
                         _this.collection_list.splice(index,1);
                     }

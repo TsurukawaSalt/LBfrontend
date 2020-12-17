@@ -104,7 +104,7 @@
               email: _this.RegisterForm.email,
               code: _this.RegisterForm.code
             }).then(res=>{ 
-                if (res.code === 200){
+                if (Number(res.code) === 200){
                   sessionStorage.setItem("userName", _this.RegisterForm.userName);
                   sessionStorage.setItem("userID",res.data.userID);
                   _this.$message({
@@ -137,7 +137,7 @@
             this.$api.user.sendEmail({
               email: _this.RegisterForm.email
             }).then(res=>{
-              if (res.code === 200) {
+              if (Number(res.code) === 200) {
                   _this.verification = res.data.verification
                   //console.log(_this.verification)
                   _this.$message({
