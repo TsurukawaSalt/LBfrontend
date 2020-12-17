@@ -55,7 +55,7 @@
             this.$api.user.getPerInfo({
                 userID:sessionStorage.getItem("userID"),
             }).then(res=>{
-                if(res.code === 200){
+                if(Number(res.code) === 200){
                     _this.perInfo.nickName= res.data.nickName;
                     _this.perInfo.realName= res.data.realName;
                     _this.perInfo.email= res.data.email;
@@ -90,7 +90,7 @@
                     userID:sessionStorage.getItem("userID"),
                     url:_this.perInfo.url
                 }).then(res=>{
-                    if(res.code === 200){
+                    if(Number(res.code) === 200){
                         _this.$message.success(res.msg);
                     }
                     else{
@@ -113,7 +113,7 @@
             preserveInfo() {
                 const emailPattern =  /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
                 const phoneNumPattern = /^1[3|4|5|7|8][0-9]{9}$/;
-                if(!this.perInfo.nickName||!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
+                if(!this.perInfo.realName||!this.perInfo.email||!this.perInfo.phoneNum) {
                     this.$message({
                         message: '信息不能为空',
                         type: 'warning'
@@ -140,7 +140,7 @@
                         email: _this.perInfo.email,
                         phoneNum: _this.perInfo.phoneNum
                     }).then(res=>{
-                        if(res.code === 200){
+                        if(Number(res.code) === 200){
                             _this.$message.success(res.msg);
                         }
                         else{
@@ -166,12 +166,12 @@
                     var encryptionPasswd1 = this.$md5(this.perInfo.oldPasswd)
                     var encryptionPasswd2 = this.$md5(this.perInfo.passwd1)
                     var _this = this
-                    this.$api.user.changPasswd({
+                    this.$api.user.changePasswd({
                         userID:sessionStorage.getItem("userID"),
                         oldPasswd:encryptionPasswd1,
                         newPasswd:encryptionPasswd2
                     }).then(res=>{
-                        if(res.code === 200){
+                        if(Number(res.code) === 200){
                             _this.$message.success(res.msg);
                         }
                         else{

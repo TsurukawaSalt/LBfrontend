@@ -39,7 +39,7 @@
             this.$api.user.getFollowList({
                 userID : sessionStorage.getItem("userID")
             }).then(res=>{
-                if(res.code === 200) {
+                if(Number(res.code) === 200) {
                     _this.follow_list = res.data.followList;
                 }
                 else {
@@ -59,7 +59,7 @@
                     scholar_id : _this.follow_list[index].id,
                     user_id : sessionStorage.getItem("userID")
                 }).then(res=>{
-                    if(res.code === 200){
+                    if(Number(res.code) === 200){
                         _this.$message(res.message);
                         _this.follow_list.splice(index,1);
                     }

@@ -52,7 +52,7 @@
             userName: _this.user.userName,
             passwd: encryptionPasswd
           }).then(res=>{
-            if (res.code === 200) {
+            if (Number(res.code) === 200) {
               sessionStorage.setItem("userName",_this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
               sessionStorage.setItem("token",res.data.token);
