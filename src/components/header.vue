@@ -4,12 +4,24 @@
       <el-input class="h_search" placeholder="请输入你要查找的内容"  v-model="keyword" @keyup.enter.native="goSearch()">
         <el-button slot="append" icon="el-icon-search" @click="goSearch()"></el-button>
       </el-input>
+
       <div class="r_con">
-        <el-link v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-link>
-        <el-link v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-link>
-        <el-link v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-link>
-        <el-link v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-link>
+        <el-button type="text" v-if="isLogin" class="r_con_user" :underline="false" @click="goUser()">{{this.userName}}</el-button>
+        <el-button v-popover:popover type="text" class="r_con_user">消息</el-button>
+        <el-button type="text" v-if="isLogin" class="r_con_reLogin" :underline="false" @click="reLogin()">退出登录</el-button>
+        <el-button type="text" v-if="!isLogin" class="r_con_login" :underline="false" @click="goLogin()">登录</el-button>
+        <el-button type="text" v-if="!isLogin" class="r_con_Register" :underline="false" @click="goRegister()">注册</el-button>
       </div>
+      <el-popover
+          ref="popover"
+          title="消息"
+          placement="bottom"
+          width="200"
+          trigger="click"
+          content="123456789"
+      >
+      </el-popover>
+
     </el-header>
 
     <el-header v-if="this.status == 2" class="header_2">
@@ -95,7 +107,7 @@ export default {
 
   .r_con {
     position: absolute;
-    top: 19px;
+    top: 8px;
     right: 4%;
   }
   .r_con_user {
