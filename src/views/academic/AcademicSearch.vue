@@ -434,7 +434,8 @@
       }
     },
     mounted() {
-      this.search_words = this.$route.query;
+      this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
+      alert(this.search_words.kw)
       console.log("获取关键词：" + this.search_words)
       this.currentPage = 1;
       // 加载检索数据

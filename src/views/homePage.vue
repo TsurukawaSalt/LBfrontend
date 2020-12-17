@@ -15,7 +15,7 @@
         :offset="170"
         title="高级搜索"
         trigger="click">
-      <el-form ref="searchForm" :model="searchForm" label-width="80px">
+      <el-form ref="search_words" :model="search_words" label-width="80px">
         <el-form-item label="检索词">
           <el-input v-model="search_words.kw"></el-input>
         </el-form-item>
@@ -123,11 +123,11 @@ export default {
   methods: {
     goSearch(isAdvanced){
       if (!isAdvanced) {
-        if (this.searchForm.kw !== '') {
+        if (this.search_words.kw !== '') {
           this.$router.push({
             name:"AcademicSearch",
             params:{
-              search_words:this.search_words
+              search_words: encodeURIComponent(JSON.stringify(this.search_words))
             }
           })
         } else {
@@ -141,11 +141,11 @@ export default {
             && this.search_words.endTime === 0) {
           alert("搜索内容为空")
         } else {
-          alert(this.search_words.startTime)
+          // alert(this.search_words.startTime)
           this.$router.push({
             name:"AcademicSearch",
             params:{
-              search_words:this.search_words
+              search_words: encodeURIComponent(JSON.stringify(this.search_words))
             }
           })
         }
