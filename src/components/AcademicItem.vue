@@ -7,7 +7,8 @@
           <span class="title-click" @click="toDetailPage">{{ item.title }}</span>
         </div>
         <!-- 摘要 -->
-        <div class="abstract" style="word-break: break-all;white-space: normal">{{ item.summary }}</div>
+        <!-- TODO 限制行数 -->
+        <div class="summary">{{ item.summary }}</div>
         <!-- 其他信息：所有作者/来源(期刊/出版社/或无)/被引量/年份-->
         <div class="info">
           <span v-for="(item, index) in item.authors" :key="index">
@@ -134,9 +135,18 @@
    cursor: pointer;
    text-decoration-line: underline;
  }
- .abstract{
+ .summary{
    color: #9c9e9c;
    line-height: 24px;
+   word-break: break-all;
+   white-space: normal;
+   display: -webkit-box;
+   /* -webkit-box-orient: vertical; */
+   /*! autoprefixer: off */
+   -webkit-box-orient: vertical;
+   /* autoprefixer: on */
+   -webkit-line-clamp: 3;
+   overflow: hidden;
  }
  .info{
    margin-top: 4px;
