@@ -224,6 +224,7 @@
           }
         })
         sessionStorage.setItem("current_page", this.currentPage.toString());
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
       },
       filter_words: {
         // 监听左侧过滤项点击
