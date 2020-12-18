@@ -415,7 +415,7 @@ export default {
       var _this = this
       this.$api.academic.getSearchResult({
         search_words: {
-          expert: _this.scholar_info.name,
+          experts: _this.scholar_info.name,
         },
         filter_words: {
           year: _this.sort_words.sc_year,
