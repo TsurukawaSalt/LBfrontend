@@ -145,7 +145,7 @@ export default {
           this.$router.push({
             name:"AcademicSearch",
             params:{
-              search_words: encodeURIComponent(JSON.stringify(this.search_words))
+              search_words: encodeURIComponent(JSON.stringify(this.search_words)),
             }
           })
         }

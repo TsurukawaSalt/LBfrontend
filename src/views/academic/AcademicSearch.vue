@@ -331,6 +331,8 @@
       sort: function () {
         // 监听：排序方式
         var _this = this;
+        this.result_list = []
+        this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -377,70 +379,77 @@
             console.log("Request => getSearchResult : not 200");
           }
         })
-
+        sessionStorage.setItem("current_page", this.currentPage.toString());
       },
-      filter_words: {
-        // 监听左侧过滤项点击
-        handler (){
-          console.log("filter_words 父组件对自己深度监听成功！")
-          console.log(this.filter_words)
-          var _this = this
-          this.$api.academic.getSearchResult({
-            search_words: _this.search_words,
-            filter_words: _this.filter_words,
-            sort: _this.sort,
-            page: _this.currentPage,
-            userID: sessionStorage.getItem("userID")
-          }).then(res => {
-            if (res.code === "200"){
-              _this.result_list = res.data.result_list;
-              _this.filter_list = res.data.filter_list;
-              _this.result_length = _this.result_list.length;
-              _this.total_rs = res.data.total;
-            } else {
-              _this.$message({
-                message: res.message,
-                type: "error"
-              })
-              console.log("Request => getSearchResult : not 200");
-            }
-          })
-        },
-        deep: true
-      },
-      search_words: {
-        handler () {
-          var _this = this
-          this.result_list = {};
-          this.$api.academic.getSearchResult({
-            search_words: _this.search_words,
-            filter_words: {},
-            sort: "views",
-            page: 1,
-            userID: sessionStorage.getItem("userID")
-          }).then(res => {
-            if (res.code === "200"){
-              _this.result_list = res.data.result_list;
-              _this.filter_list = res.data.filter_list;
-              _this.result_length = _this.result_list.length;
-              _this.total_rs = res.data.total;
-            } else {
-              _this.$message({
-                message: res.message,
-                type: "error"
-              })
-              console.log("Request => getSearchResult : not 200");
-            }
-          })
-        }
-      }
+      // filter_words: {
+      //   // 监听左侧过滤项点击
+      //   handler (){
+      //     console.log("filter_words 父组件对自己深度监听成功！")
+      //     console.log(this.filter_words)
+      //     var _this = this
+      //     this.$api.academic.getSearchResult({
+      //       search_words: _this.search_words,
+      //       filter_words: _this.filter_words,
+      //       sort: _this.sort,
+      //       page: _this.currentPage,
+      //       userID: sessionStorage.getItem("userID")
+      //     }).then(res => {
+      //       if (res.code === "200"){
+      //         _this.result_list = res.data.result_list;
+      //         _this.filter_list = res.data.filter_list;
+      //         _this.result_length = _this.result_list.length;
+      //         _this.total_rs = res.data.total;
+      //       } else {
+      //         _this.$message({
+      //           message: res.message,
+      //           type: "error"
+      //         })
+      //         console.log("Request => getSearchResult : not 200");
+      //       }
+      //     })
+      //   },
+      //   deep: true
+      // },
+      // search_words: {
+      //   handler () {
+      //     var _this = this
+      //     this.result_list = {};
+      //     this.$api.academic.getSearchResult({
+      //       search_words: _this.search_words,
+      //       filter_words: {},
+      //       sort: "views",
+      //       page: 1,
+      //       userID: sessionStorage.getItem("userID")
+      //     }).then(res => {
+      //       if (res.code === "200"){
+      //         _this.result_list = res.data.result_list;
+      //         _this.filter_list = res.data.filter_list;
+      //         _this.result_length = _this.result_list.length;
+      //         _this.total_rs = res.data.total;
+      //       } else {
+      //         _this.$message({
+      //           message: res.message,
+      //           type: "error"
+      //         })
+      //         console.log("Request => getSearchResult : not 200");
+      //       }
+      //     })
+      //   }
+      // }
     },
     mounted() {
-      console.log("重新加载")
+      console.log("新加载")
+      if (window.performance.navigation.type === 1) {
+        console.log("页面被刷新")
+        this.currentPage = parseInt(sessionStorage.getItem("current_page"))
+      }else{
+        console.log("首次被加载")
+        this.currentPage = 1
+        sessionStorage.setItem("current_page", "1")
+      }
       this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
       // alert(this.search_words.kw)
       console.log("获取关键词：" + this.search_words)
-      this.currentPage = 1;
       // 加载检索数据
       this.loadSearchSc()
     }
