@@ -73,166 +73,10 @@
     },
     data() {
       return {
-        result_list:[
-          // {
-          //   id: "45145141",
-          //   title : "1. this is the title",
-          //   summary : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-          //       "this is the abstract this is the abstract this is the abstract this is the abstract",
-          //   authors: [
-          //     {name: "学者1"},
-          //     {name: "学者2"},
-          //     {name: "学者3"}
-          //   ],
-          //   source: "this is the source",
-          //   n_citation: 100,
-          //   year: 1990,
-          //   version: "中国知网",
-          //   is_favor: false
-          // }
-        ],
+        result_list:[],
         total_rs: 1000,// 搜索结果数目，非当前页面展示数量
         result_length: 0,// 当前页的显示数量
-        filter_list: [
-          // {
-          //   filter_name: 'year',
-          //   title: "时间",
-          //   filter_itemList: [
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "fbadf",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "adfbadfb",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "ntaan",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "artgna",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "artfn",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     }
-          //   ]
-          // },
-          // {
-          //   filter_name: 'cate',
-          //   title: "类型",
-          //   filter_itemList: [
-          //     {
-          //       content: "fana",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "agtnargt",
-          //       count: "42545",
-          //     }
-          //   ]
-          // },
-          // {
-          //   filter_name: 'affs',
-          //   title: "作者",
-          //   filter_itemList: [
-          //     {
-          //       content: "afg",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "fgb",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "afgn",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "afgn",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     },
-          //     {
-          //       content: "dfafga",
-          //       count: "42545",
-          //     }
-          //   ]
-          // }
-        ],
+        filter_list: [],
         currentPage: 1,
         sort: "views",
         search_words: {
@@ -257,11 +101,11 @@
     },
     methods: {
       handleSelect(val, name){
-        console.log(name + "父组件监听成功！成功筛选！"+val)
+        console.log("父组件监听到点击了filter类别：" + name + " 的选线： " + val)
         this.filter_words[name] = val
       },
       handleCancel(name){
-        console.log(name + "父组件监听成功！取消了筛选！");
+        console.log(name + "父组件监听到取消了filter类别：" + name);
         this.filter_words[name] = '';
       },
       searchAuthor(val){
@@ -332,7 +176,7 @@
         // 监听：排序方式
         var _this = this;
         this.result_list = []
-        this.filter_words = []
+        // this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -342,7 +186,7 @@
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
-            _this.filter_list = res.data.filter_list;
+            // _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
           } else {
@@ -358,7 +202,7 @@
         // 监听：页码
         var _this = this
         this.result_list = []
-        this.filter_words = []
+        // this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -368,7 +212,7 @@
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
-            _this.filter_list = res.data.filter_list;
+            // _this.filter_list = res.data.filter_list;
             _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
           } else {
@@ -381,35 +225,36 @@
         })
         sessionStorage.setItem("current_page", this.currentPage.toString());
       },
-      // filter_words: {
-      //   // 监听左侧过滤项点击
-      //   handler (){
-      //     console.log("filter_words 父组件对自己深度监听成功！")
-      //     console.log(this.filter_words)
-      //     var _this = this
-      //     this.$api.academic.getSearchResult({
-      //       search_words: _this.search_words,
-      //       filter_words: _this.filter_words,
-      //       sort: _this.sort,
-      //       page: _this.currentPage,
-      //       userID: sessionStorage.getItem("userID")
-      //     }).then(res => {
-      //       if (res.code === "200"){
-      //         _this.result_list = res.data.result_list;
-      //         _this.filter_list = res.data.filter_list;
-      //         _this.result_length = _this.result_list.length;
-      //         _this.total_rs = res.data.total;
-      //       } else {
-      //         _this.$message({
-      //           message: res.message,
-      //           type: "error"
-      //         })
-      //         console.log("Request => getSearchResult : not 200");
-      //       }
-      //     })
-      //   },
-      //   deep: true
-      // },
+      filter_words: {
+        // 监听左侧过滤项点击
+        handler (){
+          console.log("filters改变")
+          console.log(this.filter_words)
+          var _this = this
+          this.result_list = []
+          this.$api.academic.getSearchResult({
+            search_words: _this.search_words,
+            filter_words: _this.filter_words,
+            sort: _this.sort,
+            page: _this.currentPage,
+            userID: sessionStorage.getItem("userID")
+          }).then(res => {
+            if (res.code === "200"){
+              _this.result_list = res.data.result_list;
+              // _this.filter_list = res.data.filter_list;
+              _this.result_length = _this.result_list.length;
+              _this.total_rs = res.data.total;
+            } else {
+              _this.$message({
+                message: res.message,
+                type: "error"
+              })
+              console.log("Request => getSearchResult : not 200");
+            }
+          })
+        },
+        deep: true
+      },
       // search_words: {
       //   handler () {
       //     var _this = this
@@ -438,7 +283,6 @@
       // }
     },
     mounted() {
-      console.log("新加载")
       if (window.performance.navigation.type === 1) {
         console.log("页面被刷新")
         this.currentPage = parseInt(sessionStorage.getItem("current_page"))

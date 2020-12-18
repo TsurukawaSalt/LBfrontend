@@ -30,10 +30,7 @@ export default {
       type: Object,
       default: null
     },
-    c_filter_words: {
-      type: Object,
-      default: null
-    }
+    c_filter_words:{}
   },
   data() {
     return {
