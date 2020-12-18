@@ -15,7 +15,7 @@
             <span class="name-click" @click="toAuthorPage(item.name)">{{ item.name }} </span>
           </span>
           <span> - </span>
-          <span class="source-click" @click="toSourcePage(item.source)">{{ item.origin }}</span>
+          <span class="source-click" @click="toSourcePage(item.origin)">{{ item.origin }}</span>
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>

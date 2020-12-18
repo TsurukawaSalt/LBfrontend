@@ -61,7 +61,7 @@ Vue.use(VueRouter)
       component: () => import('../views/academic/AcademicShow')
     },
     {
-      path: '/scholarPage',
+      path: '/scholarPage/:expertid',
       name: 'ScholarPage',
       component: () => import('../views/scholar/ScholarPage')
     },

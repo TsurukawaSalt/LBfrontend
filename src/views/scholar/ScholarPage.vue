@@ -553,7 +553,7 @@ export default {
   },
   mounted() {
     this.user_id = sessionStorage.getItem('userID')
-    this.scholar_id = this.$route.params.scholar_id
+    this.scholar_id = this.$route.params.expertid
     this.currentPage = 1
     this.loadInfo()
     this.loadRelateSc()

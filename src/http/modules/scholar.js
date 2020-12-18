@@ -53,3 +53,11 @@ export const authenScholar = data => {
     data
   })
 }
+
+export const getInfoByName = params => {
+  return axios({
+    url: '/scholar/getInfoByName',
+    method: 'get',
+    params
+  })
+}
