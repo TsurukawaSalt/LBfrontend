@@ -255,32 +255,34 @@
         },
         deep: true
       },
-      // search_words: {
-      //   handler () {
-      //     var _this = this
-      //     this.result_list = {};
-      //     this.$api.academic.getSearchResult({
-      //       search_words: _this.search_words,
-      //       filter_words: {},
-      //       sort: "views",
-      //       page: 1,
-      //       userID: sessionStorage.getItem("userID")
-      //     }).then(res => {
-      //       if (res.code === "200"){
-      //         _this.result_list = res.data.result_list;
-      //         _this.filter_list = res.data.filter_list;
-      //         _this.result_length = _this.result_list.length;
-      //         _this.total_rs = res.data.total;
-      //       } else {
-      //         _this.$message({
-      //           message: res.message,
-      //           type: "error"
-      //         })
-      //         console.log("Request => getSearchResult : not 200");
-      //       }
-      //     })
-      //   }
-      // }
+      search_words: {
+        handler () {
+          console.log("search_words被修改")
+          var _this = this
+          this.result_list = [];
+          this.$api.academic.getSearchResult({
+            search_words: _this.search_words,
+            filter_words: {},
+            sort: "views",
+            page: 1,
+            userID: sessionStorage.getItem("userID")
+          }).then(res => {
+            if (res.code === "200"){
+              _this.result_list = res.data.result_list;
+              _this.filter_list = res.data.filter_list;
+              _this.result_length = _this.result_list.length;
+              _this.total_rs = res.data.total;
+            } else {
+              _this.$message({
+                message: res.message,
+                type: "error"
+              })
+              console.log("Request => getSearchResult : not 200");
+            }
+          })
+        },
+        deep: true
+      }
     },
     mounted() {
       if (window.performance.navigation.type === 1) {
