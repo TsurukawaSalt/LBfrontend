@@ -301,7 +301,7 @@
           page: _this.currentPage,
           userID: sessionStorage.getItem("userID")
         }).then(res => {
-          if (res.code === 200){
+          if (res.code === "200"){
             _this.result_list = res.data.result_list;
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
@@ -338,7 +338,7 @@
           page: _this.currentPage,
           userID: sessionStorage.getItem("userID")
         }).then(res => {
-          if (res.code === 200){
+          if (res.code === "200"){
             _this.result_list = res.data.result_list;
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
@@ -364,7 +364,7 @@
           page: _this.currentPage,
           userID: sessionStorage.getItem("userID")
         }).then(res => {
-          if (res.code === 200){
+          if (res.code === "200"){
             _this.result_list = res.data.result_list;
             _this.filter_list = res.data.filter_list;
             _this.result_length = _this.result_list.length;
@@ -392,7 +392,7 @@
             page: _this.currentPage,
             userID: sessionStorage.getItem("userID")
           }).then(res => {
-            if (res.code === 200){
+            if (res.code === "200"){
               _this.result_list = res.data.result_list;
               _this.filter_list = res.data.filter_list;
               _this.result_length = _this.result_list.length;
@@ -419,7 +419,7 @@
             page: 1,
             userID: sessionStorage.getItem("userID")
           }).then(res => {
-            if (res.code === 200){
+            if (res.code === "200"){
               _this.result_list = res.data.result_list;
               _this.filter_list = res.data.filter_list;
               _this.result_length = _this.result_list.length;

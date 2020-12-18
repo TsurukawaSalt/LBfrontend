@@ -301,8 +301,8 @@ export default {
       },
       currentPage: 1,
       total_rs: 100,
-      total_co_authors: 5,
-      total_co_affs: 5,
+      total_co_authors: 0,
+      total_co_affs: 0,
       sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
     }
   },
@@ -342,7 +342,7 @@ export default {
         flag: 1,
         email: value
       }).then(res => {
-        if (res.code === 200){
+        if (res.code === "200"){
           _this.$message({
             type: "success",
             message: '成功提交申请'
@@ -361,7 +361,7 @@ export default {
         scholar_id: _this.scholar_id,
         user_id: _this.user_id
       }).then(res=>{
-        if (res.code === 200){
+        if (res.code === "200"){
           _this.is_focus = res.data.is_focus
         } else {
           _this.$message({
@@ -400,7 +400,7 @@ export default {
       this.$api.scholar.getInfo({
         scholar_id: _this.scholar_id
       }).then(res => {
-        if (res.code === 200){
+        if (res.code === "200"){
           _this.scholar_info = res.data
         }else {
           _this.$message({
@@ -429,9 +429,9 @@ export default {
       this.$api.scholar.getCoAuthors({
         scholar_id: _this.scholar_id
       }).then(res => {
-        if (res.code === 200) {
+        if (res.code === "200") {
           _this.co_authors_list = res.data.result_list
-          // _this.total_co_authors = res.data.total_rs
+          _this.total_co_authors = res.data.total_rs
           _this.total_co_authors = 2
           if (_this.total_co_authors > 4){
             _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
@@ -451,9 +451,9 @@ export default {
       this.$api.scholar.getCoAffiliate({
         scholar_id: _this.scholar_id
       }).then(res => {
-        if (res.code === 200) {
+        if (res.code === "200") {
           _this.co_affiliate_list = res.data.result_list
-          // _this.total_co_affs = res.data.total_rs
+          _this.total_co_affs = res.data.total_rs
         } else {
           _this.$message({
             message: res.message,
@@ -532,7 +532,7 @@ export default {
         sort_words: _this.sort_words,
         page: _this.currentPage
       }).then(res=>{
-        if(res.code === 200){
+        if(res.code === "200"){
           _this.result_list = res.data.result_list
         }else{
           _this.$message({
