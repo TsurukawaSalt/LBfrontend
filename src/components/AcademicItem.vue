@@ -24,7 +24,7 @@
         <!-- 来源：网站 -->
         <div class="allVersion">
           <span class="grey-part">来源：</span>
-          <span class="version-click" @click="toVersionPage()">{{ item.link }}</span>
+          <span class="version-click" @click="this.$router.push(item.link)">{{ item.link }}</span>
         </div>
       </div>
       <!-- source操作部分 -->
@@ -61,7 +61,7 @@
         this.$router.push({
           name: "AcademicShow",
           params: {
-            id: this.item.id
+            id: this.item.documentid
           }
         })
       },
@@ -85,7 +85,7 @@
         console.log("收藏/取消收藏文章！");
         var _this = this
         this.$api.academic.favorSc({
-          document_id: _this.item.id,
+          document_id: _this.item.documentid,
           user_id: sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === 200){

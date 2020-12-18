@@ -398,7 +398,8 @@ export default {
     loadInfo(){
       var _this = this
       this.$api.scholar.getInfo({
-        scholar_id: _this.scholar_id
+        scholar_id: _this.scholar_id,
+        user_id: sessionStorage.getItem("userID")
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
