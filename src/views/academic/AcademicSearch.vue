@@ -83,8 +83,8 @@
           experts: '',
           origin: '',
           kw:'',
-          startTime: '',
-          endTime: ''
+          startTime: '0',
+          endTime: '0'
         },
         filter_words: {
           year: '',
@@ -139,7 +139,7 @@
       loadSearchSc(){
         var _this = this;
         this.$api.academic.getSearchResult({
-          search_word: _this.search_words,
+          search_words: _this.search_words,
           filter_words: _this.filter_words,
           sort: _this.sort,
           page: _this.currentPage,

@@ -17,9 +17,9 @@
           <span> - </span>
           <span class="source-click" @click="toSourcePage(item.source)">{{ item.source }}</span>
           <span> - 被引量：</span>
-          <span class="citation-click" @click="toCitedPage()">{{ item.n_citation}}</span>
+          <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>
-          <span class="grey-part">{{ item.year }}年</span>
+          <span class="grey-part">{{ item.time }}年</span>
         </div>
         <!-- 来源：网站 -->
         <div class="allVersion">
