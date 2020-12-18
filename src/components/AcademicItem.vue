@@ -15,7 +15,7 @@
             <span class="name-click" @click="toAuthorPage(item.name)">{{ item.name }} </span>
           </span>
           <span> - </span>
-          <span class="source-click" @click="toSourcePage(item.source)">{{ item.source }}</span>
+          <span class="source-click" @click="toSourcePage(item.source)">{{ item.origin }}</span>
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>
@@ -24,7 +24,7 @@
         <!-- 来源：网站 -->
         <div class="allVersion">
           <span class="grey-part">来源：</span>
-          <span class="version-click" @click="toVersionPage()">{{ item.version }}</span>
+          <span class="version-click" @click="toVersionPage()">{{ item.link }}</span>
         </div>
       </div>
       <!-- source操作部分 -->
