@@ -51,7 +51,7 @@ Vue.use(VueRouter)
     },
 
     {
-      path: '/academicSearch',
+      path: '/academicSearch/:search_words',
       name: 'AcademicSearch',
       component: () => import('../views/academic/AcademicSearch')
     },

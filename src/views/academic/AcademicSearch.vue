@@ -236,9 +236,9 @@
         currentPage: 1,
         sort: "views",
         search_words: {
-          experts: '李华',
+          experts: '',
           origin: '',
-          kw:'计算机',
+          kw:'',
           startTime: '',
           endTime: ''
         },
@@ -355,6 +355,8 @@
       currentPage: function () {
         // 监听：页码
         var _this = this
+        this.result_list = []
+        this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -364,7 +366,7 @@
         }).then(res => {
           if (res.code === 200){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
+            _this.filter_list = res.data.filter_list;
             _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
           } else {
@@ -434,8 +436,9 @@
       }
     },
     mounted() {
+      console.log("重新加载")
       this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
-      alert(this.search_words.kw)
+      // alert(this.search_words.kw)
       console.log("获取关键词：" + this.search_words)
       this.currentPage = 1;
       // 加载检索数据
