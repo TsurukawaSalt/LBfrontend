@@ -1,11 +1,11 @@
 import axios from "@/http/axios";
 
-// 获取检索结果列表
-export const getSearchResult = params => {
+// 根据检索词获取检索结果列表
+export const getSearchResult = data => {
   return axios({
     url: '/academic/getSearchResult',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
