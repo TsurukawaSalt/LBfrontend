@@ -528,19 +528,16 @@ export default {
     currentPage: function () {
       // 监听：页码
       var _this = this
-      this.$api.scholar.getRelateSc({
-        scholar_id: _this.scholar_id,
-        sort_words: _this.sort_words,
+      this.$api.academic.getSearchResult({
+        search_words: {
+          experts: _this.scholar_info.name,
+        },
+        filter_words: {
+          year: _this.sort_words.sc_year,
+          type: _this.sort_words.paper_type,
+        },
+        sort: "",
         page: _this.currentPage
-      }).then(res=>{
-        if(res.code === "200"){
-          _this.result_list = res.data.result_list
-        }else{
-          _this.$message({
-            message: res.message,
-            type: "error"
-          })
-        }
       })
     },
     scholar_id: function () {

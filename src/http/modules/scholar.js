@@ -1,14 +1,5 @@
 import axios from "@/http/axios";
 
-// 获取相关文献
-export const getRelateSc = params => {
-  return axios({
-    url: '/scholar/getRelateSc',
-    method: 'get',
-    params
-  })
-}
-
 // 获取科研人员基本信息
 export const getInfo = params => {
   return axios({
@@ -45,14 +36,6 @@ export const focusScholar = params => {
   })
 }
 
-// 认证科研门户
-export const authenScholar = data => {
-  return axios({
-    url: '/scholar/authenScholar',
-    method: 'post',
-    data
-  })
-}
 
 export const getInfoByName = params => {
   return axios({
