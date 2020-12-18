@@ -91,7 +91,7 @@
                     url:_this.perInfo.url
                 }).then(res=>{
                     if(Number(res.code) === 200){
-                        _this.$message.success(res.msg);
+                        _this.$message.success("修改头像成功");
                     }
                     else{
                         _this.$message.error(res.msg);
@@ -141,7 +141,7 @@
                         phoneNum: _this.perInfo.phoneNum
                     }).then(res=>{
                         if(Number(res.code) === 200){
-                            _this.$message.success(res.msg);
+                            _this.$message.success("信息修改成功");
                         }
                         else{
                             _this.$message.error(res.msg);
@@ -172,7 +172,7 @@
                         newPasswd:encryptionPasswd2
                     }).then(res=>{
                         if(Number(res.code) === 200){
-                            _this.$message.success(res.msg);
+                            _this.$message.success("密码修改成功");
                         }
                         else{
                             _this.$message.error(res.msg);

@@ -56,7 +56,7 @@
             message: '您已登录',
             type: 'warning'
           });
-//          this.$router.push("/homepage");
+          this.$router.push("/home");
         }
         else if(!this.RegisterForm.userName) {
           this.$message({
@@ -108,7 +108,7 @@
                   sessionStorage.setItem("userName", _this.RegisterForm.userName);
                   sessionStorage.setItem("userID",res.data.userID);
                   _this.$message({
-                      message: res.msg,
+                      message: "注册成功",
                       type: 'success'
                   });
                     _this.$router.push("/login");

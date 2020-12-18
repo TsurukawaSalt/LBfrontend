@@ -60,7 +60,7 @@
                     user_id : sessionStorage.getItem("userID")
                 }).then(res=>{
                     if(Number(res.code) === 200){
-                        _this.$message(res.message);
+                        _this.$message("取消关注成功");
                         _this.follow_list.splice(index,1);
                     }
                 })

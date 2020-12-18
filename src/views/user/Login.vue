@@ -44,7 +44,7 @@
             message: '您已登录',
             type: 'warning'
           });
-//          this.$router.push("/homepage");
+          this.$router.push("/home");
         }
         else {
           var _this = this
@@ -56,7 +56,7 @@
               sessionStorage.setItem("userName",_this.user.userName);
               sessionStorage.setItem("userID",res.data.userID);
               sessionStorage.setItem("token",res.data.token);
-              _this.$router.push("/academicSearch");
+              _this.$router.push("/home");
             }
             else {
               _this.$message.error(res.msg);
