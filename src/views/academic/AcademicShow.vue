@@ -81,20 +81,20 @@
           </tr>
         </table>
         <el-row style="margin-top: 20px">
-          <el-col :offset="2" :span="4">
+          <el-col :offset="2" :span="5">
             <el-button type="primary" plain @click="jumptoLink(academic.link)">查看全文</el-button>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <el-button type="primary" round>收藏</el-button>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <el-button type="primary" round>分享</el-button>
           </el-col>
-          <el-col :span="4">
-            <el-button type="primary" round>举报</el-button>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="primary" round>认领</el-button>
+<!--          <el-col :span="4">-->
+<!--            <el-button type="primary" round>举报</el-button>-->
+<!--          </el-col>-->
+          <el-col :span="5">
+            <el-button type="primary" round @click="dialogVisible = true">认领</el-button>
           </el-col>
         </el-row>
         <hr color="#9c9e9c">
@@ -112,6 +112,24 @@
         <el-image :src="img"></el-image>
         <el-image :src="img"></el-image>
       </el-col>
+      <el-dialog
+              title="提示"
+              :visible.sync="dialogVisible"
+              width="30%">
+        <el-row style="text-align: left">
+        您确认要认领这篇文献吗？
+        </el-row>
+
+        <el-input
+                placeholder="请输入您的邮箱"
+                v-model="email"
+                clearable>
+        </el-input>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="claimSubmit">确 定</el-button>
+      </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -142,9 +160,22 @@
           views:123
         },
         relation_list:[],
+        dialogVisible:false,
+        academicID:123,
+        email:"",
       }
     },
     methods:{
+      claimSubmit(){
+        let vue = this;
+        this.$api.application.create({
+          token: sessionStorage.getItem("token"),
+          userID: sessionStorage.getItem("userID"),
+          objectID: vue.academicID,
+          flag: 0,
+          email: vue.email
+        })
+      },
       jumptoLink(url){
         console.log(url)
         if(window.open(url) === null){
@@ -164,7 +195,7 @@
     mounted() {
       let vue = this;
       this.$api.academic.getById(
-          {id:"123"}
+          {id:vue.academicID}
       ).then(
           res =>{
             vue.academic = res.data;
