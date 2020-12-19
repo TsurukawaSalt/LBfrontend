@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Header status="2"></Header>
+    <Header status="2" class="header_home"></Header>
     <el-link class="title" :underline="false">
       Logo
     </el-link>
@@ -169,11 +169,17 @@ export default {
 <style scoped>
   .page{
     position: relative;
-    min-width: 940px;
+    //min-width: 1200px;
     /*max-width: 1500px;*/
     min-height: 800px;
     /*left: 10%;*/
   }
+
+  /*.header_home{
+    position: fixed;
+    width: 100%;
+    top: 0;
+  }*/
 
   .title {
     position: absolute;
@@ -229,10 +235,11 @@ export default {
     margin: -8px;
     padding: 0;
     position: absolute;
+    display: table;
     top: 50%;
-    left: 10%;
+    left: calc((100% - 900px)/2);
     /*right: 10%;*/
-    width: 80%;
+    width: 900px;
     height: 20%;
   }
   .top_block .el-row{
@@ -259,11 +266,22 @@ export default {
     position: absolute;
     top: 70%;
     /*max-width: 1000px;*/
-    /*left: 10%;*/
-    width: 80%;
+    left: calc((100% - 1000px)/2);
+    width: 800px;
     height: 100%;
     /*display: flex;*/
   }
+  @media screen and (min-width: 1400px){
+    .middle_block {
+      left: calc((100% - 1200px)/2);
+      width: 1000px;
+    }
+    .top_block {
+      left: calc((100% - 1200px)/2);
+      width: 1200px;
+    }
+  }
+
   .left_block {
     /*background: black;*/
     /*margin: -8px;*/
@@ -338,7 +356,7 @@ export default {
     float: left;
     /*margin-left: 90%;*/
     left: 95%;
-    width: 30%;
+    width: 200px;
     height: 100%;
   }
   .keyword_list {

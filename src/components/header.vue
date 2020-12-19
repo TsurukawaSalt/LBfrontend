@@ -118,6 +118,7 @@ export default {
     margin: -10px -8px 0 -10px;
     padding: 0;
   }
+
   .h_search {
     width: 40%;
     margin: 10px;
@@ -144,7 +145,7 @@ export default {
   }
 
   .header_2 {
-    margin: -10px -10px 0 -10px;
+    margin: -10px -8px 0 -10px;
     padding: 0;
   }
 </style>
