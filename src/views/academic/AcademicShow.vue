@@ -299,7 +299,7 @@
       getRelation(){
         let vue = this;
         let kw = "";
-        for(let key in vue.academic.keywords){
+        for(let key of vue.academic.keywords){
           kw += key + " "
         }
         this.$api.academic.getSearchResult({
@@ -323,7 +323,10 @@
       this.academicID = this.$route.params.academicID
       console.log(this.academicID)
       this.$api.academic.getById(
-          {id:vue.academicID}
+          {
+            document_id:vue.academicID,
+            user_id:vue.sessionStorage.getItem("userID"),
+          }
       ).then(
           res =>{
             if(res.code == 200)
