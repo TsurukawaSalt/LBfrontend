@@ -10,7 +10,7 @@
                 <ul class="collection-sublist">
                     <li v-for="(item,index) in collection_list" :key="index">
                         <div>
-                            <span class="collection-dir">
+                            <span class="collection-dir" @click="goArticle(item.id)">
                                 <span class="subtitle">
                                     {{item.title}}
                                 </span>                                
@@ -64,7 +64,15 @@
                         _this.collection_list.splice(index,1);
                     }
                 })
-            }
+            },
+            goArticle(id){
+                this.$router.push({
+                    name:"AcademicShow",
+                    params:{
+                        id:id
+                    }
+                })
+            } 
         }
     }
 </script>
