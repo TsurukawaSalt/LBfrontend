@@ -18,6 +18,25 @@
         <!-- 搜索结果 -->
         <div class="content-left-rs">
           <div class="rs-list">
+            <!-- 学者列表 -->
+            <div class="e_result">
+              <div class="e_border">
+                <div class="e_wrapper">
+                  <p class="e_tips">为您找到2个学者：</p>
+                  <div>
+                    <div class="e_item" v-for="(item, index) in e_result_list" :key="index">
+                      <div class="e_avatar">
+                        <el-avatar :size="40" :src="sourceUrl"></el-avatar>
+                      </div>
+                      <div class="e_info">
+                        <div class="e_info_name">{{ item.name }}</div>
+                        <div class="e_info_aff">{{ item.affiliate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- 工具栏 -->
             <div class="toolbar">
               <div class="sort-container">
@@ -73,6 +92,7 @@
     },
     data() {
       return {
+        sourceUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
         result_list:[],
         total_rs: 1000,// 搜索结果数目，非当前页面展示数量
         result_length: 0,// 当前页的显示数量
@@ -96,7 +116,44 @@
           authors: '',
           jnls: '',
           affs: '',
-        }
+        },
+        e_result_list: [
+          {
+            name: "qefsdfadfa噶人",
+            id: 43514,
+            affiliate: "艾弗森adfasdfad计达"
+          },
+          {
+            name: "按adfadsfasdf对",
+            id: 17565,
+            affiliate: "你头发把asdfasdfa对"
+          },
+          {
+            name: "热火asdfasdf",
+            id: 254615,
+            affiliate: "啊日嘎asdfad人格"
+          },
+          {
+            name: "二v人",
+            id: 15424,
+            affiliate: "安然度过FB"
+          },
+          {
+            name: "二v人",
+            id: 15424,
+            affiliate: "安然度过FB"
+          },
+          {
+            name: "二v人",
+            id: 15424,
+            affiliate: "安然度过FB"
+          },
+          {
+            name: "二v人",
+            id: 15424,
+            affiliate: "安然度过FB"
+          },
+        ]
       }
     },
     methods: {
@@ -352,6 +409,57 @@
     float: left;
     width: 620px;
     padding-top: 10px;
+  }
+  .e_result{
+    width: 610px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    line-height: 1.54;
+  }
+  .e_border{
+    padding: 9px;
+    border: 1px solid #e3e3e3;
+    border-bottom-color: #e0e0e0;
+    border-right-color: #ececec;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.072);
+  }
+  .e_tips{
+    margin: 0 0 10px 0;
+  }
+  .e_item{
+    display: inline-block;
+    margin-right: 10px;
+    width: 135px;
+    overflow: hidden
+  }
+  .e_avatar{
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .e_info{
+    display: inline-block;
+    vertical-align: top;
+  }
+  .e_info_name{
+    font-size: 14px;
+    color: #0066cc;
+    width:90px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow: hidden;
+  }
+  .e_info_name:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .e_info_aff{
+    font-size: 12px;
+    width:85px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow: hidden;
   }
   .toolbar{
     font-size: 13px;
