@@ -131,6 +131,7 @@
                     :readonly="true">
             </el-input>
           </el-col>
+
           <el-col :offset="2" :span="2">
             <el-button icon="el-icon-document-copy"
                        v-clipboard:copy="url"
@@ -149,7 +150,8 @@
               :visible.sync="dialogVisible"
               width="30%">
         <el-row style="text-align: left">
-        您确认要认领这篇文献吗？
+          您确认要认领这篇文献吗？<br>
+          请输入您的常用邮箱，管理员会在和您联系后审核您的申请。
         </el-row>
 
         <el-input
