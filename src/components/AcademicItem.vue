@@ -12,7 +12,7 @@
         <!-- 其他信息：所有作者/来源(期刊/出版社/或无)/被引量/年份-->
         <div class="info">
           <span v-for="(item, index) in item.authors" :key="index">
-            <span class="name-click" @click="toAuthorPage(item.name)">{{ item.name }} </span>
+            <span class="name-click" @click="toAuthorPage(item)">{{ item.name }} </span>
           </span>
           <span> - </span>
           <span class="source-click" @click="toSourcePage(item.origin)">{{ item.origin }}</span>
@@ -63,9 +63,19 @@
           window.location.herf = url;
         }
       },
-      toAuthorPage(val) {
+      toAuthorPage(item) {
         console.log("跳转学者搜索！")
-        this.$emit("toAuthorPage", val);
+        if (item.id !== ""){
+          this.$router.push({
+            name: 'ScholarPage',
+            params: {
+              expertid: item.id
+            }
+          })
+        } else {
+          this.$emit("toAuthorPage", item);
+        }
+
       },
       toSourcePage(val) {
         // 出版社/杂志期刊
@@ -75,9 +85,6 @@
       toCitedPage() {
         // 到来源网站查看文章
         console.log("跳转引用详情页！")
-      },
-      toVersionPage() {
-        console.log("跳转来源网站详情页！")
       },
       favor() {
         console.log("收藏/取消收藏文章！");

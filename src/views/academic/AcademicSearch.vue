@@ -19,17 +19,17 @@
         <div class="content-left-rs">
           <div class="rs-list">
             <!-- 学者列表 -->
-            <div class="e_result">
+            <div class="e_result" v-show="has_experts">
               <div class="e_border">
                 <div class="e_wrapper">
-                  <p class="e_tips">为您找到2个学者：</p>
+                  <p class="e_tips">为您找到{{ experts_count }}个学者：</p>
                   <div>
                     <div class="e_item" v-for="(item, index) in e_result_list" :key="index">
                       <div class="e_avatar">
                         <el-avatar :size="40" :src="sourceUrl"></el-avatar>
                       </div>
                       <div class="e_info">
-                        <div class="e_info_name">{{ item.name }}</div>
+                        <div class="e_info_name" @click="handleToAuthor(item.id)">{{ item.name }}</div>
                         <div class="e_info_aff">{{ item.affiliate }}</div>
                       </div>
                     </div>
@@ -153,7 +153,9 @@
             id: 15424,
             affiliate: "安然度过FB"
           },
-        ]
+        ],
+        has_experts: false,
+        experts_count: 100
       }
     },
     methods: {
@@ -165,26 +167,37 @@
         console.log(name + "父组件监听到取消了filter类别：" + name);
         this.filter_words[name] = '';
       },
-      searchAuthor(val){
-        var _this = this
-        this.$api.scholar.getInfoByName({
-          name: val
-        }).then(res=>{
-          if (res === "200"){
-            console.log("该学者有id")
-            var id = res.data.expertid
-            _this.$router.push({
-              name: 'ScholarPage',
-              query:{
-                expertid: id
-              }
-            })
-          } else {
-            _this.search_words = {
-              experts: val
-            }
+      handleToAuthor(id) {
+        this.$router.push({
+          name: 'ScholarPage',
+          params: {
+            expertid: id
           }
         })
+      },
+      searchAuthor(val){
+        this.search_words = {
+          experts: val
+        }
+        // var _this = this
+        // this.$api.scholar.getInfoByName({
+        //   name: val
+        // }).then(res=>{
+        //   if (res === "200"){
+        //     console.log("该学者有id")
+        //     var id = res.data.expertid
+        //     _this.$router.push({
+        //       name: 'ScholarPage',
+        //       query:{
+        //         expertid: id
+        //       }
+        //     })
+        //   } else {
+        //     _this.search_words = {
+        //       experts: val
+        //     }
+        //   }
+        // })
       },
       searchSource(val) {
         this.search_words = {
@@ -223,6 +236,13 @@
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
+            _this.e_result_list = res.data.e_result_list;
+            if (_this.e_result_list.length === 0){
+              _this.has_experts = false
+            } else {
+              _this.has_experts = true
+              _this.experts_count = _this.e_result_list.length
+            }
           }else {
             _this.$message({
               message: res.message,

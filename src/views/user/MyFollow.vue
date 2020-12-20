@@ -10,7 +10,7 @@
                 <ul class="collection-sublist">
                     <li v-for="(item,index) in follow_list" :key="index">
                         <div>
-                            <span class="collection-dir">
+                            <span class="collection-dir" @click="goScholar(item.id)">
                                 <span class="subtitle">
                                     {{item.name}}
                                 </span>                                
@@ -64,7 +64,15 @@
                         _this.follow_list.splice(index,1);
                     }
                 })
-            }
+            },
+            goScholar(id) {
+                this.$router.push({
+                    name:"ScholarPage",
+                    params:{
+                        expertid:id
+                    }
+                })
+            }  
         }
     }
 </script>
