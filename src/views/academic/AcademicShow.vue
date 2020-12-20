@@ -285,7 +285,7 @@
             this.$message.error(res.msg);
           }else{
             this.$message({
-              message: '认领成功',
+              message: '认领申请成功',
               type: 'success'
             });
           }
