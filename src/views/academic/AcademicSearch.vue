@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <Header status="2" class="header_home"></Header>
     <div class="container">
       <div class="content-right">
         这里是右侧
@@ -84,9 +85,11 @@
 <script>
   import AcademicItem from "@/components/AcademicItem";
   import FilterItem from "@/components/FilterItem";
+  import Header from "@/components/header";
   export default {
     name: "AcademicSearch",
     components: {
+      Header,
       FilterItem,
       AcademicItem
     },
@@ -178,12 +181,20 @@
       searchAuthor(val){
         // 判断这个作者是否是唯一的
         this.search_words = {
-          experts: val
+          experts: val,
+          origin: '',
+          kw:'',
+          startTime: '0',
+          endTime: '0'
         }
       },
       searchSource(val) {
         this.search_words = {
-          kw: val
+          experts: '',
+          origin: '',
+          kw:val,
+          startTime: '0',
+          endTime: '0'
         }
       },
       sortByViews() {
@@ -272,6 +283,7 @@
             console.log("Request => getSearchResult : not 200");
           }
         })
+        sessionStorage.setItem("sort", this.sort)
       },
       currentPage: function () {
         // 监听：页码
@@ -364,6 +376,7 @@
       if (window.performance.navigation.type === 1) {
         console.log("页面被刷新")
         this.currentPage = parseInt(sessionStorage.getItem("current_page"))
+        this.sort = sessionStorage.getItem("sort")
       }else{
         console.log("首次被加载")
         this.currentPage = 1
@@ -374,6 +387,7 @@
       console.log("获取关键词：" + this.search_words)
       // 加载检索数据
       this.loadSearchSc()
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
   }
 </script>
@@ -381,6 +395,11 @@
 <style scoped>
   div{
     display: block;
+  }
+  .header_home{
+    border-bottom: 1px solid #e3e3e3;
+    border-bottom-color: #e0e0e0;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.072);
   }
   .wrapper{
     min-width: 1100px;
@@ -390,7 +409,7 @@
     width: 1100px;
     min-height: 1000px;
     text-align: left;
-    margin: auto;
+    margin: 5px auto auto;
   }
   .content-right{
     width: 240px;

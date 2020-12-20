@@ -19,7 +19,7 @@
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>
-          <span class="grey-part">{{ item.time.slice(0,4) }}年</span>
+          <span class="grey-part">{{ item.time }}年</span>
         </div>
         <!-- 来源：网站 -->
         <div class="allVersion">
@@ -119,6 +119,12 @@
       download() {
         console.log("免费下载！");
         document.getElementById("button-download").blur();
+      }
+    },
+    computed:{
+      getYear(time){
+        console.log(time.type());
+        return time.substring(0,4);
       }
     },
     watch: {
