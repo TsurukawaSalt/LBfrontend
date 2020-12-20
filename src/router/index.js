@@ -56,7 +56,7 @@ Vue.use(VueRouter)
       component: () => import('../views/academic/AcademicSearch')
     },
     {
-      path:'/academicShow',
+      path:'/academicShow/:academicID',
       name: 'AcademicShow',
       component: () => import('../views/academic/AcademicShow')
     },

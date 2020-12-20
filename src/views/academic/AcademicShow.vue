@@ -184,7 +184,17 @@
       },
       getRelation(){
         let vue = this;
-        this.$api.academic.getSearchResult().then(
+        let kw = "";
+        for(let key in vue.academic.keywords){
+          kw += key + " "
+        }
+        this.$api.academic.getSearchResult({
+          experts:"",
+          origin:"",
+          kw:kw,
+          startTime:0,
+          endTime:0
+        }).then(
             res=>{
               vue.relation_list = res.data.result_list
               console.log(vue.relation_list)
@@ -194,6 +204,8 @@
     },
     mounted() {
       let vue = this;
+      this.academicID = this.$route.params.academicID
+      console.log(this.academicID)
       this.$api.academic.getById(
           {id:vue.academicID}
       ).then(

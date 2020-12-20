@@ -61,7 +61,7 @@
         this.$router.push({
           name: "AcademicShow",
           params: {
-            id: this.item.documentid
+            academicID: this.item.id
           }
         })
       },
