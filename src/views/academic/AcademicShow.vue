@@ -199,7 +199,7 @@
         email:"",
         search_words: {
           kw:'',
-          expert:'',
+          experts:'',
           origin:'',
           startTime: 0,
           endTime: 0,
@@ -208,7 +208,7 @@
     },
     methods:{
       findByExpert(expertName){
-        this.search_words.expert = expertName;
+        this.search_words.experts = expertName;
         this.$router.push({
           name:"AcademicSearch",
           params:{
@@ -329,8 +329,10 @@
           }
       ).then(
           res =>{
-            if(res.code == 200)
+            if(res.code == 200) {
               vue.academic = res.data;
+              console.log(vue.academic);
+            }
             else{
               this.$message.error("文章不存在或已被删除")
             }

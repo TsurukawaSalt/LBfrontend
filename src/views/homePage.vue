@@ -20,7 +20,7 @@
           <el-input v-model="search_words.kw" placeholder="多个检索词用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="作者">
-          <el-input v-model="search_words.expert" placeholder="多个作者用空格分开"></el-input>
+          <el-input v-model="search_words.experts" placeholder="多个作者用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="来源">
           <el-input v-model="search_words.origin"></el-input>
@@ -113,7 +113,7 @@ export default {
       ],
       search_words: {
         kw:'',
-        expert:'',
+        experts:'',
         origin:'',
         startTime: 0,
         endTime: 0,
@@ -135,7 +135,7 @@ export default {
         }
       } else {
         if (this.search_words.kw === ''
-            && this.search_words.expert === ''
+            && this.search_words.experts === ''
             && this.search_words.origin === ''
             && this.search_words.startTime === 0
             && this.search_words.endTime === 0) {
