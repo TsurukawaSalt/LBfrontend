@@ -7,6 +7,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import utils from './javascript/utils.js'
 import md5 from 'js-md5';
+import VueClipboard from 'vue-clipboard2';
 
 Vue.use(utils);
 
@@ -18,6 +19,7 @@ Vue.use(VueAxios,axios);
 Vue.prototype.$axios = axios;
 Vue.use(ElementUI);
 Vue.prototype.$md5 = md5;
+Vue.use(VueClipboard)
 
 Vue.prototype.requestUrl = "http://rap2api.taobao.org/app/mock/271178";
 /*Vue.config.productionTip = false;

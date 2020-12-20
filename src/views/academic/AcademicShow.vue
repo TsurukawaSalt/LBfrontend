@@ -85,10 +85,11 @@
             <el-button type="primary" plain @click="jumptoLink(academic.link)">查看全文</el-button>
           </el-col>
           <el-col :span="5">
-            <el-button type="primary" round>收藏</el-button>
+            <el-button v-if="academic.is_favor" type="primary" @click="cancelFavorite" round>取消收藏</el-button>
+            <el-button v-else type="primary" @click="favorite" round>收藏</el-button>
           </el-col>
           <el-col :span="5">
-            <el-button type="primary" round>分享</el-button>
+            <el-button type="primary" round @click="sharedialogVisible = true">分享</el-button>
           </el-col>
 <!--          <el-col :span="4">-->
 <!--            <el-button type="primary" round>举报</el-button>-->
@@ -97,6 +98,7 @@
             <el-button type="primary" round @click="dialogVisible = true">认领</el-button>
           </el-col>
         </el-row>
+
         <hr color="#9c9e9c">
         <p style="text-align: left;font-size: 25px">相关推荐</p>
 
@@ -112,6 +114,34 @@
         <el-image :src="img"></el-image>
         <el-image :src="img"></el-image>
       </el-col>
+      <el-dialog
+              title="提示"
+              :visible.sync="sharedialogVisible"
+              width="30%">
+        <el-row style="text-align: left">
+          复制下面链接，粘贴到浏览器即可
+        </el-row>
+        <el-row>
+          <el-col :span="18">
+            <el-input
+                    placeholder="url"
+                    v-model="url"
+                    :readonly="true">
+            </el-input>
+          </el-col>
+          <el-col :offset="2" :span="2">
+            <el-button icon="el-icon-document-copy"
+                       v-clipboard:copy="url"
+                       v-clipboard:success="copySuccess"
+                       v-clipboard:error="onError"
+            ></el-button>
+          </el-col>
+        </el-row>
+
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="sharedialogVisible=false">确 定</el-button>
+        </span>
+      </el-dialog>
       <el-dialog
               title="提示"
               :visible.sync="dialogVisible"
@@ -136,6 +166,7 @@
 
 <script>
   import AcademicItem from "@/components/AcademicItem";
+
   export default {
     name: "AcademicShow",
     components: {
@@ -157,15 +188,53 @@
           cited_quantity: 100,
           time: 1990,
           origin: "中国知网",
-          views:123
+          views:123,
+          is_favor:true,
         },
         relation_list:[],
         dialogVisible:false,
+        sharedialogVisible:false,
         academicID:123,
+        url:window.location,
         email:"",
       }
     },
     methods:{
+      favorite(){
+        let vue = this;
+        this.$api.academic.favorSc({
+          document_id:vue.academicID,
+          token: sessionStorage.getItem("token"),
+          user_id: sessionStorage.getItem("userID"),
+        }).catch(err=>{
+          this.$message.error("请先登录")
+          console.log(err)
+        })
+      },
+      cancelFavorite(){
+        let vue = this;
+        this.$api.academic.favorSc({
+          document_id:vue.academicID,
+          token: sessionStorage.getItem("token"),
+          user_id: sessionStorage.getItem("userID"),
+        }).catch(err=>{
+          this.$message.error("请先登录")
+          console.log(err)
+        })
+      },
+      copySuccess(){
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        });
+        this.sharedialogVisible = false;
+      },
+      copyError(){
+        this.$message.error('您的浏览器不支持该功能，请自行复制链接内容');
+      },
+      share(){
+        console.log(window.location);
+      },
       claimSubmit(){
         let vue = this;
         this.$api.application.create({
@@ -212,7 +281,10 @@
           res =>{
             vue.academic = res.data;
           }
-      ).catch(err=>{console.log(err)})
+      ).catch(err=>{
+        console.log(err)
+        this.$message.error("文章不存在或已被删除")
+      })
       this.getRelation();
     }
   }
