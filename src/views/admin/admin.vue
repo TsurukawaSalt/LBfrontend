@@ -30,10 +30,20 @@
           <el-table-column
                   prop="userName"
                   label="用户名">
+<!--            <template slot-scope="scope" >-->
+<!--              <p style=" cursor: pointer; " @click="checkUser(scope.row.userID)">-->
+<!--                {{scope.row.userName}}-->
+<!--              </p>-->
+<!--            </template>-->
           </el-table-column>
           <el-table-column
                   prop="objectName"
                   :label="openExperts?'学者名':'文献标题'">
+            <template slot-scope="scope" >
+              <p style=" cursor: pointer; " @click="checkObject(scope.row)">
+                {{scope.row.objectName}}
+              </p>
+            </template>
           </el-table-column>
           <el-table-column
                   prop="email"
@@ -55,12 +65,12 @@
                   label="审批意见"
                   width="300">
           </el-table-column>
-          <el-table-column width="80">
-            <template slot-scope="scope">
-              <el-button type="primary" plain @click="agreeSubmit(scope.row)">通过</el-button>
+          <el-table-column v-if="openTodeal"  width="80">
+            <template  slot-scope="scope">
+              <el-button v-if="openTodeal" type="primary" plain @click="agreeSubmit(scope.row)">通过</el-button>
             </template>
           </el-table-column>
-          <el-table-column width="80">
+          <el-table-column v-if="openTodeal" width="80">
             <template slot-scope="scope">
               <el-button type="danger" plain @click="reject(scope.row)">拒绝</el-button>
             </template>
@@ -116,6 +126,7 @@
         },
 
         openExperts:false,
+        openTodeal:true,
         dialogVisible:false,
         rejectItem:null,
         rejectReason:null,
@@ -126,6 +137,17 @@
       }
     },
     methods:{
+      checkUser(userid){
+        console.log(userid)
+        //this.$router.push('/')
+      },
+      checkObject(row){
+        if(row.flag === 1){//门户
+          this.$router.push('/scholarPage/'+row.objectID)
+        }else{
+          this.$router.push('/academicShow/'+row.objectID)
+        }
+      },
       reject(row){
         this.dialogVisible = true;
         this.rejectItem = row;
@@ -171,19 +193,23 @@
       changeState(id){
         if(id === '1-1'){
           this.showApp = this.toDealAppExperts
-          this.openExperts = true
+          this.openExperts = true;
+          this.openTodeal = true;
         }
         if(id === '1-2'){
           this.showApp = this.allAppExperts;
           this.openExperts = true
+          this.openTodeal = false;
         }
         if(id === '2-1'){
           this.showApp = this.toDealAppAcademic
           this.openExperts = false
+          this.openTodeal = true;
         }
         if(id === '2-2'){
           this.showApp = this.allAppAcademic
           this.openExperts = false
+          this.openTodeal = false;
         }
       },
       getAllApp(){
