@@ -69,7 +69,7 @@
                 this.$router.push({
                     name:"ScholarPage",
                     params:{
-                        id:id
+                        expertid:id
                     }
                 })
             }  
