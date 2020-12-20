@@ -325,7 +325,7 @@
       this.$api.academic.getById(
           {
             document_id:vue.academicID,
-            user_id:vue.sessionStorage.getItem("userID"),
+            user_id:sessionStorage.getItem("userID"),
           }
       ).then(
           res =>{
