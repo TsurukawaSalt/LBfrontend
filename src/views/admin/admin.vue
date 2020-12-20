@@ -4,15 +4,15 @@
     <el-container>
       <el-aside style="width: 14%">
         <el-menu default-active="2-1">
-<!--          <el-submenu index="1">-->
-<!--            <template slot="title"><i class="el-icon-message"></i>认领门户</template>-->
-<!--            <el-menu-item index="1-1" @click="changeState('1-1')">-->
-<!--              <template slot="title">待处理申请</template>-->
-<!--            </el-menu-item>-->
-<!--            <el-menu-item index="1-2" @click="changeState('1-2')">-->
-<!--              <template slot="title">全部申请</template>-->
-<!--            </el-menu-item>-->
-<!--          </el-submenu>-->
+          <el-submenu index="1">
+            <template slot="title"><i class="el-icon-message"></i>认领门户</template>
+            <el-menu-item index="1-1" @click="changeState('1-1')">
+              <template slot="title">待处理申请</template>
+            </el-menu-item>
+            <el-menu-item index="1-2" @click="changeState('1-2')">
+              <template slot="title">全部申请</template>
+            </el-menu-item>
+          </el-submenu>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-message"></i>认领文献</template>
             <el-menu-item index="2-1" @click="changeState('2-1')">
@@ -66,7 +66,7 @@
           <el-pagination
                   layout="prev, pager, next"
                   :current-page="showApp.page"
-                  @current-change="changePage(showApp === allAppAcademic)"
+                  @current-change="changePage()"
                   :total="showApp.totalElements">
           </el-pagination>
         </div>
@@ -100,11 +100,16 @@
     },
     data(){
       return {
-        allAppExperts:[],
-        toDealAppExperts:[],
-        allAppAcademic:[],
-        toDealAppAcademic:[],
-        showApp:[],
+        allAppExperts: {},
+        toDealAppExperts:{},
+        allAppAcademic:{},
+        toDealAppAcademic:{},
+        showApp:{
+          totalPages:0,
+          page:0,
+          totalElements:0,
+          rows:[]
+        },
 
         openExperts:true,
         dialogVisible:false,
@@ -136,7 +141,6 @@
         });
       },
       agreeSubmit(row){
-        row;
         this.$api.application.agree({
           formID:row.formID,
           token:sessionStorage.getItem("token"),
@@ -146,9 +150,19 @@
           type: 'success'
         });
       },
-      changePage(isAll){
-        console.log(this.showApp.page)
-        this.getOneApp(isAll,0,this.showApp.page);
+      changePage(){
+        let showApp = this.showApp;
+        let page = this.showApp.page;
+        if(showApp === this.allAppAcademic){
+          this.getOneApp(true,0,page);
+        }else if(showApp === this.allAppExperts){
+          this.getOneApp(true,1,page);
+        }else if(showApp === this.toDealAppAcademic){
+          this.getOneApp(false,0,page);
+        }else if(showApp === this.toDealAppExperts){
+          this.getOneApp(false,1,page);
+        }
+        //this.getOneApp(isAll,flag,this.showApp.page);
       },
       changeState(id){
         if(id === '1-1'){
@@ -169,8 +183,8 @@
         }
       },
       getAllApp(){
-        //this.getOneApp(true,1,10,1);
-        //this.getOneApp(false,1,10,1);
+        this.getOneApp(true,1,10,1);
+        this.getOneApp(false,1,10,1);
         this.getOneApp(true,0,1);
         this.getOneApp(false,0,1);
       },
@@ -183,7 +197,7 @@
           flag,
           token:sessionStorage.getItem("token"),
         }).then(res =>{
-          if(res.code === 200){
+          if(res.code === "200"){
             console.log(res.data)
             if(isAll && flag === 1)
               vue.allAppExperts = res.data;
