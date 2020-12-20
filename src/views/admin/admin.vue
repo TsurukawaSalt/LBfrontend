@@ -127,7 +127,7 @@
         console.log(this.rejectItem+this.rejectReason)
         this.$api.application.reject({
           formID:vue.rejectItem.formID,
-          token:'',
+          token:sessionStorage.getItem("token"),
           reason:vue.rejectReason
         })
         this.$message({
@@ -139,7 +139,7 @@
         row;
         this.$api.application.agree({
           formID:row.formID,
-          token:''
+          token:sessionStorage.getItem("token"),
         })
         this.$message({
           message: '已同意该申请',
@@ -181,7 +181,7 @@
           page:page,
           isAll,
           flag,
-          token:'hv678h3fgrb8huirt'
+          token:sessionStorage.getItem("token"),
         }).then(res =>{
           if(res.code === 200){
             console.log(res.data)
