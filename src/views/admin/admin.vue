@@ -36,6 +36,10 @@
                   :label="openExperts?'学者名':'文献标题'">
           </el-table-column>
           <el-table-column
+                  prop="email"
+                  label="联系邮箱">
+          </el-table-column>
+          <el-table-column
                   prop="time"
                   label="时间">
           </el-table-column>
@@ -111,7 +115,7 @@
           rows:[]
         },
 
-        openExperts:true,
+        openExperts:false,
         dialogVisible:false,
         rejectItem:null,
         rejectReason:null,

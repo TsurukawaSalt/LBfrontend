@@ -135,7 +135,7 @@
             <el-button icon="el-icon-document-copy"
                        v-clipboard:copy="url"
                        v-clipboard:success="copySuccess"
-                       v-clipboard:error="onError"
+                       v-clipboard:error="copyError"
             ></el-button>
           </el-col>
         </el-row>
@@ -269,9 +269,6 @@
       copyError(){
         this.$message.error('您的浏览器不支持该功能，请自行复制链接内容');
       },
-      share(){
-        console.log(window.location);
-      },
       claimSubmit(){
         let vue = this;
         this.$api.application.create({
@@ -327,7 +324,11 @@
           {id:vue.academicID}
       ).then(
           res =>{
-            vue.academic = res.data;
+            if(res.code == 200)
+              vue.academic = res.data;
+            else{
+              this.$message.error("文章不存在或已被删除")
+            }
           }
       ).catch(err=>{
         console.log(err)
