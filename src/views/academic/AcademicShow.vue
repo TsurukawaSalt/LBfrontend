@@ -243,6 +243,12 @@
           objectID: vue.academicID,
           flag: 0,
           email: vue.email
+        }).then(res=>{
+          if(res.code !== 200){
+            this.$message.error(res.msg);
+          }
+        }).catch(err=>{
+          console.log(err)
         })
       },
       jumptoLink(url){
