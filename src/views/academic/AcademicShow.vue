@@ -18,6 +18,7 @@
             </td>
             <td style="float:left;cursor: pointer; ">
               <span v-for="expert in academic.experts" :key="expert"
+                    @click="findByExpert(expert.name)"
                     class="expert">
                 {{expert.name}}
               </span>
@@ -41,6 +42,7 @@
             </td>
             <td style="float:left;cursor: pointer; ">
             <span v-for="word in academic.keywords" :key="word"
+                  @click="findByKw(word)"
                   class="keyword">
               {{word}}
             </span>
@@ -197,9 +199,34 @@
         academicID:123,
         url:window.location,
         email:"",
+        search_words: {
+          kw:'',
+          expert:'',
+          origin:'',
+          startTime: 0,
+          endTime: 0,
+        }
       }
     },
     methods:{
+      findByExpert(expertName){
+        this.search_words.expert = expertName;
+        this.$router.push({
+          name:"AcademicSearch",
+          params:{
+            search_words: encodeURIComponent(JSON.stringify(this.search_words)),
+          }
+        })
+      },
+      findByKw(keyword){
+        this.search_words.kw = keyword;
+        this.$router.push({
+          name:"AcademicSearch",
+          params:{
+            search_words: encodeURIComponent(JSON.stringify(this.search_words)),
+          }
+        })
+      },
       favorite(){
         let vue = this;
         this.$api.academic.favorSc({
