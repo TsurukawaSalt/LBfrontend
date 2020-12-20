@@ -180,25 +180,6 @@
         this.search_words = {
           experts: val
         }
-        // var _this = this
-        // this.$api.scholar.getInfoByName({
-        //   name: val
-        // }).then(res=>{
-        //   if (res === "200"){
-        //     console.log("该学者有id")
-        //     var id = res.data.expertid
-        //     _this.$router.push({
-        //       name: 'ScholarPage',
-        //       query:{
-        //         expertid: id
-        //       }
-        //     })
-        //   } else {
-        //     _this.search_words = {
-        //       experts: val
-        //     }
-        //   }
-        // })
       },
       searchSource(val) {
         this.search_words = {

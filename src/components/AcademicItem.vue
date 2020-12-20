@@ -19,7 +19,7 @@
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>
-          <span class="grey-part">{{ item.time }}年</span>
+          <span class="grey-part">{{ item.time.slice(0,4) }}年</span>
         </div>
         <!-- 来源：网站 -->
         <div class="allVersion">
@@ -30,8 +30,8 @@
       <!-- source操作部分 -->
       <div class="sc_ext">
         <!-- 收藏/引用/批量引用/（免费下载）-->
-        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-show="!item.is_favor">收藏</el-button>
-        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="item.is_favor">已收藏</el-button>
+        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-show="!this.is_favor">收藏</el-button>
+        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="this.is_favor">已收藏</el-button>
         <el-button class="ext-button" id="button-quote" type="mini" round icon="el-icon-share" @click="quote()">引用</el-button>
         <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>
         <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="download()">免费下载</el-button>
@@ -52,7 +52,8 @@
       return {
         item: {
 
-        }
+        },
+        is_favor: false
       }
     },
     methods: {
@@ -65,20 +66,19 @@
       },
       toAuthorPage(item) {
         console.log("跳转学者搜索！")
-        // 返回里有id的情况
-        if (item.id !== ""){
+        // 有id的情况
+        if (item.id !== null){
           this.$router.push({
             name: 'ScholarPage',
             params: {
               expertid: item.id
             }
           })
-        } else {
-          this.$emit("toAuthorPage", item);
         }
-
-        // 返回里没有id的情况 无脑emit
-        // this.$emit("toAuthorPage", item);
+        // 没有id的情况 触发搜索
+        else {
+          this.$emit("toAuthorPage", item.name);
+        }
       },
       toSourcePage(val) {
         // 出版社/杂志期刊
@@ -101,8 +101,8 @@
           document_id: _this.item.documentid,
           user_id: sessionStorage.getItem("userID")
         }).then(res => {
-          if (res.code === 200){
-            _this.item.is_favor = res.data.is_favor
+          if (res.code === "200"){
+            _this.is_favor = res.data;
           }
         })
         document.getElementById("button-favor").blur();
@@ -121,8 +121,17 @@
         document.getElementById("button-download").blur();
       }
     },
+    watch: {
+      c_sc: {
+        handler(){
+          this.item = this.c_sc
+        },
+        deep: true
+      }
+    },
     mounted() {
       this.item = this.c_sc
+      this.is_favor = this.item.is_favor
     }
   }
 </script>
