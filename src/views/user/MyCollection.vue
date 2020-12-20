@@ -67,10 +67,7 @@
             },
             goArticle(id){
                 this.$router.push({
-                    name:"AcademicShow",
-                    params:{
-                        id:id
-                    }
+                    path:"/academicShow/"+id,
                 })
             } 
         }
