@@ -176,6 +176,7 @@
         })
       },
       searchAuthor(val){
+        // 判断这个作者是否是唯一的
         this.search_words = {
           experts: val
         }

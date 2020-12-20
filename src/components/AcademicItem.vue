@@ -24,7 +24,7 @@
         <!-- 来源：网站 -->
         <div class="allVersion">
           <span class="grey-part">来源：</span>
-          <span class="version-click" @click="this.$router.push(item.link)">{{ item.link }}</span>
+          <span class="version-click" @click="toLink(item.link)">{{ item.link }}</span>
         </div>
       </div>
       <!-- source操作部分 -->
@@ -65,6 +65,7 @@
       },
       toAuthorPage(item) {
         console.log("跳转学者搜索！")
+        // 返回里有id的情况
         if (item.id !== ""){
           this.$router.push({
             name: 'ScholarPage',
@@ -76,6 +77,8 @@
           this.$emit("toAuthorPage", item);
         }
 
+        // 返回里没有id的情况 无脑emit
+        // this.$emit("toAuthorPage", item);
       },
       toSourcePage(val) {
         // 出版社/杂志期刊
@@ -85,6 +88,11 @@
       toCitedPage() {
         // 到来源网站查看文章
         console.log("跳转引用详情页！")
+      },
+      toLink(link){
+        // window.location.href = link;
+
+        window.open(link, '_blank');
       },
       favor() {
         console.log("收藏/取消收藏文章！");
