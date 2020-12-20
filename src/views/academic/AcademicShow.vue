@@ -17,10 +17,10 @@
             </span>
             </td>
             <td style="float:left;cursor: pointer; ">
-              <span v-for="expert in academic.experts" :key="expert"
-                    @click="findByExpert(expert.name)"
+              <span v-for="author in academic.authors" :key="author"
+                    @click="findByExpert(author.name)"
                     class="expert">
-                {{expert.name}}
+                {{author.name}}
               </span>
             </td>
           </tr>
@@ -41,7 +41,7 @@
               <span class="tableleft" >关键词：</span>
             </td>
             <td style="float:left;cursor: pointer; ">
-            <span v-for="word in academic.keywords" :key="word"
+            <span v-for="word in academic.keywordList" :key="word"
                   @click="findByKw(word)"
                   class="keyword">
               {{word}}
@@ -180,12 +180,8 @@
         academic: {
           title: "this is the title",
           summary: "摘要 this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary this is the summary",
-          experts: [
-            {name: "学者1"},
-            {name: "学者2"},
-            {name: "学者3"}
-          ],
-          keywords:["fds","kdfIFD","段通风户籍"],
+          authors: [ "学者1","学者2","学者3"],
+          keywordList:["fds","kdfIFD","段通风户籍"],
           link: "this is the link",
           cited_quantity: 100,
           time: 1990,
@@ -238,6 +234,7 @@
             message: '收藏成功',
             type: 'success'
           });
+          vue.academic.is_favor = false;
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
@@ -254,6 +251,7 @@
             message: '取消收藏成功',
             type: 'success'
           });
+          vue.academic.is_favor = true;
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
@@ -303,11 +301,13 @@
           kw += key + " "
         }
         this.$api.academic.getSearchResult({
-          experts:"",
-          origin:"",
-          kw:kw,
-          startTime:0,
-          endTime:0
+          search_words:{
+            experts:"",
+            origin:"",
+            kw:kw,
+            startTime:0,
+            endTime:0
+          }
         }).then(
             res=>{
               vue.relation_list = res.data.result_list
