@@ -281,8 +281,13 @@
           flag: 0,
           email: vue.email
         }).then(res=>{
-          if(res.code !== 200){
+          if(res.code !== "200"){
             this.$message.error(res.msg);
+          }else{
+            this.$message({
+              message: '认领成功',
+              type: 'success'
+            });
           }
         }).catch(err=>{
           console.log(err)
