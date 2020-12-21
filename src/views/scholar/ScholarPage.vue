@@ -189,70 +189,50 @@ export default {
         scholar_id: 'CN-B073VAMJ',
         affiliate: '北京航空航天大学',
         achList: [
-          {
-            title: 'a指数',
-            num: 1341
-          },
-          {
-            title: 'b指数',
-            num: 2565
-          },
-          {
-            title: 'c指数',
-            num: 241
-          },
-          {
-            title: 'd指数',
-            num: 597
-          }
+          // {
+          //   title: 'a指数',
+          //   num: 1341
+          // },
+          // {
+          //   title: 'b指数',
+          //   num: 2565
+          // },
+          // {
+          //   title: 'c指数',
+          //   num: 241
+          // },
+          // {
+          //   title: 'd指数',
+          //   num: 597
+          // }
         ],
         isVerified: false,
-        isFocus: true
+        isFocus: false
       },
       co_authors_list:[
-        {
-          expertid: '23423',
-          name: '十六日',
-          affiliate: '浙江医科大学肿瘤研究所'
-        },
-        {
-          expertid: '3673',
-          name: '打过交道',
-          affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
-        }
+        // {
+        //   expertid: '23423',
+        //   name: '十六日',
+        //   affiliate: '浙江医科大学肿瘤研究所'
+        // },
+        // {
+        //   expertid: '3673',
+        //   name: '打过交道',
+        //   affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
+        // }
       ],
-      co_authors_list_show:[
-        {
-          expertid: null,
-          name: '十六日',
-          affiliate: '浙江医科大学肿瘤研究所'
-        },
-        {
-          expertid: null,
-          name: '打过交道',
-          affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
-        }
-      ],
+      co_authors_list_show:[],
       co_affiliate_list: [
-        {
-          name: '啊的发挥快递费',
-          count: 14351
-        },
-        {
-          name: '是该公司认为',
-          count: 42654
-        }
+        // {
+        //   name: '啊的发挥快递费',
+        //   count: 14351
+        // },
+        // {
+        //   name: '是该公司认为',
+        //   count: 42654
+        // }
       ],
-      co_affiliate_list_show: [
-        {
-          name: '啊的发挥快递费',
-          count: 14351
-        },
-        {
-          name: '是该公司认为',
-          count: 42654
-        }
-      ],
+      co_affiliate_list_show: [],
       result_list:[],
       sort_words: {
         sc_year: '',
@@ -276,8 +256,12 @@ export default {
     },
     toScholarPage(scholar) {
       if (scholar.expertid !== null){
-        // 修改scholar_id
-        this.scholar_id = scholar.expertid
+        this.$router.push({
+          name: "ScholarPage",
+          params: {
+            expertid: scholar.expertid
+          }
+        })
       } else {
         var search_words = {
           experts: '',
@@ -382,8 +366,8 @@ export default {
         if (res.code === "200"){
           _this.scholar_info = res.data
           this.loadRelateSc()
-          // this.loadCoAuthorsList()
-          // this.loadCoAffList()
+          this.loadCoAuthorsList()
+          this.loadCoAffList()
         }else {
           _this.$message({
             message: "loadInfo失败",
@@ -391,12 +375,6 @@ export default {
           })
         }
       })
-      //     .catch(err => {
-      //   _this.$message({
-      //     message: err,
-      //     type: "error"
-      //   })
-      // })
     },
     loadRelateSc(){
       var _this = this
@@ -533,11 +511,6 @@ export default {
       // 监听：页码
       console.log("page有改动")
       this.loadRelateSc();
-    },
-    scholar_id: function () {
-      console.log("scholarid有改动")
-      this.currentPage = 1
-      this.loadInfo()
     }
   },
   mounted() {
