@@ -204,7 +204,7 @@ export default {
         }
       }else {
         _this.$message({
-          message: res.message,
+          message: res.msg,
           type: "error"
         })
         console.log("Request => getSearchResult : not 200");
