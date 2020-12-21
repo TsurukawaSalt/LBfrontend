@@ -388,11 +388,6 @@
   div{
     display: block;
   }
-  .header_home{
-    border-bottom: 1px solid #e3e3e3;
-    border-bottom-color: #e0e0e0;
-    box-shadow: 1px 2px 1px rgba(0,0,0,.072);
-  }
   .wrapper{
     min-width: 1100px;
     text-align: center;
