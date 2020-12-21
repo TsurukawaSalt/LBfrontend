@@ -119,7 +119,7 @@
 
           }else{
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
           }

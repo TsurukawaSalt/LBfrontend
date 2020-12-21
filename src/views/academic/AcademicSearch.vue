@@ -224,7 +224,7 @@
             }
           }else {
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -264,7 +264,7 @@
             _this.result_length = _this.result_list.length;
           } else {
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -291,7 +291,7 @@
             _this.total_rs = res.data.total;
           } else {
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -319,7 +319,7 @@
               _this.total_rs = res.data.total;
             } else {
               _this.$message({
-                message: res.message,
+                message: res.msg,
                 type: "error"
               })
               console.log("Request => getSearchResult : not 200");
@@ -347,7 +347,7 @@
       //         _this.total_rs = res.data.total;
       //       } else {
       //         _this.$message({
-      //           message: res.message,
+      //           message: res.msg,
       //           type: "error"
       //         })
       //         console.log("Request => getSearchResult : not 200");

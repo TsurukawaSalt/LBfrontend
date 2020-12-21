@@ -331,7 +331,7 @@ export default {
           })
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: 'error'
           })
         }
@@ -411,7 +411,7 @@ export default {
         }
         else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
@@ -432,7 +432,7 @@ export default {
           }
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
@@ -448,7 +448,7 @@ export default {
           _this.total_co_affs = res.data.total_rs
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
