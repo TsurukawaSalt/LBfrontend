@@ -248,12 +248,17 @@
           document_id:vue.academicID,
           token: sessionStorage.getItem("token"),
           user_id: sessionStorage.getItem("userID"),
-        }).then(()=>{
-          this.$message({
-            message: '收藏成功',
-            type: 'success'
-          });
-          vue.academic.is_favor = false;
+        }).then((res)=>{
+          if(res.code == 200){
+            this.$message({
+              message: '收藏成功',
+              type: 'success'
+            });
+            vue.academic.is_favor = true;
+          }else{
+            this.$message.error(res.msg)
+          }
+
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
@@ -265,12 +270,16 @@
           document_id:vue.academicID,
           token: sessionStorage.getItem("token"),
           user_id: sessionStorage.getItem("userID"),
-        }).then(()=>{
-          this.$message({
-            message: '取消收藏成功',
-            type: 'success'
-          });
-          vue.academic.is_favor = true;
+        }).then((res)=>{
+          if(res.code == 200){
+            this.$message({
+              message: '取消收藏成功',
+              type: 'success'
+            });
+            vue.academic.is_favor = false;
+          }else{
+            this.$message.error(res.msg)
+          }
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
