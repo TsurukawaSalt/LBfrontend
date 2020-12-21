@@ -90,6 +90,8 @@ export default {
   data() {
     return {
       // url:require('@/assets/home_icon/Num-1.png'),
+      result_list:[],
+      result_length:0,
       academic_list:[
         {title:"12345666667777777", year:2020, author:'ABC', cited:195},
         {title:'654321', year:2020, author:'ABC', cited:195},
@@ -167,7 +169,34 @@ export default {
     Header,
   },
   mounted() {
-
+    let _this = this;
+    this.$api.academic.getSearchResult({
+      search_words: '',
+      filter_words: '',
+      sort: 'views',
+      page: 1,
+      userID: sessionStorage.getItem("userID")
+    }).then(res => {
+      if (res.code === "200"){
+        _this.result_list = res.data.result_list;
+        // _this.filter_list = res.data.filter_list;
+        // _this.total_rs = res.data.total;
+        _this.result_length = _this.result_list.length;
+        // _this.e_result_list = res.data.e_result_list;
+        // if (_this.e_result_list.length === 0){
+        //   _this.has_experts = false
+        // } else {
+        //   _this.has_experts = true
+        //   _this.experts_count = _this.e_result_list.length
+        // }
+      }else {
+        _this.$message({
+          message: res.message,
+          type: "error"
+        })
+        console.log("Request => getSearchResult : not 200");
+      }
+    })
   }
 }
 </script>
