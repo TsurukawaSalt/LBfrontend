@@ -347,6 +347,9 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
+          this.loadRelateSc()
+          this.loadCoAuthorsList()
+          this.loadCoAffList()
         }else {
           _this.$message({
             message: res.message,
@@ -386,7 +389,8 @@ export default {
         userID: sessionStorage.getItem("userID")
       }).then(res => {
         if (res === "200"){
-          _this.result_list = res.data
+          _this.result_list = res.data.result_list
+          _this.total_rs = res.data.total
         }
         else {
           _this.$message({
@@ -485,43 +489,20 @@ export default {
     sort_words: {
       // 监听：过滤关键词
       handler: function () {
+        console.log("sort_words有改动")
         this.loadRelateSc()
       },
       deep: true
     },
     currentPage: function () {
       // 监听：页码
-      var _this = this
-      this.$api.academic.getSearchResult({
-        search_words: {
-          experts: _this.scholar_info.name,
-          origin: '',
-          kw:'',
-          startTime: '0',
-          endTime: '0'
-        },
-        filter_words: {
-          year: _this.sort_words.sc_year,
-          cate: '',
-          level: '',
-          savetype: '',
-          keywords: '',
-          type: _this.sort_words.paper_type,
-          authors: '',
-          jnls: '',
-          affs: '',
-        },
-        sort: _this.sort_words.sc_sort,
-        page: _this.currentPage,
-        userID: sessionStorage.getItem("userID")
-      })
+      console.log("page有改动")
+      this.loadRelateSc();
     },
     scholar_id: function () {
+      console.log("scholarid有改动")
       this.currentPage = 1
       this.loadInfo()
-      this.loadRelateSc()
-      this.loadCoAuthorsList()
-      this.loadCoAffList()
     }
   },
   mounted() {
@@ -529,9 +510,6 @@ export default {
     this.scholar_id = this.$route.params.expertid
     this.currentPage = 1
     this.loadInfo()
-    this.loadRelateSc()
-    this.loadCoAuthorsList()
-    this.loadCoAffList()
   }
 }
 </script>
