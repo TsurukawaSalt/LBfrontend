@@ -171,17 +171,25 @@ export default {
   mounted() {
     let _this = this;
     this.$api.academic.getSearchResult({
-      search_words: '',
-      filter_words: '',
-      sort: 'views',
+      search_words: {
+        kw:'',
+        experts:'',
+        origin:'',
+        startTime: '0',
+        endTime: '0',
+      },
+      filter_words: {},
+      sort: "views",
       page: 1,
       userID: sessionStorage.getItem("userID")
     }).then(res => {
       if (res.code === "200"){
+        // alert(200)
         _this.result_list = res.data.result_list;
         // _this.filter_list = res.data.filter_list;
         // _this.total_rs = res.data.total;
         _this.result_length = _this.result_list.length;
+        console.log(_this.result_list)
         // _this.e_result_list = res.data.e_result_list;
         // if (_this.e_result_list.length === 0){
         //   _this.has_experts = false
