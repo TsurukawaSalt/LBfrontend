@@ -54,21 +54,21 @@
       <div class="left_block">
         <h4>热门文献</h4>
         <div class="list_left">
-          <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(0, 5)" :key="index">
+          <el-row class="list_item" v-for="(o, index) in this.result_list.slice(0, 5)" :key="index">
             <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-ach"></el-image>
-            <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
-            <span class="list_cited" :underline="false">{{o.cited}}</span>
+            <el-link class="list_title" :underline="false" @click="goArticle(o.id)">{{ o.title }}</el-link>
+            <span class="list_cited" :underline="false">{{o.cited_quantity}}</span>
             <br>
-            <span class="list_author" :underline="false">{{o.author}} {{o.year}}</span>
+            <span class="list_author" :underline="false">{{o.time}} {{o.experts}}</span>
           </el-row>
         </div>
         <div class="list_right">
-          <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(5, 10)" :key="index">
+          <el-row class="list_item" v-for="(o, index) in this.result_list.slice(5, 10)" :key="index">
             <el-image :src="require('@/assets/home_icon/Num-'+(index+6)+'.png')" class="num-icon-ach"></el-image>
-            <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
-            <span class="list_cited" :underline="false">{{o.cited}}</span>
+            <el-link class="list_title" :underline="false" @click="goArticle(o.id)">{{ o.title }}</el-link>
+            <span class="list_cited" :underline="false">{{o.cited_quantity}}</span>
             <br>
-            <span class="list_author" :underline="false">{{o.author}} {{o.year}}</span>
+            <span class="list_author" :underline="false">{{o.time}} {{o.experts}}</span>
           </el-row>
         </div>
       </div>
@@ -76,7 +76,7 @@
         <h4>热门关键词</h4>
         <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
           <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-kw"></el-image>
-          <el-link class="keyword" :underline="false" @click="goSearch(o)">{{o}}</el-link>
+          <el-link class="keyword" :underline="false" @click="goKwSearch(o)">{{o}}</el-link>
         </el-row>
       </div>
     </div>
@@ -92,24 +92,24 @@ export default {
       // url:require('@/assets/home_icon/Num-1.png'),
       result_list:[],
       result_length:0,
-      academic_list:[
-        {title:"12345666667777777", year:2020, author:'ABC', cited:195},
-        {title:'654321', year:2020, author:'ABC', cited:195},
-        {title:'111111', year:2020, author:'ABC', cited:195},
-        {title:'222222', year:2020, author:'ABC', cited:195},
-        {title:'333333', year:2020, author:'ABC', cited:195},
-
-        {title:'444444', year:2020, author:'ABC', cited:195},
-        {title:'555555', year:2020, author:'ABC', cited:195},
-        {title:'666666', year:2020, author:'ABC', cited:195},
-        {title:'888888', year:2020, author:'ABC', cited:195},
-        {title:'777777', year:2020, author:'ABC', cited:195},
-      ],
+      // academic_list:[
+      //   {title:"12345666667777777", year:2020, author:'ABC', cited:195},
+      //   {title:'654321', year:2020, author:'ABC', cited:195},
+      //   {title:'111111', year:2020, author:'ABC', cited:195},
+      //   {title:'222222', year:2020, author:'ABC', cited:195},
+      //   {title:'333333', year:2020, author:'ABC', cited:195},
+      //
+      //   {title:'444444', year:2020, author:'ABC', cited:195},
+      //   {title:'555555', year:2020, author:'ABC', cited:195},
+      //   {title:'666666', year:2020, author:'ABC', cited:195},
+      //   {title:'888888', year:2020, author:'ABC', cited:195},
+      //   {title:'777777', year:2020, author:'ABC', cited:195},
+      // ],
       hot_keywords:[
-          'ABC',
-          'DEF',
-          'GHI',
-          'JKL',
+          'AB',
+          'DEFC',
+          'GHIl',
+          'J',
           'MNO',
           'PQR',
           'STU',
@@ -156,13 +156,13 @@ export default {
         }
       }
     },
-    goArticle(url){
-      this.$router.push({
-        name:"AcademicShow",
-        params:{
-          id:url
-        }
-      })
+    goKwSearch(kw){
+      alert(kw)
+      this.search_words.kw = kw
+      this.goSearch(false)
+    },
+    goArticle(id){
+      this.$router.push('academicShow/'+id)
     },
   },
   components:{
@@ -172,7 +172,7 @@ export default {
     let _this = this;
     this.$api.academic.getSearchResult({
       search_words: {
-        kw:'',
+        kw:'计算机',
         experts:'',
         origin:'',
         startTime: '0',
@@ -189,14 +189,19 @@ export default {
         // _this.filter_list = res.data.filter_list;
         // _this.total_rs = res.data.total;
         _this.result_length = _this.result_list.length;
-        console.log(_this.result_list)
-        // _this.e_result_list = res.data.e_result_list;
-        // if (_this.e_result_list.length === 0){
-        //   _this.has_experts = false
-        // } else {
-        //   _this.has_experts = true
-        //   _this.experts_count = _this.e_result_list.length
-        // }
+        console.log(_this.result_list[0])
+        for (let i = 0; i < 10; i ++) {
+
+          _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
+          console.log(_this.result_list[i].time)
+        }
+        _this.e_result_list = res.data.e_result_list;
+        if (_this.e_result_list.length === 0){
+          _this.has_experts = false
+        } else {
+          _this.has_experts = true
+          _this.experts_count = _this.e_result_list.length
+        }
       }else {
         _this.$message({
           message: res.message,
@@ -212,7 +217,7 @@ export default {
 <style scoped>
   .page{
     position: relative;
-    //min-width: 1200px;
+    min-width: 920px;
     /*max-width: 1500px;*/
     min-height: 800px;
     /*left: 10%;*/
@@ -226,7 +231,7 @@ export default {
 
   .title {
     position: absolute;
-    top: 27%;
+    top: 200px;
     left: 25%;
     width: 50%;
     font-size: 70px;
@@ -234,7 +239,7 @@ export default {
   }
   .search {
     position: absolute;
-    top: 40%;
+    top: 300px;
     left: 25%;
     width: 50%;
   }
@@ -281,7 +286,7 @@ export default {
     padding: 0;
     position: absolute;
     display: table;
-    top: 50%;
+    top: 400px;
     left: calc((100% - 900px)/2);
     /*right: 10%;*/
     width: 900px;
@@ -316,16 +321,7 @@ export default {
     height: 100%;
     /*display: flex;*/
   }
-  @media screen and (min-width: 1400px){
-    .middle_block {
-      left: calc((100% - 1200px)/2);
-      width: 1000px;
-    }
-    .top_block {
-      left: calc((100% - 1200px)/2);
-      width: 1200px;
-    }
-  }
+
 
   .left_block {
     /*background: black;*/
@@ -342,13 +338,13 @@ export default {
     position: absolute;
     //background: #005cd9;
     text-align: left;
-    top: -3%;
+    top: -25px;
     width: 20%;
-    left: 10%;
+    left: 10px;
   }
   .left_block .el-row {
     top: 5%;
-    left: -25%;
+    left: -140px;
   }
 
 
@@ -359,8 +355,8 @@ export default {
     text-align: left;
     //max-width: 400px;
     height: 70%;
-    width: 35%;
-    left: 18%;
+    width: 200px;
+    left: 150px;
   }
   .list_right {
     position: absolute;
@@ -369,12 +365,12 @@ export default {
     text-align: left;
     //max-width: 400px;
     height: 70%;
-    width: 35%;
-    left: 62%;
+    width: 200px;
+    left: 550px;
   }
   .list_item {
     /*background: #9c9e9c;*/
-    height: 20%;
+    height: 80px;
     //overflow: hidden;
     //text-overflow: ellipsis;
   }
@@ -386,12 +382,17 @@ export default {
   .list_title {
     /*background: #8c939d;*/
     //position: absolute;
-    font-size: 20px;
-    height: 60px;
-    //width: 150px;
-    left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 15px;
+    height: 20px;
+    width: 200px;
+    left: 50px;
+    top: -16px;
+    display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+    -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+    overflow: hidden; /*超出的文本隐藏*/
+    text-overflow: ellipsis; /* 溢出用省略号*/
+    //white-space: nowrap;
+    -webkit-box-orient: vertical
   }
   .list_author{
     //background: #9fa19f;
@@ -403,8 +404,8 @@ export default {
   .list_cited {
     font-size: 15px;
     position: absolute;
-    left: 250px;
-    top: 24px;
+    left: 290px;
+    top: 29px;
   }
 
   .right_block {
@@ -412,10 +413,10 @@ export default {
     /*margin: -8px;*/
     padding: 0;
     position: absolute;
-    /*top: 80%;*/
+    top: -25px;
     float: left;
     /*margin-left: 90%;*/
-    left: 95%;
+    left: 800px;
     width: 200px;
     height: 100%;
   }
@@ -426,9 +427,58 @@ export default {
   }
   .keyword_list {
     height: 45px;
+    text-align: left;
+    left: 50px;
   }
   .keyword {
     font-size: 20px;
-    left: 5px;
+    left: 10px;
+  }
+
+  @media screen and (min-width: 1400px){
+    .middle_block {
+      left: calc((100% - 1200px)/2);
+      width: 1000px;
+    }
+    .top_block {
+      left: calc((100% - 1000px)/2);
+      width: 1000px;
+    }
+
+    .left_block h4 {
+      width: 20%;
+      left: 70px;
+    }
+
+    .list_left {
+      width: 300px;
+      left: 200px;
+    }
+    .list_right {
+      width: 300px;
+      left: 650px;
+    }
+    .list_title {
+      /*background: #8c939d;*/
+    //position: absolute;
+      font-size: 15px;
+      height: 20px;
+      width: 250px;
+      left: 50px;
+      top: -16px;
+      display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+      -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+      overflow: hidden; /*超出的文本隐藏*/
+      text-overflow: ellipsis; /* 溢出用省略号*/
+    //white-space: nowrap;
+      -webkit-box-orient: vertical
+    }
+    .right_block {
+      top: -25px;
+      float: left;
+      left: 950px;
+      width: 200px;
+      height: 100%;
+    }
   }
 </style>
