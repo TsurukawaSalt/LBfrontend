@@ -246,6 +246,7 @@
     watch: {
       sort: function () {
         // 监听：排序方式
+        console.log("sort被修改")
         sessionStorage.setItem("sort", this.sort)
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         var _this = this;
@@ -272,6 +273,7 @@
       },
       currentPage: function () {
         // 监听：页码
+        console.log("page被修改")
         sessionStorage.setItem("current_page", this.currentPage.toString());
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         var _this = this
@@ -285,7 +287,6 @@
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
             _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
           } else {
@@ -301,7 +302,6 @@
         // 监听左侧过滤项点击
         handler (){
           console.log("filters改变")
-          console.log(this.filter_words)
           document.body.scrollTop = document.documentElement.scrollTop = 0;
           var _this = this
           this.result_list = []
@@ -359,6 +359,8 @@
       // }
     },
     mounted() {
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
       if (window.performance.navigation.type === 1) {
         console.log("页面被刷新")
         this.currentPage = parseInt(sessionStorage.getItem("current_page"))
@@ -373,14 +375,11 @@
         this.sort = "views"
         sessionStorage.setItem("sort", "views")
       }
-      this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
-
       console.log("获取关键词：" + this.search_words)
       console.log("页码：" + this.currentPage)
       console.log("排序方式" + this.sort)
       // 加载检索数据
       this.loadSearchSc()
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
   }
 </script>

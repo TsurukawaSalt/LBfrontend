@@ -4,7 +4,7 @@ import axios from "@/http/axios";
 export const getInfo = params => {
   return axios({
     url: '/scholar/getInfo',
-    method: 'post',
+    method: 'get',
     params
   })
 }
