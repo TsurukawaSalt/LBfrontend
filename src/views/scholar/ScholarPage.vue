@@ -29,7 +29,7 @@
             <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
-                ScholarID:
+<!--                ScholarID:-->
                 <span class="p-scholarID-id">
                   {{ scholar_info.scholar_id }}
                 </span>
@@ -141,14 +141,13 @@
           <div class="co-author-wr">
             <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="total_co_authors>4">更多</i>
             <h3>合作学者</h3>
-
             <div class="co-author-list">
               <div v-for="(item, index) in co_authors_list_show" :key="index">
                 <div class="co-author-avatar is-hover"  @click="toScholarPage(item.scholar_id)">
                   <el-avatar shape="square" :size="40" :src="sourceUrl"></el-avatar>
                 </div>
                 <div class="co-author-item">
-                  <div class="co-author-name" @click="toScholarPage(item.scholar_id)">{{ item.name }}</div>
+                  <div class="co-author-name" @click="toScholarPage(item)">{{ item.name }}</div>
                   <div class="co-author-affiliate">{{ item.affiliate }}</div>
                 </div>
               </div>
@@ -212,30 +211,48 @@ export default {
       },
       co_authors_list:[
         {
-          scholar_id: '23423',
+          expertid: '23423',
           name: '十六日',
           affiliate: '浙江医科大学肿瘤研究所'
         },
         {
-          scholar_id: '3673',
+          expertid: '3673',
           name: '打过交道',
           affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
         }
       ],
-      co_authors_list_show:[],
+      co_authors_list_show:[
+        {
+          expertid: null,
+          name: '十六日',
+          affiliate: '浙江医科大学肿瘤研究所'
+        },
+        {
+          expertid: null,
+          name: '打过交道',
+          affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
+        }
+      ],
       co_affiliate_list: [
         {
-          aff_id: '13451',
           name: '啊的发挥快递费',
           count: 14351
         },
         {
-          aff_id: '1414',
           name: '是该公司认为',
           count: 42654
         }
       ],
-      co_affiliate_list_show: [],
+      co_affiliate_list_show: [
+        {
+          name: '啊的发挥快递费',
+          count: 14351
+        },
+        {
+          name: '是该公司认为',
+          count: 42654
+        }
+      ],
       result_list:[],
       sort_words: {
         sc_year: '',
@@ -257,8 +274,25 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    toScholarPage(scholar_id) {
-      this.scholar_id = scholar_id
+    toScholarPage(scholar) {
+      if (scholar.expertid !== null){
+        // 修改scholar_id
+        this.scholar_id = scholar.expertid
+      } else {
+        var search_words = {
+          experts: '',
+          origin: '',
+          kw: scholar.name,
+          startTime: '0',
+          endTime: '0'
+        }
+        this.$router.push({
+          name: "AcademicSearch",
+          params: {
+            search_words: encodeURIComponent(JSON.stringify(search_words))
+          }
+        })
+      }
     },
     handleAuthen(){
       console.log("点击了申请认领门户");
@@ -348,28 +382,29 @@ export default {
         if (res.code === "200"){
           _this.scholar_info = res.data
           this.loadRelateSc()
-          this.loadCoAuthorsList()
-          this.loadCoAffList()
+          // this.loadCoAuthorsList()
+          // this.loadCoAffList()
         }else {
           _this.$message({
-            message: res.message,
+            message: "loadInfo失败",
             type: "error"
           })
         }
-      }).catch(err => {
-        _this.$message({
-          message: err,
-          type: "error"
-        })
       })
+      //     .catch(err => {
+      //   _this.$message({
+      //     message: err,
+      //     type: "error"
+      //   })
+      // })
     },
     loadRelateSc(){
       var _this = this
       this.$api.academic.getSearchResult({
         search_words: {
-          experts: _this.scholar_info.name,
+          experts: '',
           origin: '',
-          kw:'',
+          kw:_this.scholar_info.name,
           startTime: '0',
           endTime: '0'
         },
@@ -388,7 +423,7 @@ export default {
         page: _this.currentPage,
         userID: sessionStorage.getItem("userID")
       }).then(res => {
-        if (res === "200"){
+        if (res.code === "200"){
           _this.result_list = res.data.result_list
           _this.total_rs = res.data.total
         }
@@ -613,13 +648,15 @@ export default {
   }
   .p-scholarID{
     float: right;
-    width: 192px;
+    /*width: 192px;*/
+    width: 262px;
     height: 24px;
     background-color: #fafafa;
     padding: 3px;
   }
   .p-scholarID-all{
-    width: 190px;
+    /*width: 190px;*/
+    width: 260px;
     height: 22px;
     border: 1px solid #E6E6E6;
     background-color: #fafafa;
