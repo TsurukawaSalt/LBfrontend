@@ -282,6 +282,7 @@
             })
             console.log("Request => getSearchResult : not 200");
           }
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
         })
         sessionStorage.setItem("sort", this.sort)
       },
@@ -309,9 +310,9 @@
             })
             console.log("Request => getSearchResult : not 200");
           }
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
         })
         sessionStorage.setItem("current_page", this.currentPage.toString());
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
       },
       filter_words: {
         // 监听左侧过滤项点击
@@ -339,6 +340,7 @@
               })
               console.log("Request => getSearchResult : not 200");
             }
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
           })
         },
         deep: true
@@ -367,6 +369,7 @@
               })
               console.log("Request => getSearchResult : not 200");
             }
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
           })
         },
         deep: true

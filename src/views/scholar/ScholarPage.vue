@@ -235,64 +235,7 @@ export default {
         }
       ],
       co_affiliate_list_show: [],
-      result_list:[
-        {
-          title : "1. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者1"},
-            {name: "学者2"},
-            {name: "学者3"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "这是标题",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者4"},
-            {name: "学者5"},
-            {name: "学者6"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "3. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者7"},
-            {name: "学者8"},
-            {name: "学者9"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "4. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者1"},
-            {name: "学者2"},
-            {name: "学者3"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-      ],
+      result_list:[],
       sort_words: {
         sc_year: '',
         paper_type: '0',
@@ -300,7 +243,7 @@ export default {
         sc_sort: 'time',
       },
       currentPage: 1,
-      total_rs: 100,
+      total_rs: 0,
       total_co_authors: 0,
       total_co_affs: 0,
       sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
