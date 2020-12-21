@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <Header status="2" class="header_home"></Header>
+    <Header class="header_home"></Header>
     <div class="container">
       <div class="content-right">
         这里是右侧
