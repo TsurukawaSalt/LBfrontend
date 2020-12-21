@@ -5,7 +5,7 @@
       <div class="content-right">
         这里是右侧
       </div>
-      <div class="content-left">
+      <div class="content-left" v-if="has_result">
         <!-- filter -->
         <div class="content-left-nav">
           <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
@@ -78,6 +78,14 @@
           </el-pagination>
         </p>
       </div>
+      <div class="no_result_tip" v-if="!has_result">
+        抱歉，没有找到与“{{ this.search_words }}”相关的学术结果
+
+        建议：
+            1. 检查输入是否正确
+            2. 简化输入词
+            3. 尝试其他相关词，如同义、近义词等
+      </div>
     </div>
   </div>
 </template>
@@ -133,7 +141,8 @@
           }
         ],
         has_experts: false,
-        experts_count: 0
+        experts_count: 0,
+        has_result: true
       }
     },
     methods: {
@@ -211,6 +220,7 @@
           userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
+            _this.has_result = true
             _this.result_list = res.data.result_list;
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
@@ -222,9 +232,12 @@
               _this.has_experts = true
               _this.experts_count = _this.e_result_list.length
             }
-          }else {
+          } else if (res.code === "100"){
+            _this.has_result = false
+          } else {
+            _this.has_result = false
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -259,12 +272,16 @@
           userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
+            _this.has_result = true
             _this.result_list = res.data.result_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
+          } else if (res.code === "100"){
+            _this.has_result = false
           } else {
+            _this.has_result = false
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -286,12 +303,16 @@
           userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
+            _this.has_result = true
             _this.result_list = res.data.result_list;
             _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
+          } else if (res.code === "100"){
+            _this.has_result = false
           } else {
+            _this.has_result = false
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
             console.log("Request => getSearchResult : not 200");
@@ -313,13 +334,17 @@
             userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
           }).then(res => {
             if (res.code === "200"){
+              _this.has_result = true
               _this.result_list = res.data.result_list;
               // _this.filter_list = res.data.filter_list;
               _this.result_length = _this.result_list.length;
               _this.total_rs = res.data.total;
+            } else if (res.code === "100"){
+              _this.has_result = false
             } else {
+              _this.has_result = false
               _this.$message({
-                message: res.message,
+                message: res.msg,
                 type: "error"
               })
               console.log("Request => getSearchResult : not 200");
@@ -347,7 +372,7 @@
       //         _this.total_rs = res.data.total;
       //       } else {
       //         _this.$message({
-      //           message: res.message,
+      //           message: res.msg,
       //           type: "error"
       //         })
       //         console.log("Request => getSearchResult : not 200");
@@ -387,11 +412,6 @@
 <style scoped>
   div{
     display: block;
-  }
-  .header_home{
-    border-bottom: 1px solid #e3e3e3;
-    border-bottom-color: #e0e0e0;
-    box-shadow: 1px 2px 1px rgba(0,0,0,.072);
   }
   .wrapper{
     min-width: 1100px;

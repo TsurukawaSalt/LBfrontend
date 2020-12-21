@@ -99,7 +99,8 @@
         var _this = this
         this.$api.academic.favorSc({
           document_id: _this.item.documentid,
-          user_id: sessionStorage.getItem("userID")
+          user_id: sessionStorage.getItem("userID"),
+          token: sessionStorage.getItem("token")
         }).then(res => {
           if (res.code === "200"){
             _this.is_favor = res.data;
@@ -118,7 +119,7 @@
 
           }else{
             _this.$message({
-              message: res.message,
+              message: res.msg,
               type: "error"
             })
           }

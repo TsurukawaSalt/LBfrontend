@@ -1,7 +1,7 @@
 <template>
   <div>
     <br>
-    <div style="width: 1000px; margin: 0 auto;">
+    <div style="width: 1150px; margin: 0 auto;">
       <el-col :span="17">
         <el-row>
           <div @click="jumptoLink(academic.link)"
@@ -110,6 +110,23 @@
 
       </el-col>
       <el-col :offset="2" :span="5" align="left">
+<!--        <span style="font-size: 20px;">-->
+<!--          研究热点分析-->
+<!--        </span>-->
+<!--        <br>-->
+<!--        <br>-->
+<!--        <el-row>-->
+<!--          <div v-for="word in academic.keywordList" :key="word"-->
+<!--               @click="findByKw(word)"-->
+<!--               style="cursor: pointer;">-->
+<!--            <div class="hotword" :style="'width:'+word.length*30+'px'">-->
+<!--              <div style="margin: 0 auto; line-height:50px;">-->
+<!--                {{word}}-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--        </el-row>-->
         这里是右侧<br>
 
         假装有广告
@@ -231,12 +248,17 @@
           document_id:vue.academicID,
           token: sessionStorage.getItem("token"),
           user_id: sessionStorage.getItem("userID"),
-        }).then(()=>{
-          this.$message({
-            message: '收藏成功',
-            type: 'success'
-          });
-          vue.academic.is_favor = false;
+        }).then((res)=>{
+          if(res.code == 200){
+            this.$message({
+              message: '收藏成功',
+              type: 'success'
+            });
+            vue.academic.is_favor = true;
+          }else{
+            this.$message.error(res.msg)
+          }
+
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
@@ -248,12 +270,16 @@
           document_id:vue.academicID,
           token: sessionStorage.getItem("token"),
           user_id: sessionStorage.getItem("userID"),
-        }).then(()=>{
-          this.$message({
-            message: '取消收藏成功',
-            type: 'success'
-          });
-          vue.academic.is_favor = true;
+        }).then((res)=>{
+          if(res.code == 200){
+            this.$message({
+              message: '取消收藏成功',
+              type: 'success'
+            });
+            vue.academic.is_favor = false;
+          }else{
+            this.$message.error(res.msg)
+          }
         }).catch(err=>{
           this.$message.error("请先登录")
           console.log(err)
@@ -358,6 +384,14 @@
 </script>
 
 <style scoped>
+  .hotword{
+    border:1px solid #409EFF;
+    border-radius:10px;
+    height: 50px;
+    font-size: 20px;
+    background: #effdff;
+    text-align:center;
+  }
   .expert{
     color: #0066cc;
   }

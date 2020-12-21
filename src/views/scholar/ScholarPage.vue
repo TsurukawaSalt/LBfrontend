@@ -281,7 +281,7 @@ export default {
     handleAuthen(){
       console.log("点击了申请认领门户");
       var _this = this
-      this.$prompt('请输入邮箱', '提示', {
+      this.$prompt('请使用您所在机构的邮箱认证！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
@@ -311,8 +311,8 @@ export default {
           });
         } else {
           _this.$message({
-            type: "error",
-            message: res.message
+            message: res.msg,
+            type: "error"
           })
         }
       })
@@ -331,7 +331,7 @@ export default {
           })
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: 'error'
           })
         }
@@ -411,7 +411,7 @@ export default {
         }
         else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
@@ -432,7 +432,7 @@ export default {
           }
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
@@ -448,7 +448,7 @@ export default {
           _this.total_co_affs = res.data.total_rs
         } else {
           _this.$message({
-            message: res.message,
+            message: res.msg,
             type: "error"
           })
         }
