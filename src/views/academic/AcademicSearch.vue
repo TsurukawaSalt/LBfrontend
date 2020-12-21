@@ -5,7 +5,7 @@
       <div class="content-right">
         这里是右侧
       </div>
-      <div class="content-left" v-if="!has_result">
+      <div class="content-left" v-if="has_result">
         <!-- filter -->
         <div class="content-left-nav">
           <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
@@ -78,7 +78,7 @@
           </el-pagination>
         </p>
       </div>
-      <div class="no_result_tip" v-if="has_result">
+      <div class="no_result_tip" v-if="!has_result">
         <p class="no_result_tip_warning">No Result</p>
         <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.kw + " " +search_words.experts + " " +search_words.origin + " "}}”相关的学术结果</p>
 <!--        -->
