@@ -5,7 +5,7 @@
       <div class="content-right">
         这里是右侧
       </div>
-      <div class="content-left" v-if="has_result">
+      <div class="content-left" v-if="!has_result">
         <!-- filter -->
         <div class="content-left-nav">
           <div class="left-nav" v-for="(item, index) in filter_list" :key="index">
@@ -78,13 +78,17 @@
           </el-pagination>
         </p>
       </div>
-      <div class="no_result_tip" v-if="!has_result">
-        抱歉，没有找到与“{{ this.search_words }}”相关的学术结果
+      <div class="no_result_tip" v-if="has_result">
+        <p class="no_result_tip_warning">No Result</p>
+        <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.kw + " " +search_words.experts + " " +search_words.origin + " "}}”相关的学术结果</p>
+<!--        -->
+        <p style="line-height: 26px">
+          <b style="font-size: 17px">建议：</b><br/>
+          1. 检查输入是否正确<br/>
+          2. 简化输入词<br/>
+          3. 尝试其他相关词，如同义、近义词等<br/>
+        </p>
 
-        建议：
-            1. 检查输入是否正确
-            2. 简化输入词
-            3. 尝试其他相关词，如同义、近义词等
       </div>
     </div>
   </div>
@@ -254,6 +258,31 @@
         } else {
           return "时间降序";
         }
+      },
+      getTipWords: function (){
+        // var search_words = JSON.stringify(searchWords)
+        // alert(typeof search_words)
+        var search_words = this.search_words
+        var str = ""
+        if (search_words.kw !== ""){
+          // str+=String(search_words.kw)
+          str = str + search_words.kw
+        }
+        if (search_words.experts !== ""){
+          if (str !== ""){
+            str+=","
+          }
+          // str+=String(search_words.experts)
+          str = str + "" + search_words.experts
+        }
+        if (search_words.origin !== ""){
+          if (str !== ""){
+            str+=","
+          }
+          // str+=String(search_words.origin)
+          str = str + "" + search_words.origin
+        }
+        return str
       }
     },
     watch: {
@@ -518,6 +547,20 @@
   .page{
     margin-left: 240px;
     text-align: center;
+  }
+  .no_result_tip{
+    width: 500px;
+    text-align: left;
+    margin: 50px auto;
+  }
+  .no_result_tip_warning{
+    /*text-align:center;*/
+    position: relative;
+    right: 3px;
+    color: #2c3e50;
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 0;
   }
 </style>
 <style>
