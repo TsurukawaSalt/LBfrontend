@@ -110,23 +110,33 @@
 
       </el-col>
       <el-col :offset="2" :span="5" align="left">
-<!--        <span style="font-size: 20px;">-->
-<!--          研究热点分析-->
-<!--        </span>-->
-<!--        <br>-->
-<!--        <br>-->
-<!--        <el-row>-->
-<!--          <div v-for="word in academic.keywordList" :key="word"-->
-<!--               @click="findByKw(word)"-->
-<!--               style="cursor: pointer;">-->
-<!--            <div class="hotword" :style="'width:'+word.length*30+'px'">-->
-<!--              <div style="margin: 0 auto; line-height:50px;">-->
-<!--                {{word}}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+        <span style="font-size: 20px;">
+          研究热点分析
+        </span>
+        <br>
+        <br>
+        <el-row >
+          <div style="display:flex; width: 300px;flex-wrap: wrap;">
+            <div v-for="word in academic.keywordList" :key="word"
+                 @click="findByKw(word)"
+                 style="cursor: pointer;">
+              <!--            <div class="hotword" :style="'width:'+(30+word.length*20)+'px'">-->
+              <!--              <div style="margin: 0 auto; line-height:40px;">-->
+              <!--                {{word}}-->
+              <!--              </div>-->
+              <!--            </div>-->
+              <div :style="'width:'+(word.length*22+50)+'px;'">
+                <el-card style="width: 90%;text-align:center;">
+                  <!--              <div style="margin: 0 auto; ">-->
+                  {{word}}
+                  <!--              </div>-->
+                </el-card>
+                <br>
+              </div>
 
-<!--        </el-row>-->
+            </div>
+          </div>
+        </el-row>
         这里是右侧<br>
 
         假装有广告
@@ -348,10 +358,14 @@
       let vue = this;
       this.academicID = this.$route.params.academicID
       console.log(this.academicID)
+      let user_id = sessionStorage.getItem("userID")
+      if(user_id == null){
+        user_id = -1;
+      }
       this.$api.academic.getById(
           {
             document_id:vue.academicID,
-            user_id:sessionStorage.getItem("userID"),
+            user_id,
           }
       ).then(
           res =>{
@@ -386,10 +400,10 @@
 <style scoped>
   .hotword{
     border:1px solid #409EFF;
-    border-radius:10px;
-    height: 50px;
-    font-size: 20px;
-    background: #effdff;
+    border-radius:12px;
+    height: 40px;
+    font-size: 18px;
+    background: #e0e0e0;
     text-align:center;
   }
   .expert{
