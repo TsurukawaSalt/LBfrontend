@@ -12,17 +12,18 @@
               </div>
             </div>
             <!--认证按钮-->
-            <div class="person-authen is-hover" v-show="!scholar_info.is_authen">
+            <div class="person-authen is-hover" v-show="!scholar_info.isVerified">
               <p class="authen-button" @click="handleAuthen">我要认证</p>
             </div>
             <!--关注按钮-->
             <div class="person-focus is-hover">
-              <p class="focus-button" @click="handleFocus" v-show="!scholar_info.is_focus">关注</p>
-              <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.is_focus">已关注
+              <p class="focus-button" @click="handleFocus" v-show="!scholar_info.isFocus">关注</p>
+              <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.isFocus">已关注
               <i class="el-icon-check"></i>
               </p>
             </div>
           </div>
+          <!-- 基本信息 -->
           <div class="person-baseinfo">
             <div class="p-name">{{ scholar_info.name }}</div>
             <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
@@ -36,7 +37,7 @@
             </div>
             <div class="p-affiliate">{{ scholar_info.affiliate }}</div>
             <ul class="p-ach">
-              <li class="p-ach-item" v-for="(item, index) in scholar_info.ach" :key="index">
+              <li class="p-ach-item" v-for="(item, index) in scholar_info.achList" :key="index">
                 <p class="p-ach-type c-grey">{{ item.title }}</p>
                 <p class="p-ach-num">{{ item.num }}</p>
               </li>
@@ -118,7 +119,7 @@
                     <academic-item :item = result_item></academic-item>
                   </div>
                 </div>
-                <div class="result-page" v-show="total_rs>10">
+                <div class="result-page" v-show="total_rs > 10">
                   <el-pagination
                       background
                       @size-change="handleSizeChange"
@@ -188,7 +189,7 @@ export default {
         volume: 21312,
         scholar_id: 'CN-B073VAMJ',
         affiliate: '北京航空航天大学',
-        ach: [
+        achList: [
           {
             title: 'a指数',
             num: 1341
@@ -206,8 +207,8 @@ export default {
             num: 597
           }
         ],
-        is_authen: false,
-        is_focus: true
+        isVerified: false,
+        isFocus: true
       },
       co_authors_list:[
         {
@@ -305,7 +306,7 @@ export default {
         user_id: _this.user_id
       }).then(res=>{
         if (res.code === "200"){
-          _this.is_focus = res.data.is_focus
+          _this.scholar_info.isFocus = res.data
         } else {
           _this.$message({
             message: res.message,
@@ -352,6 +353,11 @@ export default {
             type: "error"
           })
         }
+      }).catch(err => {
+        _this.$message({
+          message: err,
+          type: "error"
+        })
       })
     },
     loadRelateSc(){
@@ -359,13 +365,35 @@ export default {
       this.$api.academic.getSearchResult({
         search_words: {
           experts: _this.scholar_info.name,
+          origin: '',
+          kw:'',
+          startTime: '0',
+          endTime: '0'
         },
         filter_words: {
           year: _this.sort_words.sc_year,
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
           type: _this.sort_words.paper_type,
+          authors: '',
+          jnls: '',
+          affs: '',
         },
-        sort: "",
-        page: _this.currentPage
+        sort: _this.sort_words.sc_sort,
+        page: _this.currentPage,
+        userID: sessionStorage.getItem("userID")
+      }).then(res => {
+        if (res === "200"){
+          _this.result_list = res.data
+        }
+        else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
       })
     },
     loadCoAuthorsList(){
@@ -376,7 +404,6 @@ export default {
         if (res.code === "200") {
           _this.co_authors_list = res.data.result_list
           _this.total_co_authors = res.data.total_rs
-          _this.total_co_authors = 2
           if (_this.total_co_authors > 4){
             _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
           } else{
@@ -455,12 +482,6 @@ export default {
     }
   },
   watch: {
-    is_focus: function () {
-      // 监听：关注状态
-    },
-    is_authen: function () {
-      // 监听：认证状态
-    },
     sort_words: {
       // 监听：过滤关键词
       handler: function () {
@@ -474,13 +495,25 @@ export default {
       this.$api.academic.getSearchResult({
         search_words: {
           experts: _this.scholar_info.name,
+          origin: '',
+          kw:'',
+          startTime: '0',
+          endTime: '0'
         },
         filter_words: {
           year: _this.sort_words.sc_year,
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
           type: _this.sort_words.paper_type,
+          authors: '',
+          jnls: '',
+          affs: '',
         },
-        sort: "",
-        page: _this.currentPage
+        sort: _this.sort_words.sc_sort,
+        page: _this.currentPage,
+        userID: sessionStorage.getItem("userID")
       })
     },
     scholar_id: function () {
