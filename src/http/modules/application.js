@@ -23,11 +23,11 @@ export const reject = params =>{
   })
 }
 // 新建申请
-export const create = data => {
+export const create = params => {
   return axios({
     url: '/application/create',
-    method: 'post',
-    data
+    method: 'get',
+    params
   })
 }
 

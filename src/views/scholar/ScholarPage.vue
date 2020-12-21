@@ -12,23 +12,24 @@
               </div>
             </div>
             <!--认证按钮-->
-            <div class="person-authen is-hover" v-show="!scholar_info.is_authen">
+            <div class="person-authen is-hover" v-show="!scholar_info.isVerified">
               <p class="authen-button" @click="handleAuthen">我要认证</p>
             </div>
             <!--关注按钮-->
             <div class="person-focus is-hover">
-              <p class="focus-button" @click="handleFocus" v-show="!scholar_info.is_focus">关注</p>
-              <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.is_focus">已关注
+              <p class="focus-button" @click="handleFocus" v-show="!scholar_info.isFocus">关注</p>
+              <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.isFocus">已关注
               <i class="el-icon-check"></i>
               </p>
             </div>
           </div>
+          <!-- 基本信息 -->
           <div class="person-baseinfo">
             <div class="p-name">{{ scholar_info.name }}</div>
             <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
-                ScholarID:
+<!--                ScholarID:-->
                 <span class="p-scholarID-id">
                   {{ scholar_info.scholar_id }}
                 </span>
@@ -36,7 +37,7 @@
             </div>
             <div class="p-affiliate">{{ scholar_info.affiliate }}</div>
             <ul class="p-ach">
-              <li class="p-ach-item" v-for="(item, index) in scholar_info.ach" :key="index">
+              <li class="p-ach-item" v-for="(item, index) in scholar_info.achList" :key="index">
                 <p class="p-ach-type c-grey">{{ item.title }}</p>
                 <p class="p-ach-num">{{ item.num }}</p>
               </li>
@@ -118,7 +119,7 @@
                     <academic-item :item = result_item></academic-item>
                   </div>
                 </div>
-                <div class="result-page" v-show="total_rs>10">
+                <div class="result-page" v-show="total_rs > 10">
                   <el-pagination
                       background
                       @size-change="handleSizeChange"
@@ -140,14 +141,13 @@
           <div class="co-author-wr">
             <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="total_co_authors>4">更多</i>
             <h3>合作学者</h3>
-
             <div class="co-author-list">
               <div v-for="(item, index) in co_authors_list_show" :key="index">
                 <div class="co-author-avatar is-hover"  @click="toScholarPage(item.scholar_id)">
                   <el-avatar shape="square" :size="40" :src="sourceUrl"></el-avatar>
                 </div>
                 <div class="co-author-item">
-                  <div class="co-author-name" @click="toScholarPage(item.scholar_id)">{{ item.name }}</div>
+                  <div class="co-author-name" @click="toScholarPage(item)">{{ item.name }}</div>
                   <div class="co-author-affiliate">{{ item.affiliate }}</div>
                 </div>
               </div>
@@ -188,111 +188,52 @@ export default {
         volume: 21312,
         scholar_id: 'CN-B073VAMJ',
         affiliate: '北京航空航天大学',
-        ach: [
-          {
-            title: 'a指数',
-            num: 1341
-          },
-          {
-            title: 'b指数',
-            num: 2565
-          },
-          {
-            title: 'c指数',
-            num: 241
-          },
-          {
-            title: 'd指数',
-            num: 597
-          }
+        achList: [
+          // {
+          //   title: 'a指数',
+          //   num: 1341
+          // },
+          // {
+          //   title: 'b指数',
+          //   num: 2565
+          // },
+          // {
+          //   title: 'c指数',
+          //   num: 241
+          // },
+          // {
+          //   title: 'd指数',
+          //   num: 597
+          // }
         ],
-        is_authen: false,
-        is_focus: true
+        isVerified: false,
+        isFocus: false
       },
       co_authors_list:[
-        {
-          scholar_id: '23423',
-          name: '十六日',
-          affiliate: '浙江医科大学肿瘤研究所'
-        },
-        {
-          scholar_id: '3673',
-          name: '打过交道',
-          affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
-        }
+        // {
+        //   expertid: '23423',
+        //   name: '十六日',
+        //   affiliate: '浙江医科大学肿瘤研究所'
+        // },
+        // {
+        //   expertid: '3673',
+        //   name: '打过交道',
+        //   affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
+        // }
       ],
       co_authors_list_show:[],
       co_affiliate_list: [
-        {
-          aff_id: '13451',
-          name: '啊的发挥快递费',
-          count: 14351
-        },
-        {
-          aff_id: '1414',
-          name: '是该公司认为',
-          count: 42654
-        }
+        // {
+        //   name: '啊的发挥快递费',
+        //   count: 14351
+        // },
+        // {
+        //   name: '是该公司认为',
+        //   count: 42654
+        // }
       ],
       co_affiliate_list_show: [],
-      result_list:[
-        {
-          title : "1. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者1"},
-            {name: "学者2"},
-            {name: "学者3"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "这是标题",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者4"},
-            {name: "学者5"},
-            {name: "学者6"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "3. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者7"},
-            {name: "学者8"},
-            {name: "学者9"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-        {
-          title : "4. this is the title",
-          abstract : "this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract this is the abstract " +
-              "this is the abstract this is the abstract this is the abstract this is the abstract",
-          authors: [
-            {name: "学者1"},
-            {name: "学者2"},
-            {name: "学者3"}
-          ],
-          source: "this is the source",
-          n_citation: 100,
-          year: 1990,
-          version: "中国知网"
-        },
-      ],
+      result_list:[],
       sort_words: {
         sc_year: '',
         paper_type: '0',
@@ -300,7 +241,7 @@ export default {
         sc_sort: 'time',
       },
       currentPage: 1,
-      total_rs: 100,
+      total_rs: 0,
       total_co_authors: 0,
       total_co_affs: 0,
       sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
@@ -313,8 +254,29 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    toScholarPage(scholar_id) {
-      this.scholar_id = scholar_id
+    toScholarPage(scholar) {
+      if (scholar.expertid !== null){
+        this.$router.push({
+          name: "ScholarPage",
+          params: {
+            expertid: scholar.expertid
+          }
+        })
+      } else {
+        var search_words = {
+          experts: '',
+          origin: '',
+          kw: scholar.name,
+          startTime: '0',
+          endTime: '0'
+        }
+        this.$router.push({
+          name: "AcademicSearch",
+          params: {
+            search_words: encodeURIComponent(JSON.stringify(search_words))
+          }
+        })
+      }
     },
     handleAuthen(){
       console.log("点击了申请认领门户");
@@ -362,7 +324,11 @@ export default {
         user_id: _this.user_id
       }).then(res=>{
         if (res.code === "200"){
-          _this.is_focus = res.data.is_focus
+          _this.scholar_info.isFocus = res.data
+          _this.$message({
+            message: "成功关注该门户！",
+            type: "success"
+          })
         } else {
           _this.$message({
             message: res.message,
@@ -403,9 +369,12 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
+          this.loadRelateSc()
+          this.loadCoAuthorsList()
+          this.loadCoAffList()
         }else {
           _this.$message({
-            message: res.message,
+            message: "loadInfo失败",
             type: "error"
           })
         }
@@ -415,14 +384,37 @@ export default {
       var _this = this
       this.$api.academic.getSearchResult({
         search_words: {
-          experts: _this.scholar_info.name,
+          experts: '',
+          origin: '',
+          kw:_this.scholar_info.name,
+          startTime: '0',
+          endTime: '0'
         },
         filter_words: {
           year: _this.sort_words.sc_year,
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
           type: _this.sort_words.paper_type,
+          authors: '',
+          jnls: '',
+          affs: '',
         },
-        sort: "",
-        page: _this.currentPage
+        sort: _this.sort_words.sc_sort,
+        page: _this.currentPage,
+        userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
+      }).then(res => {
+        if (res.code === "200"){
+          _this.result_list = res.data.result_list
+          _this.total_rs = res.data.total
+        }
+        else {
+          _this.$message({
+            message: res.message,
+            type: "error"
+          })
+        }
       })
     },
     loadCoAuthorsList(){
@@ -433,7 +425,6 @@ export default {
         if (res.code === "200") {
           _this.co_authors_list = res.data.result_list
           _this.total_co_authors = res.data.total_rs
-          _this.total_co_authors = 2
           if (_this.total_co_authors > 4){
             _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
           } else{
@@ -512,40 +503,18 @@ export default {
     }
   },
   watch: {
-    is_focus: function () {
-      // 监听：关注状态
-    },
-    is_authen: function () {
-      // 监听：认证状态
-    },
     sort_words: {
       // 监听：过滤关键词
       handler: function () {
+        console.log("sort_words有改动")
         this.loadRelateSc()
       },
       deep: true
     },
     currentPage: function () {
       // 监听：页码
-      var _this = this
-      this.$api.academic.getSearchResult({
-        search_words: {
-          experts: _this.scholar_info.name,
-        },
-        filter_words: {
-          year: _this.sort_words.sc_year,
-          type: _this.sort_words.paper_type,
-        },
-        sort: "",
-        page: _this.currentPage
-      })
-    },
-    scholar_id: function () {
-      this.currentPage = 1
-      this.loadInfo()
-      this.loadRelateSc()
-      this.loadCoAuthorsList()
-      this.loadCoAffList()
+      console.log("page有改动")
+      this.loadRelateSc();
     }
   },
   mounted() {
@@ -553,9 +522,6 @@ export default {
     this.scholar_id = this.$route.params.expertid
     this.currentPage = 1
     this.loadInfo()
-    this.loadRelateSc()
-    this.loadCoAuthorsList()
-    this.loadCoAffList()
   }
 }
 </script>
@@ -659,13 +625,15 @@ export default {
   }
   .p-scholarID{
     float: right;
-    width: 192px;
+    /*width: 192px;*/
+    width: 262px;
     height: 24px;
     background-color: #fafafa;
     padding: 3px;
   }
   .p-scholarID-all{
-    width: 190px;
+    /*width: 190px;*/
+    width: 260px;
     height: 22px;
     border: 1px solid #E6E6E6;
     background-color: #fafafa;

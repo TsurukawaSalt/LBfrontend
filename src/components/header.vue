@@ -1,9 +1,42 @@
 <template>
   <div>
     <el-header v-if="this.status == 1" class="header_1">
-      <el-input class="h_search" placeholder="请输入你要查找的内容"  v-model="keyword" @keyup.enter.native="goSearch()">
-        <el-button slot="append" icon="el-icon-search" @click="goSearch()"></el-button>
+      <el-input class="h_search" placeholder="请输入你要查找的内容" v-model="search_words.kw" @keyup.enter.native="goSearch(false)">
+        <el-button v-popover:search slot="append">高级搜索</el-button>
       </el-input>
+      <el-popover
+          ref="search"
+          placement="bottom"
+          width="600"
+          :offset="-250"
+          title="高级搜索"
+          trigger="click">
+        <el-form ref="search_words" :model="search_words" label-width="80px">
+          <el-form-item label="检索词">
+            <el-input v-model="search_words.kw" placeholder="多个检索词用空格分开"></el-input>
+          </el-form-item>
+          <el-form-item label="作者">
+            <el-input v-model="search_words.experts" placeholder="多个作者用空格分开"></el-input>
+          </el-form-item>
+          <el-form-item label="来源">
+            <el-input v-model="search_words.origin"></el-input>
+          </el-form-item>
+          <el-form-item label="发表时间">
+            <el-col :span="11">
+              <el-date-picker type="date" placeholder="选择起始日期" v-model="search_words.startTime" style="width: 90%"></el-date-picker>
+            </el-col>
+            <!--          <el-col class="line" :span="1"> - </el-col>-->
+            <el-col :span="11">
+              <el-date-picker type="date" placeholder="选择截至日期" v-model="search_words.endTime" style="width: 90%"></el-date-picker>
+            </el-col>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button @click="goSearch(true)">搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </el-popover>
+
 
       <div class="r_con">
 <!--        <el-badge is-dot>-->
@@ -58,7 +91,14 @@ export default {
   name: "header",
   data(){
     return {
-      keyword:'',
+      search_words: {
+        kw:'',
+        experts:'',
+        origin:'',
+        startTime: 0,
+        endTime: 0,
+      },
+
       isLogin:false,
       userName:'',
     }
@@ -71,16 +111,34 @@ export default {
     }
   },
   methods:{
-    goSearch(){
-      if (!this.keyword) {
-        alert("搜索内容为空")
+    goSearch(isAdvanced){
+      if (!isAdvanced) {
+        if (this.search_words.kw !== '') {
+          this.$router.push({
+            name:"AcademicSearch",
+            params:{
+              search_words: encodeURIComponent(JSON.stringify(this.search_words))
+            }
+          })
+        } else {
+          alert("搜索内容为空")
+        }
       } else {
-        this.$router.push({
-          name:"AcademicSearch",
-          params:{
-            keyword:this.keyword
-          }
-        })
+        if (this.search_words.kw === ''
+            && this.search_words.experts === ''
+            && this.search_words.origin === ''
+            && this.search_words.startTime === 0
+            && this.search_words.endTime === 0) {
+          alert("搜索内容为空")
+        } else {
+          // alert(this.search_words.startTime)
+          this.$router.push({
+            name:"AcademicSearch",
+            params:{
+              search_words: encodeURIComponent(JSON.stringify(this.search_words)),
+            }
+          })
+        }
       }
     },
     goUser() {
@@ -120,10 +178,14 @@ export default {
   }
 
   .h_search {
-    width: 40%;
+    width: 400px;
     margin: 10px;
   }
-
+  @media screen and (min-width: 1400px){
+    .h_search {
+      width: 600px;
+    }
+  }
   .r_con {
     position: absolute;
     top: 8px;

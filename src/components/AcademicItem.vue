@@ -19,7 +19,7 @@
           <span> - 被引量：</span>
           <span class="citation-click" @click="toCitedPage()">{{ item.cited_quantity}}</span>
           <span> - </span>
-          <span class="grey-part">{{ item.time.slice(0,4) }}年</span>
+          <span class="grey-part">{{ item.time.substring(0,4) }}年</span>
         </div>
         <!-- 来源：网站 -->
         <div class="allVersion">
@@ -30,8 +30,8 @@
       <!-- source操作部分 -->
       <div class="sc_ext">
         <!-- 收藏/引用/批量引用/（免费下载）-->
-        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-show="!this.is_favor">收藏</el-button>
-        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-show="this.is_favor">已收藏</el-button>
+        <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-if="this.is_favor">已收藏</el-button>
+        <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-if="!this.is_favor">收藏</el-button>
         <el-button class="ext-button" id="button-quote" type="mini" round icon="el-icon-share" @click="quote()">引用</el-button>
         <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>
         <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="download()">免费下载</el-button>
@@ -103,6 +103,24 @@
         }).then(res => {
           if (res.code === "200"){
             _this.is_favor = res.data;
+            if (_this.is_favor === true){
+              _this.$message({
+                message: "成功收藏该资源！",
+                type: "success"
+              })
+            }
+            else {
+              _this.$message({
+                message: "成功取消收藏该资源！",
+                type: "success"
+              })
+            }
+
+          }else{
+            _this.$message({
+              message: res.message,
+              type: "error"
+            })
           }
         })
         document.getElementById("button-favor").blur();
@@ -163,10 +181,8 @@
    word-break: break-all;
    white-space: normal;
    display: -webkit-box;
-   /* -webkit-box-orient: vertical; */
-   /*! autoprefixer: off */
+   /*! autoprefixer: ignore next */
    -webkit-box-orient: vertical;
-   /* autoprefixer: on */
    -webkit-line-clamp: 3;
    overflow: hidden;
  }

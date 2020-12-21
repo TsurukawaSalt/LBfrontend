@@ -55,25 +55,28 @@
         <h4>热门文献</h4>
         <div class="list_left">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(0, 5)" :key="index">
+            <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-ach"></el-image>
             <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
-            <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
+            <span class="list_cited" :underline="false">{{o.cited}}</span>
             <br>
-            <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
+            <span class="list_author" :underline="false">{{o.author}} {{o.year}}</span>
           </el-row>
         </div>
         <div class="list_right">
           <el-row class="list_item" v-for="(o, index) in this.academic_list.slice(5, 10)" :key="index">
+            <el-image :src="require('@/assets/home_icon/Num-'+(index+6)+'.png')" class="num-icon-ach"></el-image>
             <el-link class="list_title" :underline="false" @click="goArticle()">{{ o.title }}</el-link>
-            <el-link class="list_cited" :underline="false">{{o.cited}}</el-link>
+            <span class="list_cited" :underline="false">{{o.cited}}</span>
             <br>
-            <el-link class="list_author" :underline="false">{{o.author}} {{o.year}}</el-link>
+            <span class="list_author" :underline="false">{{o.author}} {{o.year}}</span>
           </el-row>
         </div>
       </div>
       <div class="right_block">
         <h4>热门关键词</h4>
         <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
-            <el-link class="keyword" :underline="false" @click="goSearch(o)">{{o}}</el-link>
+          <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-kw"></el-image>
+          <el-link class="keyword" :underline="false" @click="goSearch(o)">{{o}}</el-link>
         </el-row>
       </div>
     </div>
@@ -86,9 +89,11 @@ export default {
   name:"homePage",
   data() {
     return {
-      // keyword:'',
+      // url:require('@/assets/home_icon/Num-1.png'),
+      result_list:[],
+      result_length:0,
       academic_list:[
-        {title:'1234566666666666', year:2020, author:'ABC', cited:195},
+        {title:"12345666667777777", year:2020, author:'ABC', cited:195},
         {title:'654321', year:2020, author:'ABC', cited:195},
         {title:'111111', year:2020, author:'ABC', cited:195},
         {title:'222222', year:2020, author:'ABC', cited:195},
@@ -109,7 +114,7 @@ export default {
           'PQR',
           'STU',
           'VWX',
-          'YZ',
+          'YZA',
       ],
       search_words: {
         kw:'',
@@ -162,6 +167,44 @@ export default {
   },
   components:{
     Header,
+  },
+  mounted() {
+    let _this = this;
+    this.$api.academic.getSearchResult({
+      search_words: {
+        kw:'',
+        experts:'',
+        origin:'',
+        startTime: '0',
+        endTime: '0',
+      },
+      filter_words: {},
+      sort: "views",
+      page: 1,
+      userID: sessionStorage.getItem("userID")
+    }).then(res => {
+      if (res.code === "200"){
+        // alert(200)
+        _this.result_list = res.data.result_list;
+        // _this.filter_list = res.data.filter_list;
+        // _this.total_rs = res.data.total;
+        _this.result_length = _this.result_list.length;
+        console.log(_this.result_list)
+        // _this.e_result_list = res.data.e_result_list;
+        // if (_this.e_result_list.length === 0){
+        //   _this.has_experts = false
+        // } else {
+        //   _this.has_experts = true
+        //   _this.experts_count = _this.e_result_list.length
+        // }
+      }else {
+        _this.$message({
+          message: res.message,
+          type: "error"
+        })
+        console.log("Request => getSearchResult : not 200");
+      }
+    })
   }
 }
 </script>
@@ -229,6 +272,8 @@ export default {
     background: white;
     /*right: 100%;*/
   }
+
+
 
   .top_block {
     /*background: blue;*/
@@ -305,12 +350,14 @@ export default {
     top: 5%;
     left: -25%;
   }
+
+
   .list_left {
     position: absolute;
     /*float: left;*/
     /*background-color: black;*/
     text-align: left;
-    max-width: 400px;
+    //max-width: 400px;
     height: 70%;
     width: 35%;
     left: 18%;
@@ -320,31 +367,44 @@ export default {
     /*float: left;*/
     /*background-color: red;*/
     text-align: left;
-    max-width: 400px;
+    //max-width: 400px;
     height: 70%;
     width: 35%;
     left: 62%;
   }
   .list_item {
     /*background: #9c9e9c;*/
-    height: 15%;
+    height: 20%;
+    //overflow: hidden;
+    //text-overflow: ellipsis;
   }
-
+  .num-icon-ach{
+    width: 40px;
+    height: 40px;
+    top: 26px;
+  }
   .list_title {
     /*background: #8c939d;*/
-    font-size: 18px;
+    //position: absolute;
+    font-size: 20px;
     height: 60px;
+    //width: 150px;
+    left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .list_author{
     //background: #9fa19f;
-    left: 5px;
-    top: -10%;
-    font-size: 5px;
+    position: absolute;
+    left: 52px;
+    top: 55px;
+    font-size: 14px;
   }
   .list_cited {
-    font-size: 7px;
-    float: right;
-    top: 27%;
+    font-size: 15px;
+    position: absolute;
+    left: 250px;
+    top: 24px;
   }
 
   .right_block {
@@ -359,10 +419,16 @@ export default {
     width: 200px;
     height: 100%;
   }
+  .num-icon-kw{
+    width: 30px;
+    height: 30px;
+    top: 10px;
+  }
   .keyword_list {
     height: 45px;
   }
   .keyword {
     font-size: 20px;
+    left: 5px;
   }
 </style>
