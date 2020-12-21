@@ -169,10 +169,8 @@
    word-break: break-all;
    white-space: normal;
    display: -webkit-box;
-   /* -webkit-box-orient: vertical; */
-   /*! autoprefixer: off */
+   /*! autoprefixer: ignore next */
    -webkit-box-orient: vertical;
-   /* autoprefixer: on */
    -webkit-line-clamp: 3;
    overflow: hidden;
  }
