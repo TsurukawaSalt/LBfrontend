@@ -37,7 +37,6 @@
         </el-form>
       </el-popover>
 
-
       <div class="r_con">
 <!--        <el-badge is-dot>-->
           <el-button v-popover:popover type="text" class="r_con_mess">消息</el-button>
@@ -172,8 +171,11 @@ export default {
 
 <style scoped>
   .header_1 {
+    //position: absolute;
+    min-width: 800px;
+    //width: 100%;
     background-color: #2c3e50;
-    margin: -10px -8px 0 -10px;
+    margin: -10px -8px 0 -8px;
     padding: 0;
   }
 
@@ -187,9 +189,11 @@ export default {
     }
   }
   .r_con {
-    position: absolute;
-    top: 8px;
-    right:4%;
+    //position: absolute;
+    margin-top: 12px;
+    width: 200px;
+    float: right;
+    left: calc(100% - 200px);
   }
   .r_con_mess {
     margin-right: 10px;
@@ -198,7 +202,7 @@ export default {
     margin-right: 15px;
   }
   .r_con_reLogin {
-    left: 10%;
+    left: 10px;
   }
   .r_con_login {
     margin-right: 10px;
@@ -207,6 +211,7 @@ export default {
   }
 
   .header_2 {
+    min-width: 800px;
     margin: -10px -8px 0 -10px;
     padding: 0;
   }
