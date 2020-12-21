@@ -38,31 +38,31 @@
             Aside,
         },
         mounted() {
-
+            this.history_list = JSON.parse(localStorage.getItem("myHistory"));
         },
         data() {
             return {
                 history_list:[
-                    {
-                        id:1,
-                        title:"title1",
-                        time:"2020.12.5"
-                    },
-                    {
-                        id:2,
-                        title:"title2",
-                        time:"2020.12.4"
-                    },
-                    {
-                        id:3,
-                        title:"title3",
-                        time:"2020.12.3",
-                    },
-                    {
-                        id:4,
-                        title:"title4",
-                        time:"2020.12.2"
-                    }                               
+                    // {
+                    //     id:1,
+                    //     title:"title1",
+                    //     time:"2020.12.5"
+                    // },
+                    // {
+                    //     id:2,
+                    //     title:"title2",
+                    //     time:"2020.12.4"
+                    // },
+                    // {
+                    //     id:3,
+                    //     title:"title3",
+                    //     time:"2020.12.3",
+                    // },
+                    // {
+                    //     id:4,
+                    //     title:"title4",
+                    //     time:"2020.12.2"
+                    // }                               
                 ]                
             };
         },

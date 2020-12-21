@@ -342,6 +342,17 @@
         this.$message.error("文章不存在或已被删除")
       })
       this.getRelation();
+
+      var date = new Date();
+      var history = [];
+      if(!localStorage.getItem(this.user_id)) {
+        history = [{id:this.academicID, title:this.academic.title, time:date.toLocaleDateString()}];
+        localStorage.setItem(this.user_id,JSON.stringify(history));
+      } else {
+        history = JSON.parse(localStorage.getItem(this.user_id));
+        history.push({id:this.academicID, title:this.academic.title, time:date.toLocaleDateString()});
+        localStorage.setItem(this.user_id,JSON.stringify(history));
+      }
     }
   }
 </script>
