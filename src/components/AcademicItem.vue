@@ -103,6 +103,24 @@
         }).then(res => {
           if (res.code === "200"){
             _this.is_favor = res.data;
+            if (_this.is_favor === true){
+              _this.$message({
+                message: "成功收藏该资源！",
+                type: "success"
+              })
+            }
+            else {
+              _this.$message({
+                message: "成功取消收藏该资源！",
+                type: "success"
+              })
+            }
+
+          }else{
+            _this.$message({
+              message: res.message,
+              type: "error"
+            })
           }
         })
         document.getElementById("button-favor").blur();
@@ -119,12 +137,6 @@
       download() {
         console.log("免费下载！");
         document.getElementById("button-download").blur();
-      }
-    },
-    computed:{
-      getYear(time){
-        console.log(time.type());
-        return time.substring(0,4);
       }
     },
     watch: {

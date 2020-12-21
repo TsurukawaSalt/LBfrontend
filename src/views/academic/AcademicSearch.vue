@@ -208,7 +208,7 @@
           filter_words: _this.filter_words,
           sort: _this.sort,
           page: _this.currentPage,
-          userID: sessionStorage.getItem("userID")
+          userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
@@ -256,7 +256,7 @@
           filter_words: _this.filter_words,
           sort: _this.sort,
           page: _this.currentPage,
-          userID: sessionStorage.getItem("userID")
+          userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
@@ -283,7 +283,7 @@
           filter_words: _this.filter_words,
           sort: _this.sort,
           page: _this.currentPage,
-          userID: sessionStorage.getItem("userID")
+          userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
@@ -310,7 +310,7 @@
             filter_words: _this.filter_words,
             sort: _this.sort,
             page: _this.currentPage,
-            userID: sessionStorage.getItem("userID")
+            userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
           }).then(res => {
             if (res.code === "200"){
               _this.result_list = res.data.result_list;

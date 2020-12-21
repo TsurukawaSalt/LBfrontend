@@ -325,6 +325,10 @@ export default {
       }).then(res=>{
         if (res.code === "200"){
           _this.scholar_info.isFocus = res.data
+          _this.$message({
+            message: "成功关注该门户！",
+            type: "success"
+          })
         } else {
           _this.$message({
             message: res.message,
@@ -399,7 +403,7 @@ export default {
         },
         sort: _this.sort_words.sc_sort,
         page: _this.currentPage,
-        userID: sessionStorage.getItem("userID")
+        userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
       }).then(res => {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
