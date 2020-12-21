@@ -130,35 +130,10 @@
             name: "按adfadsfasdf对",
             id: 17565,
             affiliate: "你头发把asdfasdfa对"
-          },
-          {
-            name: "热火asdfasdf",
-            id: 254615,
-            affiliate: "啊日嘎asdfad人格"
-          },
-          {
-            name: "二v人",
-            id: 15424,
-            affiliate: "安然度过FB"
-          },
-          {
-            name: "二v人",
-            id: 15424,
-            affiliate: "安然度过FB"
-          },
-          {
-            name: "二v人",
-            id: 15424,
-            affiliate: "安然度过FB"
-          },
-          {
-            name: "二v人",
-            id: 15424,
-            affiliate: "安然度过FB"
-          },
+          }
         ],
         has_experts: false,
-        experts_count: 100
+        experts_count: 0
       }
     },
     methods: {
@@ -179,23 +154,34 @@
         })
       },
       searchAuthor(val){
-        // 判断这个作者是否是唯一的
-        this.search_words = {
+        var search_words = {
           experts: val,
           origin: '',
           kw:'',
           startTime: '0',
           endTime: '0'
         }
+        this.$router.push({
+          name: "AcademicSearch",
+          params: {
+            search_words: encodeURIComponent(JSON.stringify(search_words))
+          }
+        })
       },
       searchSource(val) {
-        this.search_words = {
+        var search_words = {
           experts: '',
           origin: '',
-          kw:val,
+          kw: val,
           startTime: '0',
           endTime: '0'
         }
+        this.$router.push({
+          name: "AcademicSearch",
+          params: {
+            search_words: encodeURIComponent(JSON.stringify(search_words))
+          }
+        })
       },
       sortByViews() {
         console.log("按浏览量排序！");
@@ -260,9 +246,11 @@
     watch: {
       sort: function () {
         // 监听：排序方式
+        console.log("sort被修改")
+        sessionStorage.setItem("sort", this.sort)
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         var _this = this;
         this.result_list = []
-        // this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -272,7 +260,6 @@
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
           } else {
@@ -282,15 +269,15 @@
             })
             console.log("Request => getSearchResult : not 200");
           }
-          document.body.scrollTop = document.documentElement.scrollTop = 0;
         })
-        sessionStorage.setItem("sort", this.sort)
       },
       currentPage: function () {
         // 监听：页码
+        console.log("page被修改")
+        sessionStorage.setItem("current_page", this.currentPage.toString());
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         var _this = this
         this.result_list = []
-        // this.filter_words = []
         this.$api.academic.getSearchResult({
           search_words: _this.search_words,
           filter_words: _this.filter_words,
@@ -300,7 +287,6 @@
         }).then(res => {
           if (res.code === "200"){
             _this.result_list = res.data.result_list;
-            // _this.filter_list = res.data.filter_list;
             _this.result_length = _this.result_list.length;
             _this.total_rs = res.data.total;
           } else {
@@ -310,15 +296,13 @@
             })
             console.log("Request => getSearchResult : not 200");
           }
-          document.body.scrollTop = document.documentElement.scrollTop = 0;
         })
-        sessionStorage.setItem("current_page", this.currentPage.toString());
       },
       filter_words: {
         // 监听左侧过滤项点击
         handler (){
           console.log("filters改变")
-          console.log(this.filter_words)
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
           var _this = this
           this.result_list = []
           this.$api.academic.getSearchResult({
@@ -340,57 +324,62 @@
               })
               console.log("Request => getSearchResult : not 200");
             }
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
           })
         },
         deep: true
       },
-      search_words: {
-        handler () {
-          console.log("search_words被修改")
-          var _this = this
-          this.result_list = [];
-          this.$api.academic.getSearchResult({
-            search_words: _this.search_words,
-            filter_words: {},
-            sort: "views",
-            page: 1,
-            userID: sessionStorage.getItem("userID")
-          }).then(res => {
-            if (res.code === "200"){
-              _this.result_list = res.data.result_list;
-              _this.filter_list = res.data.filter_list;
-              _this.result_length = _this.result_list.length;
-              _this.total_rs = res.data.total;
-            } else {
-              _this.$message({
-                message: res.message,
-                type: "error"
-              })
-              console.log("Request => getSearchResult : not 200");
-            }
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-          })
-        },
-        deep: true
-      }
+      // search_words: {
+      //   handler () {
+      //     console.log("search_words被修改")
+      //     var _this = this
+      //     this.result_list = [];
+      //     this.$api.academic.getSearchResult({
+      //       search_words: _this.search_words,
+      //       filter_words: {},
+      //       sort: "views",
+      //       page: 1,
+      //       userID: sessionStorage.getItem("userID")
+      //     }).then(res => {
+      //       if (res.code === "200"){
+      //         _this.result_list = res.data.result_list;
+      //         _this.filter_list = res.data.filter_list;
+      //         _this.result_length = _this.result_list.length;
+      //         _this.total_rs = res.data.total;
+      //       } else {
+      //         _this.$message({
+      //           message: res.message,
+      //           type: "error"
+      //         })
+      //         console.log("Request => getSearchResult : not 200");
+      //       }
+      //       document.body.scrollTop = document.documentElement.scrollTop = 0;
+      //     })
+      //   },
+      //   deep: true
+      // }
     },
     mounted() {
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+      this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
       if (window.performance.navigation.type === 1) {
         console.log("页面被刷新")
         this.currentPage = parseInt(sessionStorage.getItem("current_page"))
         this.sort = sessionStorage.getItem("sort")
+        if (this.sort === null){
+          this.sort = "views"
+        }
       }else{
         console.log("首次被加载")
         this.currentPage = 1
         sessionStorage.setItem("current_page", "1")
+        this.sort = "views"
+        sessionStorage.setItem("sort", "views")
       }
-      this.search_words = JSON.parse(decodeURIComponent(this.$route.params.search_words));
-      // alert(this.search_words.kw)
       console.log("获取关键词：" + this.search_words)
+      console.log("页码：" + this.currentPage)
+      console.log("排序方式" + this.sort)
       // 加载检索数据
       this.loadSearchSc()
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
   }
 </script>
