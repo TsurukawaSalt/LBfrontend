@@ -31,7 +31,7 @@
                       </div>
                       <div class="e_info">
                         <div class="e_info_name" @click="handleToAuthor(item.id)">{{ item.name }}</div>
-                        <div class="e_info_aff">{{ item.affiliate }}</div>
+                        <div class="e_info_aff">{{ item.org }}</div>
                       </div>
                     </div>
                   </div>
@@ -187,11 +187,11 @@
       },
       searchSource(val) {
         var search_words = {
-          searchWords: val,
+          searchWords: '',
           title: '',
           keyWords: '',
           experts: '',
-          origin: '',
+          origin: val,
           startTime: '0',
           endTime: '0'
         }
@@ -235,7 +235,7 @@
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
-            _this.e_result_list = res.data.e_result_list;
+            _this.e_result_list = res.data.expert_list;
             if (_this.e_result_list.length === 0){
               _this.has_experts = false
             } else {
@@ -402,6 +402,9 @@
         this.sort = sessionStorage.getItem("sort")
         if (this.sort === null){
           this.sort = "views"
+        }
+        if (this.currentPage === null){
+          this.currentPage = 1
         }
       }else{
         console.log("首次被加载")
