@@ -26,18 +26,18 @@
           </div>
           <!-- 基本信息 -->
           <div class="person-baseinfo">
-            <div class="p-name">{{ scholar_info.name }}</div>
-            <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
+            <div class="p-name">{{ this.scholar_info.name }}</div>
+            <div class="p-volume c-grey">{{ this.scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
                 <span class="p-scholarID-id">
-                  {{ scholar_info.scholar_id }}
+                  {{ this.scholar_info.scholar_id }}
                 </span>
               </div>
             </div>
-            <div class="p-affiliate">{{ scholar_info.affiliate }}</div>
-            <ul class="p-ach">
-              <li class="p-ach-item" v-for="(item, index) in scholar_info.achList" :key="index">
+            <div class="p-affiliate">{{ this.scholar_info.affiliate }}</div>
+            <ul class="p-ach" v-if="this.has_ach">
+              <li class="p-ach-item" v-for="(item, index) in this.scholar_info.achList" :key="index">
                 <p class="p-ach-type c-grey">{{ item.title }}</p>
                 <p class="p-ach-num">{{ item.num }}</p>
               </li>
@@ -143,9 +143,9 @@
         <div id="main-content-right">
           <!--合作学者展示-->
           <div class="co-author-wr">
-            <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="total_co_authors>4">更多</i>
+            <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="(total_co_authors > 4)">更多</i>
             <h3>合作学者</h3>
-            <div class="co-author-list">
+            <div class="co-author-list" v-if="has_co_author">
               <div v-for="(item, index) in co_authors_list_show" :key="index">
                 <div class="co-author-avatar is-hover"  @click="toScholarPage(item.scholar_id)">
                   <el-avatar shape="square" :size="40" :src="sourceUrl"></el-avatar>
@@ -156,21 +156,23 @@
                 </div>
               </div>
             </div>
-            <div v-if="co_authors_list_show.length === 0">暂无</div>
+            <div v-if="!has_co_author">暂无</div>
           </div>
           <!--合作机构展示-->
           <div class="co-affiliate-wr">
             <h3>合作机构</h3>
-            <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
-              <li>
-                <span class="co_affiliate_name">{{ item.first }}</span>
-                <span class="co_affiliate_line">
+            <div v-if="has_co_aff">
+              <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
+                <li>
+                  <span class="co_affiliate_name">{{ item.first }}</span>
+                  <span class="co_affiliate_line">
                   <span class="co_affiliate_width"></span>
                   <span class="co_affiliate_count">{{ item.second }}</span>
                 </span>
-              </li>
-            </ul>
-            <div v-if="co_affiliate_list.length === 0">暂无</div>
+                </li>
+              </ul>
+            </div>
+            <div v-if="!has_co_aff">暂无</div>
           </div>
         </div>
       </div>
@@ -204,7 +206,11 @@ export default {
       co_authors_list_show:[],
       co_affiliate_list: [],
       co_affiliate_list_show: [],
+      total_co_authors: 0,
+      total_co_affs: 0,
       result_list:[],
+      total_rs: 0,
+      has_result: false,
       sort_words: {
         sc_year: '',
         paper_type: '0',
@@ -212,11 +218,10 @@ export default {
         sc_sort: 'time',
       },
       currentPage: 1,
-      total_rs: 0,
-      total_co_authors: 0,
-      total_co_affs: 0,
       sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
-      has_result: true
+      has_ach: false,
+      has_co_author: false,
+      has_co_aff: false
     }
   },
   methods: {
@@ -354,6 +359,11 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
+          if (_this.scholar_info.achList.length === 0){
+            _this.has_ach = false;
+          } else {
+            _this.has_ach = true;
+          }
         }else {
           _this.$message({
             message: res.msg,
@@ -395,7 +405,7 @@ export default {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
           _this.total_rs = res.data.total
-          if (_this.total_rs === 0){
+          if (_this.result_list.length === 0){
             _this.has_result = false;
           } else {
             _this.has_result = true
@@ -420,11 +430,16 @@ export default {
       }).then(res => {
         if (res.code === "200") {
           _this.co_authors_list = res.data
-          _this.total_co_authors = _this.co_authors_list.length
-          if (_this.total_co_authors > 4){
-            _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
-          } else{
-            _this.co_authors_list_show = _this.co_authors_list
+          if (_this.co_authors_list === null){
+            _this.has_co_author = false;
+          } else {
+            _this.has_co_author = true;
+            _this.total_co_authors = _this.co_authors_list.length
+            if (_this.total_co_authors > 4){
+              _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
+            } else{
+              _this.co_authors_list_show = _this.co_authors_list
+            }
           }
         } else {
           _this.$message({
@@ -441,7 +456,12 @@ export default {
       }).then(res => {
         if (res.code === "200") {
           _this.co_affiliate_list = res.data
-          _this.total_co_affs = _this.co_affiliate_list.length
+          if (_this.co_affiliate_list === null){
+            _this.has_co_aff = false;
+          } else {
+            _this.has_co_aff = true;
+            _this.total_co_affs = _this.co_affiliate_list.length
+          }
         } else {
           _this.$message({
             message: res.msg,
