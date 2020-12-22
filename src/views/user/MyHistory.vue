@@ -70,7 +70,8 @@
         methods: {
              delHistory(index) {
                 this.$message('删除成功');
-                this.history_list.splice(index,1);                
+                this.history_list.splice(index,1);    
+                localStorage.setItem(sessionStorage.getItem("userID"),JSON.stringify(this.history_list));
             }        
         }
     }
