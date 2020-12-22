@@ -136,17 +136,17 @@
       return {
         sourceUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
         result_list:[],
-        total_rs: 1000,// 搜索结果数目，非当前页面展示数量
+        total_rs: 0,// 搜索结果数目，非当前页面展示数量
         result_length: 0,// 当前页的显示数量
         filter_list: [],
         currentPage: 1,
         sort: "views",
         search_words: {
-          searchWords: '',  // 普通搜索词
-          title: '', // 标题
-          keyWords: '', // 关键词
-          experts: '', // 学者名
-          origin: '', // 机构
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: '',
+          origin: '',
           startTime: '0',
           endTime: '0'
         },
@@ -425,36 +425,7 @@
           })
         },
         deep: true
-      },
-      // search_words: {
-      //   handler () {
-      //     console.log("search_words被修改")
-      //     var _this = this
-      //     this.result_list = [];
-      //     this.$api.academic.getSearchResult({
-      //       search_words: _this.search_words,
-      //       filter_words: {},
-      //       sort: "views",
-      //       page: 1,
-      //       userID: sessionStorage.getItem("userID")
-      //     }).then(res => {
-      //       if (res.code === "200"){
-      //         _this.result_list = res.data.result_list;
-      //         _this.filter_list = res.data.filter_list;
-      //         _this.result_length = _this.result_list.length;
-      //         _this.total_rs = res.data.total;
-      //       } else {
-      //         _this.$message({
-      //           message: res.msg,
-      //           type: "error"
-      //         })
-      //         console.log("Request => getSearchResult : not 200");
-      //       }
-      //       document.body.scrollTop = document.documentElement.scrollTop = 0;
-      //     })
-      //   },
-      //   deep: true
-      // }
+      }
     },
     mounted() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;

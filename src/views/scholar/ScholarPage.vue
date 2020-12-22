@@ -30,7 +30,6 @@
             <div class="p-volume c-grey">{{ scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
-<!--                ScholarID:-->
                 <span class="p-scholarID-id">
                   {{ scholar_info.scholar_id }}
                 </span>
@@ -53,7 +52,7 @@
 <!--            <div class="achievement-line"></div>-->
 <!--          </div>-->
           <!--相关文献-->
-          <div id="article-list">
+          <div id="article-list" v-if="has_result">
             <div id="article-list-container">
               <!--筛选 filter-->
               <div id="content-top">
@@ -135,6 +134,10 @@
               </div>
             </div>
           </div>
+          <div class="no-result-tip" v-if="!has_result" style="text-align: center">
+            <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
+            <p>抱歉，暂无该学者的相关学术资源</p>
+          </div>
         </div>
         <!--合作统计展示-->
         <div id="main-content-right">
@@ -153,6 +156,7 @@
                 </div>
               </div>
             </div>
+            <div v-if="co_authors_list_show.length === 0">暂无</div>
           </div>
           <!--合作机构展示-->
           <div class="co-affiliate-wr">
@@ -166,6 +170,7 @@
                 </span>
               </li>
             </ul>
+            <div v-if="co_affiliate_list.length === 0">暂无</div>
           </div>
         </div>
       </div>
@@ -187,16 +192,11 @@ export default {
       user_id: '0',
       scholar_id: '0',
       scholar_info: {
-        name: '张三',
-        volume: 21312,
-        scholar_id: 'CN-B073VAMJ',
-        affiliate: '北京航空航天大学',
-        achList: [
-          // {
-          //   title: 'a指数',
-          //   num: 1341
-          // },
-        ],
+        name: '',
+        volume: 0,
+        scholar_id: '',
+        affiliate: '',
+        achList: [],
         isVerified: false,
         isFocus: false
       },
@@ -215,7 +215,8 @@ export default {
       total_rs: 0,
       total_co_authors: 0,
       total_co_affs: 0,
-      sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
+      sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
+      has_result: true
     }
   },
   methods: {
@@ -226,6 +227,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     toScholarPage(scholar) {
+      // 有 ID
       if (scholar.expertID !== null){
         this.$router.push({
           name: "ScholarPage",
@@ -233,7 +235,9 @@ export default {
             expertid: scholar.expertID
           }
         })
-      } else {
+      }
+      // 无 ID
+      else {
         var search_words = {
           searchWords: '',
           title: '',
@@ -298,10 +302,18 @@ export default {
       }).then(res=>{
         if (res.code === "200"){
           _this.scholar_info.isFocus = res.data
-          _this.$message({
-            message: "成功关注该门户！",
-            type: "success"
-          })
+          if (_this.scholar_info.isFocus){
+            _this.$message({
+              message: "成功关注该门户！",
+              type: "success"
+            })
+          } else {
+            _this.$message({
+              message: "成功取消关注该门户！",
+              type: "success"
+            })
+          }
+
         } else {
           _this.$message({
             message: res.msg,
@@ -342,11 +354,9 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
-          // this.loadCoAuthorsList()
-          // this.loadCoAffList()
         }else {
           _this.$message({
-            message: "loadInfo失败",
+            message: res.msg,
             type: "error"
           })
         }
@@ -385,8 +395,17 @@ export default {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
           _this.total_rs = res.data.total
+          if (_this.total_rs === 0){
+            _this.has_result = false;
+          } else {
+            _this.has_result = true
+          }
+        }
+        else if (res.code === "100"){
+          _this.has_result = false;
         }
         else {
+          _this.has_result = false;
           _this.$message({
             message: res.msg,
             type: "error"
@@ -515,7 +534,7 @@ export default {
   }
   #author-info{
     border-bottom: 1px solid #e3e3e3;
-    padding: 32px 0 53px;
+    padding: 32px 0 20px 80px;
     overflow: hidden;
   }
   #main-content-left{
@@ -530,7 +549,7 @@ export default {
     width: 125px;
     float: left;
     text-align: center;
-    margin-right: 20px;
+    margin-right: 60px;
     /*min-height: 250px;*/
   }
   .person-portrait{
@@ -544,7 +563,7 @@ export default {
     box-shadow: 0 1px 6px rgba(0,0,0,.25);
   }
   .person-authen,.person-focus{
-    width: 90px;
+    width: 94px;
     display: inline-block;
   }
   .person-authen{
