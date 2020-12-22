@@ -225,12 +225,14 @@
         url:window.location,
         email:"",
         search_words: {
-          kw:'',
-          experts:'',
-          origin:'',
-          startTime: 0,
-          endTime: 0,
-        }
+          searchWords: '',  // 普通搜索词
+          title: '', // 标题
+          keyWords: '', // 关键词
+          experts: '', // 学者名
+          origin: '', // 机构
+          startTime: '0',
+          endTime: '0'
+        },
       }
     },
     methods:{
@@ -244,7 +246,7 @@
         })
       },
       findByKw(keyword){
-        this.search_words.kw = keyword;
+        this.search_words.searchWords = keyword;
         this.$router.push({
           name:"AcademicSearch",
           params:{
@@ -342,7 +344,7 @@
           search_words:{
             experts:"",
             origin:"",
-            kw:kw,
+            searchWords:kw,
             startTime:0,
             endTime:0
           }
