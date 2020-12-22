@@ -80,7 +80,7 @@
       </div>
       <div class="no_result_tip" v-if="!has_result">
         <p class="no_result_tip_warning">No Result</p>
-        <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.kw + " " +search_words.experts + " " +search_words.origin + " "}}”相关的学术结果</p>
+        <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.searchWords + " " +search_words.title + " " +search_words.keyWords + " " + search_words.experts + " " + search_words.origin + " "}}”相关的学术结果</p>
 <!--        -->
         <p style="line-height: 26px">
           <b style="font-size: 17px">建议：</b><br/>
@@ -115,9 +115,11 @@
         currentPage: 1,
         sort: "views",
         search_words: {
-          experts: '',
-          origin: '',
-          kw:'',
+          searchWords: '',  // 普通搜索词
+          title: '', // 标题
+          keyWords: '', // 关键词
+          experts: '', // 学者名
+          origin: '', // 机构
           startTime: '0',
           endTime: '0'
         },
@@ -168,9 +170,11 @@
       },
       searchAuthor(val){
         var search_words = {
+          searchWords: '',
+          title: '',
+          keyWords: '',
           experts: val,
           origin: '',
-          kw:'',
           startTime: '0',
           endTime: '0'
         }
@@ -183,9 +187,11 @@
       },
       searchSource(val) {
         var search_words = {
+          searchWords: val,
+          title: '',
+          keyWords: '',
           experts: '',
           origin: '',
-          kw: val,
           startTime: '0',
           endTime: '0'
         }
@@ -258,31 +264,6 @@
         } else {
           return "时间降序";
         }
-      },
-      getTipWords: function (){
-        // var search_words = JSON.stringify(searchWords)
-        // alert(typeof search_words)
-        var search_words = this.search_words
-        var str = ""
-        if (search_words.kw !== ""){
-          // str+=String(search_words.kw)
-          str = str + search_words.kw
-        }
-        if (search_words.experts !== ""){
-          if (str !== ""){
-            str+=","
-          }
-          // str+=String(search_words.experts)
-          str = str + "" + search_words.experts
-        }
-        if (search_words.origin !== ""){
-          if (str !== ""){
-            str+=","
-          }
-          // str+=String(search_words.origin)
-          str = str + "" + search_words.origin
-        }
-        return str
       }
     },
     watch: {

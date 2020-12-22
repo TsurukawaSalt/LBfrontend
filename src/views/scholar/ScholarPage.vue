@@ -232,9 +232,11 @@ export default {
         })
       } else {
         var search_words = {
-          experts: '',
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: scholar.name,
           origin: '',
-          kw: scholar.name,
           startTime: '0',
           endTime: '0'
         }
@@ -354,9 +356,11 @@ export default {
       var _this = this
       this.$api.academic.getSearchResult({
         search_words: {
-          experts: '',
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: _this.scholar_info.name,
           origin: '',
-          kw:_this.scholar_info.name,
           startTime: '0',
           endTime: '0'
         },
