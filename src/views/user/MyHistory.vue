@@ -38,7 +38,8 @@
             Aside,
         },
         mounted() {
-            this.history_list = JSON.parse(localStorage.getItem("myHistory"));
+            this.history_list = JSON.parse(localStorage.getItem(sessionStorage.getItem("userID")));
+            console.log(this.history_list);
         },
         data() {
             return {
@@ -69,7 +70,8 @@
         methods: {
              delHistory(index) {
                 this.$message('删除成功');
-                this.history_list.splice(index,1);                
+                this.history_list.splice(index,1);    
+                localStorage.setItem(sessionStorage.getItem("userID"),JSON.stringify(this.history_list));
             }        
         }
     }

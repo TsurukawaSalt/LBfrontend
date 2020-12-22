@@ -381,18 +381,20 @@
         console.log(err)
         this.$message.error("文章不存在或已被删除")
       })
-      this.getRelation();
-
+      
       var date = new Date();
       var history = [];
-      if(!localStorage.getItem(this.user_id)) {
+      var userID = sessionStorage.getItem("userID");
+      if(!localStorage.getItem(userID)) {
         history = [{id:this.academicID, title:this.academic.title, time:date.toLocaleDateString()}];
-        localStorage.setItem(this.user_id,JSON.stringify(history));
+        localStorage.setItem(userID,JSON.stringify(history));
       } else {
-        history = JSON.parse(localStorage.getItem(this.user_id));
+        history = JSON.parse(localStorage.getItem(userID));
         history.push({id:this.academicID, title:this.academic.title, time:date.toLocaleDateString()});
-        localStorage.setItem(this.user_id,JSON.stringify(history));
+        localStorage.setItem(userID,JSON.stringify(history));
       }
+
+      this.getRelation();
     }
   }
 </script>
