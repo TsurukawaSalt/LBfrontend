@@ -383,6 +383,7 @@ export default {
     /*background: #8c939d;*/
     //position: absolute;
     font-size: 15px;
+    color: black;
     height: 20px;
     width: 200px;
     left: 50px;
@@ -397,12 +398,14 @@ export default {
   .list_author{
     //background: #9fa19f;
     position: absolute;
+    color: grey;
     left: 52px;
     top: 55px;
     font-size: 14px;
   }
   .list_cited {
     font-size: 15px;
+    color: #005cd9;
     position: absolute;
     left: 290px;
     top: 29px;
