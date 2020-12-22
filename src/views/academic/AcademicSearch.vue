@@ -403,6 +403,9 @@
         if (this.sort === null){
           this.sort = "views"
         }
+        if (this.currentPage === null){
+          this.currentPage = 1
+        }
       }else{
         console.log("首次被加载")
         this.currentPage = 1
