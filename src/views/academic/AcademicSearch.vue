@@ -538,7 +538,7 @@
   .e_item{
     display: inline-block;
     margin-right: 10px;
-    width: 135px;
+    width: 180px;
     overflow: hidden
   }
   .e_avatar{
@@ -552,7 +552,7 @@
   .e_info_name{
     font-size: 14px;
     color: #0066cc;
-    width:90px;
+    width:130px;
     white-space:nowrap;
     text-overflow:ellipsis;
     -o-text-overflow:ellipsis;
@@ -564,7 +564,7 @@
   }
   .e_info_aff{
     font-size: 12px;
-    width:85px;
+    width:130px;
     white-space:nowrap;
     text-overflow:ellipsis;
     -o-text-overflow:ellipsis;
