@@ -410,6 +410,7 @@
         }
       },
       getRelation(){
+        console.log('getrelation')
         let vue = this;
         let kw = "";
         for(let key of vue.academic.keywords){
@@ -423,12 +424,13 @@
             startTime:0,
             endTime:0
           }
-        }).then(
-            res=>{
-              vue.relation_list = res.data.result_list
-              console.log(vue.relation_list)
-            }
-        )
+        }).then((res)=> {
+          if(res == 200){
+            vue.relation_list = res.data.result_list
+            console.log('get relation list', vue.relation_list)
+          }
+
+        })
       }
     },
     mounted() {

@@ -254,7 +254,15 @@
       }
     },
     mounted() {
-      this.getAllApp();
+      this.$api.user.isadmin({
+        token:sessionStorage.getItem("token")
+      }).then((res)=>{
+        if(res.code == 200){
+          this.getAllApp();
+        }else{
+          this.$message.error('您没有权限查看该页面');
+        }
+      })
     }
   }
 </script>

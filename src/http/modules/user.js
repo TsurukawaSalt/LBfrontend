@@ -80,3 +80,12 @@ export const getFollowList = params => {
       params
   })
 }
+
+// 查询是不是管理员
+export const isadmin = params => {
+  return axios({
+    url: '/user/isadmin',
+    method: 'get',
+    params
+  })
+}
