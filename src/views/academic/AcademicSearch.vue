@@ -5,6 +5,7 @@
       <div class="content-right">
         这里是右侧
       </div>
+      <!-- 搜索结果 -->
       <div class="content-left" v-if="has_result">
         <!-- filter -->
         <div class="content-left-nav">
@@ -55,12 +56,39 @@
               </div>
               <span class="nums">找到约{{ this.total_rs }}条相关结果</span>
             </div>
-            <!-- 列表 -->
+            <!-- 文献列表 -->
             <div v-for="(result_item,index) in result_list" v-bind:key="index">
               <academic-item
                   :c_sc = result_item
                   v-on:toAuthorPage = "searchAuthor"
-                  v-on:toSourcePage = "searchSource"></academic-item>
+                  v-on:toSourcePage = "searchSource"
+                  v-on:quote = showQuote></academic-item>
+              <!-- 引用 -->
+              <el-dialog
+                  title="引用"
+                  :visible.sync="quotedialogVisible"
+                  width="40%">
+                <el-row style="text-align: left">
+                  以下引用格式为GB/T7714，点击按钮即可复制内容
+                  <el-button icon="el-icon-document-copy"
+                             style="float: right"
+                             v-clipboard:copy="getQuote(result_item)"
+                             v-clipboard:success="copySuccess"
+                             v-clipboard:error="copyError"
+                  ></el-button>
+                </el-row>
+
+                <el-input
+                    type="textarea"
+                    placeholder="url"
+                    autosize
+                    v-model="quoteText"
+                    :readonly="true">
+                </el-input>
+                <span slot="footer" class="dialog-footer">
+                  <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+                </span>
+              </el-dialog>
             </div>
           </div>
         </div>
@@ -78,17 +106,16 @@
           </el-pagination>
         </p>
       </div>
+      <!-- 无结果tip -->
       <div class="no_result_tip" v-if="!has_result">
         <p class="no_result_tip_warning">No Result</p>
         <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.searchWords + " " +search_words.title + " " +search_words.keyWords + " " + search_words.experts + " " + search_words.origin + " "}}”相关的学术结果</p>
-<!--        -->
         <p style="line-height: 26px">
           <b style="font-size: 17px">建议：</b><br/>
           1. 检查输入是否正确<br/>
           2. 简化输入词<br/>
           3. 尝试其他相关词，如同义、近义词等<br/>
         </p>
-
       </div>
     </div>
   </div>
@@ -134,24 +161,58 @@
           jnls: '',
           affs: '',
         },
-        e_result_list: [
-          {
-            name: "qefsdfadfa噶人",
-            id: 43514,
-            affiliate: "艾弗森adfasdfad计达"
-          },
-          {
-            name: "按adfadsfasdf对",
-            id: 17565,
-            affiliate: "你头发把asdfasdfa对"
-          }
-        ],
+        e_result_list: [],
         has_experts: false,
         experts_count: 0,
-        has_result: true
+        has_result: true,
+        quoteText:"",
+        quotedialogVisible:false,
       }
     },
     methods: {
+      showQuote(val){
+        this.quoteText = this.getQuote(val)
+        this.quotedialogVisible = true;
+      },
+      getQuote(document){
+        let res = ""
+        for(let i in document.authors){
+          if(i != 0){
+            res += ",";
+          }
+          res += document.authors[i].name;
+        }
+        res += '.';
+        res += document.title+'['
+        let dtype = document.dtype;
+        if(dtype == '专利'){
+          res += 'P'
+        }else if(dtype == '会议'){
+          res += 'C'
+        }else if(dtype == '图书'){
+          res += 'M'
+        }else if(dtype == '学位'){
+          res += 'D'
+        }else if(dtype == '期刊'){
+          res += 'J'
+        }
+        res += '].'
+        res += document.origin;
+        if(document.time.length >= 4){
+          res += ','+document.time.substring(0,4);
+        }
+        return res;
+      },
+      copySuccess(){
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        });
+        this.sharedialogVisible = false;
+      },
+      copyError(){
+        this.$message.error('您的浏览器不支持该功能，请自行复制链接内容');
+      },
       handleSelect(val, name){
         console.log("父组件监听到点击了filter类别：" + name + " 的选线： " + val)
         this.filter_words[name] = val

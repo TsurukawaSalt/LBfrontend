@@ -130,6 +130,7 @@
       quote() {
         console.log("引用文章！");
         document.getElementById("button-quote").blur();
+        this.$emit("quote", this.item)
       },
       batchQuote() {
         console.log("批量引用文章！");
