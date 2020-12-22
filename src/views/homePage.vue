@@ -169,7 +169,7 @@ export default {
     goKwSearch(kw){
       alert(kw)
       this.search_words.keyWords = kw
-      this.goSearch(false)
+      this.goSearch(true)
     },
     goArticle(id){
       this.$router.push('academicShow/'+id)
