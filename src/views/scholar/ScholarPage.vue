@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <Header class="header_home"></Header>
     <div class="container">
       <div id="main-content">
         <!--科研人员信息-->
@@ -174,10 +175,12 @@
 
 <script>
 import AcademicItem from "@/components/AcademicItem";
+import Header from "@/components/header";
 export default {
   name: "ScholarPage",
   components: {
-    AcademicItem
+    AcademicItem,
+    Header
   },
   data() {
     return {
