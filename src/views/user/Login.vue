@@ -44,7 +44,7 @@
             message: '您已登录',
             type: 'warning'
           });
-          this.$router.push("/home");
+          this.$router.push("/");
         }
         else {
           var _this = this
@@ -57,7 +57,7 @@
               sessionStorage.setItem("userID",res.data.userID);
               sessionStorage.setItem("token",res.data.token);
               sessionStorage.setItem("is_admin",res.data.is_admin);
-              _this.$router.push("/home");
+              _this.$router.push("/");
             }
             else {
               _this.$message.error(res.msg);
