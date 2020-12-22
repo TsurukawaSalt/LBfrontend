@@ -4,7 +4,7 @@
     <el-link class="title" :underline="false">
       Logo
     </el-link>
-    <el-input class="search" placeholder="请输入你要查找的内容" v-model="search_words.kw" @keyup.enter.native="goSearch(false)">
+    <el-input class="search" placeholder="请输入你要查找的内容" v-model="search_words.searchWords" @keyup.enter.native="goSearch(false)">
       <el-button v-popover:popover type="text" class="h_button" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
       <el-button class="button" slot="append" @click="goSearch(false)">搜索</el-button>
     </el-input>
@@ -17,13 +17,19 @@
         trigger="click">
       <el-form ref="search_words" :model="search_words" label-width="80px">
         <el-form-item label="检索词">
-          <el-input v-model="search_words.kw" placeholder="多个检索词用空格分开"></el-input>
+          <el-input v-model="search_words.searchWords" placeholder="多个检索词用空格分开"></el-input>
+        </el-form-item>
+        <el-form-item label="标题">
+          <el-input v-model="search_words.title" placeholder="输入标题检索"></el-input>
+        </el-form-item>
+        <el-form-item label="关键字">
+          <el-input v-model="search_words.keyWords" placeholder="多个关键字用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="作者">
           <el-input v-model="search_words.experts" placeholder="多个作者用空格分开"></el-input>
         </el-form-item>
         <el-form-item label="来源">
-          <el-input v-model="search_words.origin"></el-input>
+          <el-input v-model="search_words.origin" placeholder="输入来源"></el-input>
         </el-form-item>
         <el-form-item label="发表时间">
           <el-col :span="11">
@@ -117,7 +123,9 @@ export default {
           'YZA',
       ],
       search_words: {
-        kw:'',
+        searchWords:'',
+        title:'',
+        keyWords:'',
         experts:'',
         origin:'',
         startTime: 0,
@@ -128,7 +136,7 @@ export default {
   methods: {
     goSearch(isAdvanced){
       if (!isAdvanced) {
-        if (this.search_words.kw !== '') {
+        if (this.search_words.searchWords !== '') {
           this.$router.push({
             name:"AcademicSearch",
             params:{
@@ -139,7 +147,9 @@ export default {
           alert("搜索内容为空")
         }
       } else {
-        if (this.search_words.kw === ''
+        if (this.search_words.searchWords === ''
+            && this.search_words.title === ''
+            && this.search_words.keyWords === ''
             && this.search_words.experts === ''
             && this.search_words.origin === ''
             && this.search_words.startTime === 0
@@ -158,7 +168,7 @@ export default {
     },
     goKwSearch(kw){
       alert(kw)
-      this.search_words.kw = kw
+      this.search_words.keyWords = kw
       this.goSearch(false)
     },
     goArticle(id){
@@ -172,7 +182,9 @@ export default {
     let _this = this;
     this.$api.academic.getSearchResult({
       search_words: {
-        kw:'计算机',
+        searchWords:'计算机',
+        keyWords: '',
+        title: '',
         experts:'',
         origin:'',
         startTime: '0',
@@ -195,13 +207,13 @@ export default {
           _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
           console.log(_this.result_list[i].time)
         }
-        _this.e_result_list = res.data.e_result_list;
-        if (_this.e_result_list.length === 0){
-          _this.has_experts = false
-        } else {
-          _this.has_experts = true
-          _this.experts_count = _this.e_result_list.length
-        }
+        // _this.e_result_list = res.data.e_result_list;
+        // if (_this.e_result_list.length === 0){
+        //   _this.has_experts = false
+        // } else {
+        //   _this.has_experts = true
+        //   _this.experts_count = _this.e_result_list.length
+        // }
       }else {
         _this.$message({
           message: res.msg,
