@@ -148,7 +148,7 @@
                 </div>
                 <div class="co-author-item">
                   <div class="co-author-name" @click="toScholarPage(item)">{{ item.name }}</div>
-                  <div class="co-author-affiliate">{{ item.affiliate }}</div>
+                  <div class="co-author-affiliate">{{ item.org }}</div>
                 </div>
               </div>
             </div>
@@ -158,10 +158,10 @@
             <h3>合作机构</h3>
             <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
               <li>
-                <span class="co_affiliate_name">{{ item.name }}</span>
+                <span class="co_affiliate_name">{{ item.first }}</span>
                 <span class="co_affiliate_line">
                   <span class="co_affiliate_width"></span>
-                  <span class="co_affiliate_count">{{ item.count }}</span>
+                  <span class="co_affiliate_count">{{ item.second }}</span>
                 </span>
               </li>
             </ul>
@@ -193,45 +193,13 @@ export default {
           //   title: 'a指数',
           //   num: 1341
           // },
-          // {
-          //   title: 'b指数',
-          //   num: 2565
-          // },
-          // {
-          //   title: 'c指数',
-          //   num: 241
-          // },
-          // {
-          //   title: 'd指数',
-          //   num: 597
-          // }
         ],
         isVerified: false,
         isFocus: false
       },
-      co_authors_list:[
-        // {
-        //   expertid: '23423',
-        //   name: '十六日',
-        //   affiliate: '浙江医科大学肿瘤研究所'
-        // },
-        // {
-        //   expertid: '3673',
-        //   name: '打过交道',
-        //   affiliate: '浙江医科大啊日嘎人学肿瘤研究所'
-        // }
-      ],
+      co_authors_list:[],
       co_authors_list_show:[],
-      co_affiliate_list: [
-        // {
-        //   name: '啊的发挥快递费',
-        //   count: 14351
-        // },
-        // {
-        //   name: '是该公司认为',
-        //   count: 42654
-        // }
-      ],
+      co_affiliate_list: [],
       co_affiliate_list_show: [],
       result_list:[],
       sort_words: {
@@ -255,11 +223,11 @@ export default {
       console.log(`当前页: ${val}`);
     },
     toScholarPage(scholar) {
-      if (scholar.expertid !== null){
+      if (scholar.expertID !== null){
         this.$router.push({
           name: "ScholarPage",
           params: {
-            expertid: scholar.expertid
+            expertid: scholar.expertID
           }
         })
       } else {
@@ -365,13 +333,12 @@ export default {
       var _this = this
       this.$api.scholar.getInfo({
         scholar_id: _this.scholar_id,
-        user_id: sessionStorage.getItem("userID")
+        user_id: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
       }).then(res => {
         if (res.code === "200"){
           _this.scholar_info = res.data
-          this.loadRelateSc()
-          this.loadCoAuthorsList()
-          this.loadCoAffList()
+          // this.loadCoAuthorsList()
+          // this.loadCoAffList()
         }else {
           _this.$message({
             message: "loadInfo失败",
@@ -379,6 +346,9 @@ export default {
           })
         }
       })
+      this.loadRelateSc()
+      this.loadCoAuthorsList()
+      this.loadCoAffList()
     },
     loadRelateSc(){
       var _this = this
@@ -423,8 +393,8 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_authors_list = res.data.result_list
-          _this.total_co_authors = res.data.total_rs
+          _this.co_authors_list = res.data
+          _this.total_co_authors = _this.co_authors_list.length
           if (_this.total_co_authors > 4){
             _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
           } else{
@@ -444,8 +414,8 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_affiliate_list = res.data.result_list
-          _this.total_co_affs = res.data.total_rs
+          _this.co_affiliate_list = res.data
+          _this.total_co_affs = _this.co_affiliate_list.length
         } else {
           _this.$message({
             message: res.msg,
