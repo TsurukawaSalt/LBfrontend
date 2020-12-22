@@ -40,7 +40,7 @@
 
       <div class="r_con">
         <el-badge value="new" class="newMsg">
-          <el-button v-popover:popover type="info" icon="el-icon-message" class="r_con_mess">消息</el-button>
+          <el-button v-popover:popover type="info" icon="el-icon-message" class="r_con_mess_1">消息</el-button>
         </el-badge>
         <el-button type="text" v-if="isLogin" class="r_con_user" @click="goUser()">{{this.userName}}</el-button>
         <el-button type="text" v-if="isLogin" class="r_con_reLogin" @click="reLogin()">退出登录</el-button>
@@ -71,7 +71,7 @@
 
     <el-header v-if="this.status == 2" class="header_2">
       <div class="r_con">
-        <el-button v-popover:popover type="text" class="r_con_mess">消息</el-button>
+        <el-button v-popover:popover type="text" class="r_con_mess_2">消息</el-button>
         <el-button v-if="isLogin" class="r_con_user" type="text" @click="goUser()">{{this.userName}}</el-button>
         <el-button v-if="isLogin" class="r_con_reLogin" type="text" @click="reLogin()">退出登录</el-button>
         <el-button v-if="!isLogin" class="r_con_login" type="text" @click="goLogin()">登录</el-button>
@@ -234,11 +234,18 @@ export default {
     float: right;
     left: calc(100% - 200px);
   }
-  .r_con_mess {
+  .r_con_mess_1 {
     border-radius: 15px;
     margin-right: 10px;
     border-width: 0;
     background: darkslateblue;
+    /*color: #8c939d;*/
+  }
+  .r_con_mess_2 {
+    border-radius: 15px;
+    margin-right: 10px;
+    border-width: 0;
+    //background: darkslateblue;
     /*color: #8c939d;*/
   }
   .newMsg {
@@ -254,6 +261,7 @@ export default {
   }
   .r_con_login {
     margin-right: 10px;
+    margin-left: 35px;
   }
   .r_con_Register {
   }

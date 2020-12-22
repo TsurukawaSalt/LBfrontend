@@ -399,15 +399,22 @@ export default {
     //background: #9fa19f;
     position: absolute;
     color: grey;
+    width: 160px;
     left: 52px;
     top: 55px;
     font-size: 14px;
+    display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+    -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+    overflow: hidden; /*超出的文本隐藏*/
+    text-overflow: ellipsis; /* 溢出用省略号*/
+  //white-space: nowrap;
+    -webkit-box-orient: vertical
   }
   .list_cited {
     font-size: 15px;
     color: #005cd9;
     position: absolute;
-    left: 290px;
+    left: 300px;
     top: 29px;
   }
 
@@ -475,6 +482,9 @@ export default {
       text-overflow: ellipsis; /* 溢出用省略号*/
     //white-space: nowrap;
       -webkit-box-orient: vertical
+    }
+    .list_author{
+      width: 200px;
     }
     .right_block {
       top: -25px;
