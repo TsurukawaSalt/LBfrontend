@@ -1,9 +1,11 @@
 <template>
   <div class="page">
+    <div class="background"></div>
+    <div class="index"></div>
     <Header status="2" class="header_home"></Header>
-    <el-link class="title" :underline="false">
+    <el-image :src="require('@/assets/logo.png')" class="logo" :underline="false">
       Logo
-    </el-link>
+    </el-image>
     <el-input class="search" placeholder="请输入你要查找的内容" v-model="search_words.searchWords" @keyup.enter.native="goSearch(false)">
       <el-button v-popover:popover type="text" class="h_button" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
       <el-button class="button" slot="append" @click="goSearch(false)">搜索</el-button>
@@ -35,7 +37,7 @@
           <el-col :span="11">
             <el-date-picker type="date" placeholder="选择起始日期" v-model="search_words.startTime" style="width: 90%"></el-date-picker>
           </el-col>
-<!--          <el-col class="line" :span="1"> - </el-col>-->
+          <!--          <el-col class="line" :span="1"> - </el-col>-->
           <el-col :span="11">
             <el-date-picker type="date" placeholder="选择截至日期" v-model="search_words.endTime" style="width: 90%"></el-date-picker>
           </el-col>
@@ -86,6 +88,8 @@
         </el-row>
       </div>
     </div>
+
+
   </div>
 </template>
 
@@ -112,15 +116,15 @@ export default {
       //   {title:'777777', year:2020, author:'ABC', cited:195},
       // ],
       hot_keywords:[
-          'AB',
-          'DEFC',
-          'GHIl',
-          'J',
-          'MNO',
-          'PQR',
-          'STU',
-          'VWX',
-          'YZA',
+          '计算机',
+          '人工智能',
+          '航空',
+          '深度学习',
+          '合成生物学123456',
+          '糖尿病',
+          '航天',
+          '新冠',
+          '疫情',
       ],
       search_words: {
         searchWords:'',
@@ -167,7 +171,7 @@ export default {
       }
     },
     goKwSearch(kw){
-      alert(kw)
+      // alert(kw)
       this.search_words.keyWords = kw
       this.goSearch(true)
     },
@@ -215,11 +219,11 @@ export default {
         //   _this.experts_count = _this.e_result_list.length
         // }
       }else {
-        _this.$message({
-          message: res.msg,
-          type: "error"
-        })
-        console.log("Request => getSearchResult : not 200");
+        // _this.$message({
+        //   message: res.msg,
+        //   type: "error"
+        // })
+        // console.log("Request => getSearchResult : not 200");
       }
     })
   }
@@ -233,19 +237,39 @@ export default {
     /*max-width: 1500px;*/
     min-height: 800px;
     /*left: 10%;*/
+    //background-image: url("../assets/backgroud1.jpg");
+    //background-size: 1800px;
   }
 
-  /*.header_home{
+  .background{
     position: fixed;
-    width: 100%;
+    background-image: url("../assets/background/back4.jpg");
     top: 0;
-  }*/
+    left: 0;
+    z-index:-10;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }
+  .index {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index:-9;
+    width: 100%;
+    height: 100%;
+    background: white;
+    background-size: cover;
+    //filter:alpha(Opacity=50);
+    //-moz-opacity:0.5;
+    opacity: 0.6;
+  }
 
-  .title {
+  .logo {
     position: absolute;
-    top: 200px;
-    left: 25%;
-    width: 50%;
+    top: 100px;
+    left: calc((100% - 200px)/2);
+    width: 200px;
     font-size: 70px;
 
   }
@@ -439,8 +463,14 @@ export default {
     float: left;
     /*margin-left: 90%;*/
     left: 800px;
-    width: 200px;
+    width: 100px;
     height: 100%;
+  }
+  .right_block h4 {
+    position: absolute;
+    //top: -25px;
+    width: 100px;
+    left: 45px;
   }
   .num-icon-kw{
     width: 30px;
@@ -450,11 +480,22 @@ export default {
   .keyword_list {
     height: 45px;
     text-align: left;
+    top: 50px;
+    //width: 200px;
     left: 50px;
   }
   .keyword {
-    font-size: 20px;
-    left: 10px;
+    font-size: 15px;
+    //width: 10px;
+    top: -20px;
+    left: 40px;
+    width: 100px;
+    display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+    -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+    overflow: hidden; /*超出的文本隐藏*/
+    text-overflow: ellipsis; /* 溢出用省略号*/
+  //white-space: nowrap;
+    -webkit-box-orient: vertical
   }
 
   @media screen and (min-width: 1400px){

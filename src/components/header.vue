@@ -55,19 +55,43 @@
       </div>
       <el-popover
           ref="popover"
-          title="消息"
+          title="消息列表"
           placement="bottom"
           width="290"
           trigger="click"
           content="123456789"
       >
-        <el-col class="MsgCol">
+<!--          <span>卡片名称</span>-->
+        <el-button v-if="!this.isRead" class="check_isRead_button" type="text" @click="isRead = true">查看已读消息</el-button>
+        <el-button v-if="this.isRead" class="goBack_isRead_button" type="text" @click="isRead = false">返回</el-button>
+        <el-col v-if="!this.isRead" class="MsgCol">
           <el-row v-for="(o, index) in 8" :key="index" class="MsgRow">
             <el-card class="MsgCard">
-              <span>123465</span>
+              <div slot="header" class="clearfix">
+                <span>title</span>
+              </div>
+              <div class="MsgContent">123465</div>
               <br>
-              <el-button>已读</el-button>
-              <el-button>删除此信息</el-button>
+              <div class="button_block">
+                <el-button class="read_button"  type="success" icon="el-icon-check" circle></el-button>
+                <el-button class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+              </div>
+
+            </el-card>
+          </el-row>
+        </el-col>
+        <el-col v-if="this.isRead" class="MsgCol">
+          <el-row v-for="(o, index) in 8" :key="index" class="MsgRow">
+            <el-card class="MsgCard">
+              <div slot="header" class="clearfix">
+                <span>title</span>
+              </div>
+              <div class="MsgContent">54321</div>
+              <br>
+              <div class="r_button_block">
+                <el-button class="not_read_button" >设为未读</el-button>
+                <el-button class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+              </div>
             </el-card>
           </el-row>
         </el-col>
@@ -114,6 +138,9 @@ export default {
       },
       isLogin:false,
       userName:'',
+      isRead: false,
+      msgList:[],
+      msgNum: 0
     }
   },
   props: {
@@ -180,6 +207,23 @@ export default {
     if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
       this.isLogin = true
       this.userName = sessionStorage.getItem("userName")
+
+      // 获取消息列表
+      let _this = this
+      this.$api.message.getMessage({
+        token: sessionStorage.getItem("token"),
+        userID: sessionStorage.getItem("userID"),
+      }).then(res => {
+        if (res.code === "200"){
+          _this.msgList = res.data.rows;
+          _this.msgNum = res.data.rows.length;
+        } else {
+          // _this.$message({
+          //   message: res.msg,
+          //   type: "error"
+          // })
+        }
+      })
     }
   }
 }
@@ -291,11 +335,58 @@ export default {
    }
 
   .MsgRow{
-    height: 130px;
+    height: 230px;
     width: 280px;
   }
   .MsgCard {
+    height: 200px;
+  }
+  .MsgContent {
     height: 100px;
+
+    /*margin-bottom: 10px;*/
+  }
+
+  .button_block {
+    position: absolute;
+    width: 200px;
+    left: 150px;
+    top: -90px;
+  }
+  .r_button_block {
+    position: absolute;
+    width: 200px;
+    left: 100px;
+    top: -90px;
+  }
+
+  .check_isRead_button{
+    position: absolute;
+    color: #0066cc;
+    top: 5px;
+    left: 230px;
+  }
+  .goBack_isRead_button{
+    position: absolute;
+    color: #8c939d;
+    top: 5px;
+    left: 250px;
+  }
+  .read_button {
+    //position: absolute;
+    left: 150px;
+  }
+  .not_read_button {
+    //position: absolute;
+    background: #409EFF;
+    color: white;
+    border-radius: 25px;
+    //left: 100px;
+  }
+
+  .del_button {
+    //position: absolute;
+    left: 200px;
   }
 
   .header_2 {
