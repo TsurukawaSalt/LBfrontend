@@ -2,7 +2,8 @@
   <div>
     <el-header v-if="this.status == 1" class="header_1">
       <el-input class="h_search" placeholder="请输入你要查找的内容" v-model="search_words.kw" @keyup.enter.native="goSearch(false)">
-        <el-button v-popover:search slot="append">高级搜索</el-button>
+        <el-button v-popover:search type="text" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
+        <el-button icon="el-icon-search" slot="append" @click="goSearch(false)"></el-button>
       </el-input>
       <el-popover
           ref="search"
@@ -171,9 +172,9 @@ export default {
 
 <style scoped>
   .header_1 {
-    //position: absolute;
+    /*position: absolute;*/
     min-width: 800px;
-    //width: 100%;
+    /*width: 100%;*/
     background-color: #2c3e50;
     margin: -10px -8px 0 -8px;
     padding: 0;
@@ -183,6 +184,38 @@ export default {
     width: 400px;
     margin: 10px;
   }
+  .h_search >>> .el-input__inner {
+    border-radius: 0 0 0 0;
+    border-width: 2px 0px 2px 0px;
+    border-width: 0;
+    border-color: #245cc0;
+    font-size: 18px;
+    /*height: 60px;*/
+  }
+
+  .h_search >>> .el-input-group__append {
+    border-radius: 0 15px 15px 0;
+    border-width: 0;
+    /*border-style: dashed;*/
+    /*border-color: grey;*/
+    background: white;
+    /*height: 60px;*/
+    width: 20px;
+    font-size: 18px;
+    /*color: black;*/
+  }
+
+  .h_search >>> .el-input-group__prepend {
+    border-radius: 15px 0 0 15px;
+    border-width: 0 1px 0 0;
+    background: white;
+    border-style: solid dashed solid solid;
+    /*height: 60px;*/
+    width: 60px;
+    font-size: 15px;
+    color: grey;
+  }
+
   @media screen and (min-width: 1400px){
     .h_search {
       width: 600px;
