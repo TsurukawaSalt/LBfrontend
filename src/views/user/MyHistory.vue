@@ -38,7 +38,8 @@
             Aside,
         },
         mounted() {
-            this.history_list = JSON.parse(localStorage.getItem("myHistory"));
+            this.history_list = JSON.parse(localStorage.getItem(sessionStorage.getItem("userID")));
+            console.log(this.history_list);
         },
         data() {
             return {
