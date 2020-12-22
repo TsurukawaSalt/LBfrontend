@@ -187,11 +187,11 @@
       },
       searchSource(val) {
         var search_words = {
-          searchWords: val,
+          searchWords: '',
           title: '',
           keyWords: '',
           experts: '',
-          origin: '',
+          origin: val,
           startTime: '0',
           endTime: '0'
         }
