@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-header v-if="this.status == 1" class="header_1">
-      <el-input class="h_search" placeholder="请输入你要查找的内容" v-model="search_words.kw" @keyup.enter.native="goSearch(false)">
+      <el-input class="h_search" placeholder="请输入你要查找的内容" v-model="search_words.searchWords" @keyup.enter.native="goSearch(false)">
         <el-button v-popover:search type="text" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
         <el-button icon="el-icon-search" slot="append" @click="goSearch(false)"></el-button>
       </el-input>
@@ -14,7 +14,13 @@
           trigger="click">
         <el-form ref="search_words" :model="search_words" label-width="80px">
           <el-form-item label="检索词">
-            <el-input v-model="search_words.kw" placeholder="多个检索词用空格分开"></el-input>
+            <el-input v-model="search_words.searchWords" placeholder="多个检索词用空格分开"></el-input>
+          </el-form-item>
+          <el-form-item label="标题">
+            <el-input v-model="search_words.title" placeholder="输入标题检索"></el-input>
+          </el-form-item>
+          <el-form-item label="关键字">
+            <el-input v-model="search_words.keyWords" placeholder="多个关键字用空格分开"></el-input>
           </el-form-item>
           <el-form-item label="作者">
             <el-input v-model="search_words.experts" placeholder="多个作者用空格分开"></el-input>
@@ -98,13 +104,14 @@ export default {
   data(){
     return {
       search_words: {
-        kw:'',
+        searchWords:'',
+        title:'',
+        keyWords:'',
         experts:'',
         origin:'',
         startTime: 0,
         endTime: 0,
       },
-
       isLogin:false,
       userName:'',
     }
@@ -119,7 +126,7 @@ export default {
   methods:{
     goSearch(isAdvanced){
       if (!isAdvanced) {
-        if (this.search_words.kw !== '') {
+        if (this.search_words.searchWords !== '') {
           this.$router.push({
             name:"AcademicSearch",
             params:{
@@ -130,7 +137,9 @@ export default {
           alert("搜索内容为空")
         }
       } else {
-        if (this.search_words.kw === ''
+        if (this.search_words.searchWords === ''
+            && this.search_words.title === ''
+            && this.search_words.keyWords === ''
             && this.search_words.experts === ''
             && this.search_words.origin === ''
             && this.search_words.startTime === 0
