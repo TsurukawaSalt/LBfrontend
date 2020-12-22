@@ -75,6 +75,12 @@
               <el-button type="danger" plain @click="reject(scope.row)">拒绝</el-button>
             </template>
           </el-table-column>
+          <el-table-column v-if="!openTodeal" width="100">
+            <template  slot-scope="scope">
+              <div v-if="scope.row.result==1" class="my-button my-button-primary-plain" >已通过</div>
+              <div v-if="scope.row.result==2" class="my-button my-button-danger-plain" >未通过</div>
+            </template>
+          </el-table-column>
         </el-table>
         <div class="block">
           <el-pagination
@@ -248,11 +254,52 @@
       }
     },
     mounted() {
-      this.getAllApp();
+      this.$api.user.isadmin({
+        token:sessionStorage.getItem("token")
+      }).then((res)=>{
+        if(res.code == 200){
+          this.getAllApp();
+        }else{
+          this.$message.error('您没有权限查看该页面');
+        }
+      })
     }
   }
 </script>
 
 <style scoped>
+  .my-button{
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    background: #FFF;
+    border: 1px solid #DCDFE6;
+    border-top-color: rgb(220, 223, 230);
+    border-right-color: rgb(220, 223, 230);
+    border-bottom-color: rgb(220, 223, 230);
+    border-left-color: rgb(220, 223, 230);
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    transition: .1s;
+    font-weight: 500;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
 
+  }
+
+  .my-button-primary-plain{
+    color: #409EFF;
+    background: #ecf5ff;
+    border-color: #b3d8ff;
+  }
+  .my-button-danger-plain{
+    color: #F56C6C;
+    background: #fef0f0;
+    border-color: #fbc4c4;
+  }
 </style>

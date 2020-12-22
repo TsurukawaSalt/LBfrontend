@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <Header class="header_home"></Header>
     <div class="container">
       <div id="main-content">
         <!--科研人员信息-->
@@ -174,10 +175,12 @@
 
 <script>
 import AcademicItem from "@/components/AcademicItem";
+import Header from "@/components/header";
 export default {
   name: "ScholarPage",
   components: {
-    AcademicItem
+    AcademicItem,
+    Header
   },
   data() {
     return {
@@ -232,9 +235,11 @@ export default {
         })
       } else {
         var search_words = {
-          experts: '',
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: scholar.name,
           origin: '',
-          kw: scholar.name,
           startTime: '0',
           endTime: '0'
         }
@@ -354,9 +359,11 @@ export default {
       var _this = this
       this.$api.academic.getSearchResult({
         search_words: {
-          experts: '',
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: _this.scholar_info.name,
           origin: '',
-          kw:_this.scholar_info.name,
           startTime: '0',
           endTime: '0'
         },

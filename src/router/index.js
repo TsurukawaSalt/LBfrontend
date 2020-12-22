@@ -69,6 +69,11 @@ Vue.use(VueRouter)
       path:'/admin',
       name:'admin',
       component: () => import('../views/admin/admin')
+    },
+    {
+      path: '/404',
+      name: 'NotFound',
+      component: () => import('../views/404')
     }
 ]
 

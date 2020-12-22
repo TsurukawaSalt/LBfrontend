@@ -40,7 +40,7 @@
                 userID : sessionStorage.getItem("userID")
             }).then(res=>{
                 if(Number(res.code) === 200) {
-                    _this.follow_list = res.data.followList;
+                    _this.follow_list = res.data;
                 }
                 else {
                     _this.$message.error(res.msg);

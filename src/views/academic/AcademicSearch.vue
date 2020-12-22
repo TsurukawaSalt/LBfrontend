@@ -5,6 +5,7 @@
       <div class="content-right">
         这里是右侧
       </div>
+      <!-- 搜索结果 -->
       <div class="content-left" v-if="has_result">
         <!-- filter -->
         <div class="content-left-nav">
@@ -31,7 +32,7 @@
                       </div>
                       <div class="e_info">
                         <div class="e_info_name" @click="handleToAuthor(item.id)">{{ item.name }}</div>
-                        <div class="e_info_aff">{{ item.affiliate }}</div>
+                        <div class="e_info_aff">{{ item.org }}</div>
                       </div>
                     </div>
                   </div>
@@ -55,12 +56,13 @@
               </div>
               <span class="nums">找到约{{ this.total_rs }}条相关结果</span>
             </div>
-            <!-- 列表 -->
+            <!-- 文献列表 -->
             <div v-for="(result_item,index) in result_list" v-bind:key="index">
               <academic-item
                   :c_sc = result_item
                   v-on:toAuthorPage = "searchAuthor"
-                  v-on:toSourcePage = "searchSource"></academic-item>
+                  v-on:toSourcePage = "searchSource"
+                  v-on:quote = "showQuote"></academic-item>
             </div>
           </div>
         </div>
@@ -78,19 +80,44 @@
           </el-pagination>
         </p>
       </div>
+      <!-- 无结果tip -->
       <div class="no_result_tip" v-if="!has_result">
         <p class="no_result_tip_warning">No Result</p>
-        <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.kw + " " +search_words.experts + " " +search_words.origin + " "}}”相关的学术结果</p>
-<!--        -->
+        <p style="margin-top: 8px">抱歉，没有找到与“{{ " " + search_words.searchWords + " " +search_words.title + " " +search_words.keyWords + " " + search_words.experts + " " + search_words.origin + " "}}”相关的学术结果</p>
         <p style="line-height: 26px">
           <b style="font-size: 17px">建议：</b><br/>
           1. 检查输入是否正确<br/>
           2. 简化输入词<br/>
           3. 尝试其他相关词，如同义、近义词等<br/>
         </p>
-
       </div>
     </div>
+    <!-- 引用 -->
+    <el-dialog
+        title="引用"
+        :visible.sync="quotedialogVisible"
+        width="40%">
+      <el-row style="text-align: left">
+        以下引用格式为GB/T7714，点击按钮即可复制内容
+        <el-button icon="el-icon-document-copy"
+                   style="float: right"
+                   v-clipboard:copy="quoteText"
+                   v-clipboard:success="copySuccess"
+                   v-clipboard:error="copyError"
+        ></el-button>
+      </el-row>
+
+      <el-input
+          type="textarea"
+          placeholder="url"
+          autosize
+          v-model="quoteText"
+          :readonly="true">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -115,9 +142,11 @@
         currentPage: 1,
         sort: "views",
         search_words: {
-          experts: '',
-          origin: '',
-          kw:'',
+          searchWords: '',  // 普通搜索词
+          title: '', // 标题
+          keyWords: '', // 关键词
+          experts: '', // 学者名
+          origin: '', // 机构
           startTime: '0',
           endTime: '0'
         },
@@ -132,24 +161,60 @@
           jnls: '',
           affs: '',
         },
-        e_result_list: [
-          {
-            name: "qefsdfadfa噶人",
-            id: 43514,
-            affiliate: "艾弗森adfasdfad计达"
-          },
-          {
-            name: "按adfadsfasdf对",
-            id: 17565,
-            affiliate: "你头发把asdfasdfa对"
-          }
-        ],
+        e_result_list: [],
         has_experts: false,
         experts_count: 0,
-        has_result: true
+        has_result: true,
+        quoteText:"",
+        quotedialogVisible:false,
+        sp_result:{}
       }
     },
     methods: {
+      showQuote(val){
+        this.quoteText = this.getQuote(val)
+        this.quotedialogVisible = true;
+        this.sp_result = val;
+      },
+      getQuote(document){
+        let res = ""
+        for(let i in document.authors){
+          if(i != 0){
+            res += ",";
+          }
+          res += document.authors[i].name;
+        }
+        res += '.';
+        res += document.title+'['
+        let dtype = document.dtype;
+        if(dtype == '专利'){
+          res += 'P'
+        }else if(dtype == '会议'){
+          res += 'C'
+        }else if(dtype == '图书'){
+          res += 'M'
+        }else if(dtype == '学位'){
+          res += 'D'
+        }else if(dtype == '期刊'){
+          res += 'J'
+        }
+        res += '].'
+        res += document.origin;
+        if(document.time.length >= 4){
+          res += ','+document.time.substring(0,4);
+        }
+        return res;
+      },
+      copySuccess(){
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        });
+        this.sharedialogVisible = false;
+      },
+      copyError(){
+        this.$message.error('您的浏览器不支持该功能，请自行复制链接内容');
+      },
       handleSelect(val, name){
         console.log("父组件监听到点击了filter类别：" + name + " 的选线： " + val)
         this.filter_words[name] = val
@@ -168,9 +233,11 @@
       },
       searchAuthor(val){
         var search_words = {
+          searchWords: '',
+          title: '',
+          keyWords: '',
           experts: val,
           origin: '',
-          kw:'',
           startTime: '0',
           endTime: '0'
         }
@@ -183,9 +250,11 @@
       },
       searchSource(val) {
         var search_words = {
+          searchWords: '',
+          title: '',
+          keyWords: '',
           experts: '',
-          origin: '',
-          kw: val,
+          origin: val,
           startTime: '0',
           endTime: '0'
         }
@@ -229,7 +298,7 @@
             _this.filter_list = res.data.filter_list;
             _this.total_rs = res.data.total;
             _this.result_length = _this.result_list.length;
-            _this.e_result_list = res.data.e_result_list;
+            _this.e_result_list = res.data.expert_list;
             if (_this.e_result_list.length === 0){
               _this.has_experts = false
             } else {
@@ -258,31 +327,6 @@
         } else {
           return "时间降序";
         }
-      },
-      getTipWords: function (){
-        // var search_words = JSON.stringify(searchWords)
-        // alert(typeof search_words)
-        var search_words = this.search_words
-        var str = ""
-        if (search_words.kw !== ""){
-          // str+=String(search_words.kw)
-          str = str + search_words.kw
-        }
-        if (search_words.experts !== ""){
-          if (str !== ""){
-            str+=","
-          }
-          // str+=String(search_words.experts)
-          str = str + "" + search_words.experts
-        }
-        if (search_words.origin !== ""){
-          if (str !== ""){
-            str+=","
-          }
-          // str+=String(search_words.origin)
-          str = str + "" + search_words.origin
-        }
-        return str
       }
     },
     watch: {
@@ -421,6 +465,9 @@
         this.sort = sessionStorage.getItem("sort")
         if (this.sort === null){
           this.sort = "views"
+        }
+        if (this.currentPage === null){
+          this.currentPage = 1
         }
       }else{
         console.log("首次被加载")
