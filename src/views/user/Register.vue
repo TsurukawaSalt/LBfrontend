@@ -56,7 +56,7 @@
             message: '您已登录',
             type: 'warning'
           });
-          this.$router.push("/home");
+          this.$router.push("/");
         }
         else if(!this.RegisterForm.userName) {
           this.$message({
