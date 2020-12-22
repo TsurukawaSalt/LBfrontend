@@ -39,9 +39,9 @@
       </el-popover>
 
       <div class="r_con">
-<!--        <el-badge is-dot>-->
-          <el-button v-popover:popover type="text" class="r_con_mess">消息</el-button>
-<!--        </el-badge>-->
+        <el-badge value="new" class="newMsg">
+          <el-button v-popover:popover type="info" icon="el-icon-message" class="r_con_mess">消息</el-button>
+        </el-badge>
         <el-button type="text" v-if="isLogin" class="r_con_user" @click="goUser()">{{this.userName}}</el-button>
         <el-button type="text" v-if="isLogin" class="r_con_reLogin" @click="reLogin()">退出登录</el-button>
         <el-button type="text" v-if="!isLogin" class="r_con_login" @click="goLogin()">登录</el-button>
@@ -51,13 +51,20 @@
           ref="popover"
           title="消息"
           placement="bottom"
-          width="200"
+          width="290"
           trigger="click"
           content="123456789"
       >
-        <el-row v-for="(o, index) in 4" :key="index">
-          <el-card>123456</el-card>
-        </el-row>
+        <el-col class="MsgCol">
+          <el-row v-for="(o, index) in 8" :key="index" class="MsgRow">
+            <el-card class="MsgCard">
+              <span>123465</span>
+              <br>
+              <el-button>已读</el-button>
+              <el-button>删除此信息</el-button>
+            </el-card>
+          </el-row>
+        </el-col>
       </el-popover>
 
     </el-header>
@@ -76,7 +83,6 @@
           placement="bottom"
           width="200"
           trigger="click"
-          content="123456789"
       >
         <el-row v-for="(o, index) in 4" :key="index">
           <el-card>123456</el-card>
@@ -224,15 +230,24 @@ export default {
   .r_con {
     //position: absolute;
     margin-top: 12px;
-    width: 200px;
+    width: 300px;
     float: right;
     left: calc(100% - 200px);
   }
   .r_con_mess {
+    border-radius: 15px;
     margin-right: 10px;
+    border-width: 0;
+    background: darkslateblue;
+    /*color: #8c939d;*/
+  }
+  .newMsg {
+    width: 77px;
+    /*height: 10px;*/
   }
   .r_con_user {
     margin-right: 15px;
+    margin-left: 50px;
   }
   .r_con_reLogin {
     left: 10px;
@@ -241,6 +256,29 @@ export default {
     margin-right: 10px;
   }
   .r_con_Register {
+  }
+
+  .MsgCol {
+    height: 500px;
+    width: 300px;
+    overflow-x: hidden;
+  }
+
+   .MsgCol::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+   }
+   .MsgCol::-webkit-scrollbar-thumb {
+     background-color: #ddd;
+     border-radius: 3px;
+   }
+
+  .MsgRow{
+    height: 130px;
+    width: 280px;
+  }
+  .MsgCard {
+    height: 100px;
   }
 
   .header_2 {

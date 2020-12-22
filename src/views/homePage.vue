@@ -371,8 +371,8 @@ export default {
   .list_item {
     /*background: #9c9e9c;*/
     height: 80px;
-    //overflow: hidden;
-    //text-overflow: ellipsis;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
   }
   .num-icon-ach{
     width: 40px;
