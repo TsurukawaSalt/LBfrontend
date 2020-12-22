@@ -57,7 +57,8 @@
                 var _this = this
                 this.$api.academic.favorSc({
                     document_id : _this.collection_list[index].id,
-                    user_id : sessionStorage.getItem("userID")
+                    user_id : sessionStorage.getItem("userID"),
+                    token : sessionStorage.getItem("token")
                 }).then(res=>{
                     if(Number(res.code) === 200){
                         _this.$message("取消收藏成功");
