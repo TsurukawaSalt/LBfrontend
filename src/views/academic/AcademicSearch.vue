@@ -62,33 +62,7 @@
                   :c_sc = result_item
                   v-on:toAuthorPage = "searchAuthor"
                   v-on:toSourcePage = "searchSource"
-                  v-on:quote = showQuote></academic-item>
-              <!-- 引用 -->
-              <el-dialog
-                  title="引用"
-                  :visible.sync="quotedialogVisible"
-                  width="40%">
-                <el-row style="text-align: left">
-                  以下引用格式为GB/T7714，点击按钮即可复制内容
-                  <el-button icon="el-icon-document-copy"
-                             style="float: right"
-                             v-clipboard:copy="getQuote(result_item)"
-                             v-clipboard:success="copySuccess"
-                             v-clipboard:error="copyError"
-                  ></el-button>
-                </el-row>
-
-                <el-input
-                    type="textarea"
-                    placeholder="url"
-                    autosize
-                    v-model="quoteText"
-                    :readonly="true">
-                </el-input>
-                <span slot="footer" class="dialog-footer">
-                  <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
-                </span>
-              </el-dialog>
+                  v-on:quote = "showQuote"></academic-item>
             </div>
           </div>
         </div>
@@ -118,6 +92,32 @@
         </p>
       </div>
     </div>
+    <!-- 引用 -->
+    <el-dialog
+        title="引用"
+        :visible.sync="quotedialogVisible"
+        width="40%">
+      <el-row style="text-align: left">
+        以下引用格式为GB/T7714，点击按钮即可复制内容
+        <el-button icon="el-icon-document-copy"
+                   style="float: right"
+                   v-clipboard:copy="quoteText"
+                   v-clipboard:success="copySuccess"
+                   v-clipboard:error="copyError"
+        ></el-button>
+      </el-row>
+
+      <el-input
+          type="textarea"
+          placeholder="url"
+          autosize
+          v-model="quoteText"
+          :readonly="true">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -167,12 +167,14 @@
         has_result: true,
         quoteText:"",
         quotedialogVisible:false,
+        sp_result:{}
       }
     },
     methods: {
       showQuote(val){
         this.quoteText = this.getQuote(val)
         this.quotedialogVisible = true;
+        this.sp_result = val;
       },
       getQuote(document){
         let res = ""
