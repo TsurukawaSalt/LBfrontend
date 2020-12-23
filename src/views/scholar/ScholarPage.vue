@@ -351,15 +351,15 @@ export default {
     },
     toScholarPage(scholar) {
       // 有 ID
-      if (scholar.expertID !== null){
+      if (scholar.expertid !== null){
         this.$router.push({
           name: "ScholarPage",
           params: {
-            expertid: scholar.expertID
+            expertid: scholar.expertid
           }
         })
       }
-      // 无 ID
+      // 无 ID 跳转搜索页
       else {
         var search_words = {
           searchWords: '',
@@ -546,12 +546,10 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
-          // _this.result_list_show = _this.result_list
           _this.total_rs = res.data.total
           if (_this.result_list.length === 0){
             _this.has_result = false;
           } else {
-            // _this.result_list_first = _this.getFirstSc()
             _this.has_result = true
           }
         }
@@ -573,17 +571,18 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_authors_list = res.data
+          _this.co_authors_list = res.data.expert_list
+          _this.total_co_authors = res.data.total
           if (_this.co_authors_list === null){
             _this.has_co_author = false;
           } else {
             _this.has_co_author = true;
-            _this.total_co_authors = _this.co_authors_list.length
-            if (_this.total_co_authors > 4){
-              _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
-            } else{
-              _this.co_authors_list_show = _this.co_authors_list
-            }
+            _this.co_authors_list_show = _this.co_authors_list
+            // if (_this.total_co_authors > 4){
+            //   _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
+            // } else{
+            //   _this.co_authors_list_show = _this.co_authors_list
+            // }
           }
         } else {
           _this.$message({
