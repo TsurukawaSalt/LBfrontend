@@ -116,12 +116,14 @@
           <div style="padding-left: 80px;" v-for="(result_item,index) in relation_list" v-bind:key="index">
             <academic-item :c_sc = result_item></academic-item>
           </div>
+          <div v-if="relation_list === null">
+            <p>暂无信息</p>
+          </div>
         </div>
 
 
       </el-col>
-      <el-col :offset="2" :span="5" align="left"
-              style="position: fixed;right: 10%">
+      <el-col :offset="2" :span="5" align="left">
         <span style="font-size: 20px;">
           研究热点分析
         </span>
@@ -254,7 +256,6 @@
 
 <script>
   import AcademicItem from "@/components/AcademicItem";
-
   export default {
     name: "AcademicShow",
     components: {
@@ -275,7 +276,7 @@
           views:123,
           is_favor:true,
         },
-        relation_list:[],
+        relation_list:null,
         dialogVisible:false,
         sharedialogVisible:false,
         quotedialogVisible:false,
@@ -498,11 +499,13 @@
               this.getRelation();
             }else{
               this.$message.error("文章不存在或已被删除")
+              this.$router.push('/404')
             }
           }
       ).catch(err=>{
         console.log(err)
         this.$message.error("文章不存在或已被删除")
+        this.$router.push('/404')
       })
     }
   }
