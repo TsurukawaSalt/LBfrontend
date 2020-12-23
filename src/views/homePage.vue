@@ -3,7 +3,7 @@
     <div class="background"></div>
     <div class="index"></div>
     <Header status="2" class="header_home"></Header>
-    <el-image :src="require('@/assets/logo/logo1.png')" class="logo" :underline="false">
+    <el-image :src="require('@/assets/logo/logo3.png')" class="logo" :underline="false">
       Logo
     </el-image>
     <el-input class="search" placeholder="请输入你要查找的内容" v-model="search_words.searchWords" @keyup.enter.native="goSearch(false)">
@@ -277,9 +277,9 @@ export default {
 
   .logo {
     position: absolute;
-    top: 50px;
-    left: calc((100% - 300px)/2);
-    width: 300px;
+    top: 40px;
+    left: calc((100% - 600px)/2);
+    width: 600px;
     font-size: 70px;
 
   }
