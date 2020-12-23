@@ -52,7 +52,7 @@
 <!--            <div class="achievement-line"></div>-->
 <!--          </div>-->
           <!--相关文献-->
-          <div id="article-list" v-if="has_result">
+          <div id="article-list">
             <div id="article-list-container">
               <!--筛选 filter-->
               <div id="content-top">
@@ -60,13 +60,13 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
+                        width="60"
+                        trigger="hover">
                       <!--由后端传具体有哪些年份 for循环-->
-                      <div>全部时间</div>
-                      <div>2020</div>
-                      <div>2019</div>
-                      <div>2018</div>
+                      <div class="sort-item">全部时间</div>
+                      <div class="sort-item" @click="yearTo2020">2020</div>
+                      <div class="sort-item" @click="yearTo2019">2019</div>
+                      <div class="sort-item" @click="yearTo2018">2018</div>
                       <el-button class="button-sort" slot="reference">{{ this.getYear }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_year"></i>
                       </el-button>
@@ -75,12 +75,12 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="paperTo0">全部</div>
-                      <div @click="paperTo1">期刊</div>
-                      <div @click="paperTo2">会议</div>
-                      <div @click="paperTo3">专著</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="paperTo0">全部</div>
+                      <div class="sort-item" @click="paperTo1">期刊</div>
+                      <div class="sort-item" @click="paperTo2">会议</div>
+                      <div class="sort-item" @click="paperTo3">专著</div>
                       <el-button class="button-sort" slot="reference">{{ this.getPaper }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_paper"></i>
                       </el-button>
@@ -89,10 +89,10 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="authorTo0">全部作者</div>
-                      <div @click="authorTo1">第一作者</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="authorTo0">全部作者</div>
+                      <div class="sort-item" @click="authorTo1">第一作者</div>
                       <el-button class="button-sort" slot="reference">{{ this.getAuthor }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_author"></i>
                       </el-button>
@@ -101,10 +101,10 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="sortToTime">按时间降序</div>
-                      <div @click="sortToCited">按被引降序</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="sortToTime">按时间降序</div>
+                      <div class="sort-item" @click="sortToCited">按被引降序</div>
                       <el-button class="button-sort" slot="reference">{{ this.getSort }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_sort"></i>
                       </el-button>
@@ -113,7 +113,7 @@
                 </div>
               </div>
               <!--文献列表-->
-              <div id="content-result">
+              <div id="content-result" v-if="has_result">
                 <div class="result-list">
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
                     <academic-item
@@ -136,11 +136,13 @@
                   </el-pagination>
                 </div>
               </div>
+              <!-- 无结果tip -->
+              <div class="no-result-tip" v-if="!has_result" style="text-align: center">
+                <br/>
+                <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
+                <p>暂无该学者的相关学术资源</p>
+              </div>
             </div>
-          </div>
-          <div class="no-result-tip" v-if="!has_result" style="text-align: center">
-            <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
-            <p>暂无该学者的相关学术资源</p>
           </div>
         </div>
         <!--合作统计展示-->
@@ -181,6 +183,34 @@
         </div>
       </div>
     </div>
+    <!-- 引用 -->
+    <el-dialog
+        title="引用"
+        :visible.sync="quotedialogVisible"
+        width="40%">
+      <div style="text-align: left">
+        <b>以下引用格式为GB/T7714，点击右侧按钮即可复制内容</b>
+        <el-button type="warning"
+                   size="mini"
+                   icon="el-icon-document-copy"
+                   style="float: right"
+                   v-clipboard:copy="quoteText"
+                   v-clipboard:success="copySuccess"
+                   v-clipboard:error="copyError"
+        ></el-button>
+      </div>
+      <br/>
+      <el-input
+          type="textarea"
+          placeholder="url"
+          autosize
+          v-model="quoteText"
+          :readonly="true">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -213,12 +243,14 @@ export default {
       total_co_authors: 0,
       total_co_affs: 0,
       result_list:[],
+      result_list_first: [],
+      result_list_show: [],
       total_rs: 0,
       has_result: false,
       sort_words: {
         sc_year: '',
-        paper_type: '0',
-        first_author : '0',
+        paper_type: '',
+        first_author : '',
         sc_sort: 'time',
       },
       currentPage: 1,
@@ -228,6 +260,7 @@ export default {
       has_co_aff: false,
       quoteText:"",
       quotedialogVisible:false,
+      author_type : '0',
     }
   },
   methods: {
@@ -238,6 +271,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     showQuote(val){
+      console.log("正在引用")
       this.quoteText = this.getQuote(val)
       this.quotedialogVisible = true;
       this.sp_result = val;
@@ -253,15 +287,15 @@ export default {
       res += '.';
       res += document.title+'['
       let dtype = document.dtype;
-      if(dtype == '专利'){
+      if(dtype === '专利'){
         res += 'P'
-      }else if(dtype == '会议'){
+      }else if(dtype === '会议'){
         res += 'C'
-      }else if(dtype == '图书'){
+      }else if(dtype === '图书'){
         res += 'M'
-      }else if(dtype == '学位'){
+      }else if(dtype === '学位'){
         res += 'D'
-      }else if(dtype == '期刊'){
+      }else if(dtype === '期刊'){
         res += 'J'
       }
       res += '].'
@@ -402,7 +436,6 @@ export default {
               type: "success"
             })
           }
-
         } else {
           _this.$message({
             message: res.msg,
@@ -411,29 +444,52 @@ export default {
         }
       })
     },
+    yearTo2020() {
+      this.sort_words.sc_year = '2020'
+    },
+    yearTo2019() {
+      this.sort_words.sc_year = '2019'
+    },
+    yearTo2018() {
+      this.sort_words.sc_year = '2018'
+    },
     paperTo0() {
-      this.sort_words.paper_type = '0';
+      this.sort_words.paper_type = '';
     },
     paperTo1() {
-      this.sort_words.paper_type = '1';
+      this.sort_words.paper_type = '期刊';
     },
     paperTo2() {
-      this.sort_words.paper_type = '2';
+      this.sort_words.paper_type = '会议';
     },
     paperTo3() {
-      this.sort_words.paper_type = '3';
+      this.sort_words.paper_type = '图书';
     },
     authorTo0() {
-      this.sort_words.first_author = '0';
+      // this.author_type = "0";
+      // this.result_list_show = this.result_list
+      this.sort_words.first_author = '0'
     },
     authorTo1() {
-      this.sort_words.first_author = '1';
+      // this.author_type = "1";
+      // this.result_list_show = this.result_list_first
+      this.sort_words.first_author = '1'
     },
     sortToTime() {
       this.sort_words.sc_sort = 'time';
     },
     sortToCited() {
       this.sort_words.sc_sort = 'cited';
+    },
+    getFirstSc() {
+      this.result_list_first = []
+      var name = this.scholar_info.name
+      for (var i=0 ; i < this.result_list.length; i++){
+        if (this.result_list[i].authors[0].name === name){
+          this.result_list_first.push(this.result_list[i])
+        }
+      }
+      console.log("第一作者文章：" + this.result_list_first)
     },
     loadInfo(){
       var _this = this
@@ -448,6 +504,9 @@ export default {
           } else {
             _this.has_ach = true;
           }
+          this.loadRelateSc()
+          this.loadCoAuthorsList()
+          this.loadCoAffList()
         }else {
           _this.$message({
             message: res.msg,
@@ -455,12 +514,10 @@ export default {
           })
         }
       })
-      this.loadRelateSc()
-      this.loadCoAuthorsList()
-      this.loadCoAffList()
     },
     loadRelateSc(){
       var _this = this
+      console.log(_this.scholar_info.name + "正在搜索文献")
       this.$api.academic.getSearchResult({
         search_words: {
           searchWords: '',
@@ -477,6 +534,7 @@ export default {
           level: '',
           savetype: '',
           keywords: '',
+          // type: '',
           type: _this.sort_words.paper_type,
           authors: '',
           jnls: '',
@@ -488,10 +546,12 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
+          // _this.result_list_show = _this.result_list
           _this.total_rs = res.data.total
           if (_this.result_list.length === 0){
             _this.has_result = false;
           } else {
+            // _this.result_list_first = _this.getFirstSc()
             _this.has_result = true
           }
         }
@@ -562,19 +622,21 @@ export default {
           return '2020'
         case '2019':
           return '2019'
+        case '2018':
+          return '2018'
         default:
           return '全部年份'
       }
     },
     getPaper() {
       switch (this.sort_words.paper_type){
-        case "0":
+        case "":
           return '全部类型'
-        case "1":
+        case "期刊":
           return '期刊'
-        case "2":
+        case "会议":
           return '会议'
-        case "3":
+        case "图书":
           return '专著'
         default:
           return '全部类型'
@@ -628,7 +690,7 @@ export default {
 
 <style scoped>
   #main-content{
-    width: 1100px;
+    width: 1000px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
@@ -638,16 +700,16 @@ export default {
   }
   #author-info{
     border-bottom: 1px solid #e3e3e3;
-    padding: 32px 0 20px 80px;
+    padding: 32px 0 20px 0;
     overflow: hidden;
   }
   #main-content-left{
     float: left;
-    width: 710px;
+    width: 610px;
   }
   #main-content-right{
     float: right;
-    width: 370px;
+    width: 330px;
   }
   .person-image{
     width: 125px;
@@ -830,6 +892,14 @@ export default {
     text-align: center;
   }
   .is-hover:hover{
+    cursor: pointer;
+  }
+  .sort-item{
+    font-size: 12px;
+    line-height: 20px;
+    min-width: 50px;
+  }
+  .sort-item:hover{
     cursor: pointer;
   }
 </style>
