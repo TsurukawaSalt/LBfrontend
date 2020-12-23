@@ -188,7 +188,9 @@
     <el-header v-if="this.status == 2" class="header_2">
       <div class="r_con">
         <span v-if="isLogin">
-          <el-button v-popover:popover type="text" class="r_con_mess_2">消息</el-button>
+          <el-badge  :value="msgList.length" :hidden="msgList.length == 0" class="newMsg">
+            <el-button v-popover:popover type="text" icon="el-icon-message" class="r_con_mess_2">消息</el-button>
+          </el-badge>
           <el-popover
                 ref="popover"
                 placement="bottom"
@@ -541,10 +543,16 @@ export default {
   }
   .r_con_mess_2 {
     border-radius: 15px;
-    margin-right: 10px;
-    border-width: 0;
-    //background: darkslateblue;
+    border:1px solid #66b1ff;
+    /*background: #2c3e50;*/
+    color: #66b1ff;
+    width: 70px;
+
     /*color: #8c939d;*/
+  }
+  .r_con_mess_2:hover{
+    background: #66b1ff;
+    color: white;
   }
   .newMsg {
     width: 77px;
