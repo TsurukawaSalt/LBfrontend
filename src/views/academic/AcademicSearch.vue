@@ -2,6 +2,7 @@
   <div class="wrapper">
     <Header class="header_home"></Header>
     <div class="container">
+      <!-- 右侧热门显示 -->
       <div class="content-right">
         <div style="margin-left: 20px">
           <!-- 热门关键词 -->
@@ -110,7 +111,7 @@
         </p>
       </div>
     </div>
-    <!-- 引用 -->
+    <!-- 引用dialog -->
     <el-dialog
         title="引用"
         :visible.sync="quotedialogVisible"
@@ -202,12 +203,10 @@
     },
     methods: {
       goArticle(val){
-        this.$router.push({
-          name: 'AcademicShow',
-          params: {
-            academicID: val
-          }
-        })
+        let url = window.location.origin + "/#/academicShow/"+val;
+        if(window.open(url) === null){
+          window.location.herf = url;
+        }
       },
       showQuote(val){
         this.quoteText = this.getQuote(val)
@@ -225,15 +224,15 @@
         res += '.';
         res += document.title+'['
         let dtype = document.dtype;
-        if(dtype == '专利'){
+        if(dtype === '专利'){
           res += 'P'
-        }else if(dtype == '会议'){
+        }else if(dtype === '会议'){
           res += 'C'
-        }else if(dtype == '图书'){
+        }else if(dtype === '图书'){
           res += 'M'
-        }else if(dtype == '学位'){
+        }else if(dtype === '学位'){
           res += 'D'
-        }else if(dtype == '期刊'){
+        }else if(dtype === '期刊'){
           res += 'J'
         }
         res += '].'

@@ -7,7 +7,6 @@
           <span class="title-click" @click="toDetailPage">{{ item.title }}</span>
         </div>
         <!-- 摘要 -->
-        <!-- TODO 限制行数 -->
         <div class="summary">{{ item.summary }}</div>
         <!-- 其他信息：所有作者/来源(期刊/出版社/或无)/被引量/年份-->
         <div class="info">
@@ -50,9 +49,7 @@
     },
     data() {
       return {
-        item: {
-
-        },
+        item: {},
         is_favor: false
       }
     },
@@ -86,12 +83,11 @@
         this.$emit("toSourcePage", val);
       },
       toCitedPage() {
-        // 到来源网站查看文章
+        // 查看引用信息
         console.log("跳转引用详情页！")
       },
       toLink(link){
         // window.location.href = link;
-
         window.open(link, '_blank');
       },
       favor() {

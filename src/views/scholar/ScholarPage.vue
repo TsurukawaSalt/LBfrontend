@@ -285,15 +285,15 @@ export default {
       res += '.';
       res += document.title+'['
       let dtype = document.dtype;
-      if(dtype == '专利'){
+      if(dtype === '专利'){
         res += 'P'
-      }else if(dtype == '会议'){
+      }else if(dtype === '会议'){
         res += 'C'
-      }else if(dtype == '图书'){
+      }else if(dtype === '图书'){
         res += 'M'
-      }else if(dtype == '学位'){
+      }else if(dtype === '学位'){
         res += 'D'
-      }else if(dtype == '期刊'){
+      }else if(dtype === '期刊'){
         res += 'J'
       }
       res += '].'
@@ -434,7 +434,6 @@ export default {
               type: "success"
             })
           }
-
         } else {
           _this.$message({
             message: res.msg,
