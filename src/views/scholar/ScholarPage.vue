@@ -192,10 +192,10 @@
             <div v-if="has_co_aff">
               <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
                 <li>
-                  <span class="co_affiliate_name">{{ item.first }}</span>
+                  <span class="co_affiliate_name">{{ item.org }}</span>
                   <span class="co_affiliate_line">
                   <span class="co_affiliate_width"></span>
-                  <span class="co_affiliate_count">{{ item.second }}</span>
+                  <span class="co_affiliate_count">{{ item.cooperationNum }}</span>
                 </span>
                 </li>
               </ul>
