@@ -202,7 +202,12 @@
     },
     methods: {
       goArticle(val){
-        this.$router.push('academicShow/'+val)
+        this.$router.push({
+          name: 'AcademicShow',
+          params: {
+            academicID: val
+          }
+        })
       },
       showQuote(val){
         this.quoteText = this.getQuote(val)
