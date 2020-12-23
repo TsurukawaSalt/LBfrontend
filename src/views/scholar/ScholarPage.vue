@@ -118,6 +118,7 @@
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
                     <academic-item
                         :c_sc = result_item
+                        :length=660
                         v-on:toAuthorPage = "searchAuthor"
                         v-on:toSourcePage = "searchSource"
                         v-on:quote = "showQuote"></academic-item>
