@@ -214,8 +214,8 @@
         }
       },
       getAllApp(){
-        this.getOneApp(true,1,10,1);
-        this.getOneApp(false,1,10,1);
+        this.getOneApp(true,1,1);
+        this.getOneApp(false,1,1);
         this.getOneApp(true,0,1);
         this.getOneApp(false,0,1);
       },
