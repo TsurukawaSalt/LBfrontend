@@ -1,6 +1,9 @@
 <template>
   <div>
     <el-header v-if="this.status == 1" class="header_1">
+      <span class="icon-home">
+        <i class="el-icon-s-home" @click="goHome"></i>
+      </span>
       <el-input class="h_search" placeholder="请输入你要查找的内容" v-model="search_words.searchWords" @keyup.enter.native="goSearch(false)">
         <el-button v-popover:search type="text" slot="prepend" icon="el-icon-caret-bottom">高级搜索</el-button>
         <el-button icon="el-icon-search" slot="append" @click="goSearch(false)"></el-button>
@@ -389,6 +392,9 @@ export default {
     jumpExpert(id){
       this.$router.push('scholarPage/'+id);
     },
+    goHome(){
+      this.$router.push('/');
+    },
     goSearch(isAdvanced){
       if (!isAdvanced) {
         if (this.search_words.searchWords !== '') {
@@ -472,6 +478,17 @@ export default {
 </script>
 
 <style scoped>
+  .icon-home{
+    color: white;
+    cursor: pointer;
+    font-size: 30px;
+    position: absolute;
+    left: 10px;
+    top:10px;
+  }
+  .icon-home:hover{
+    color: #e0e0e0;
+  }
   .header_1 {
     /*position: absolute;*/
     min-width: 800px;
