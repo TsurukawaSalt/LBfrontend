@@ -55,33 +55,40 @@
       </div>
       <el-popover
           ref="popover"
-          title="消息列表"
           placement="bottom"
           width="290"
           trigger="click"
           content="123456789"
       >
-<!--          <span>卡片名称</span>-->
+        <div class="MsgTitle">
+          <span>消息列表</span>
+        </div>
         <el-button v-if="!this.isRead" class="check_isRead_button" type="text" @click="isRead = true">查看已读消息</el-button>
         <el-button v-if="this.isRead" class="goBack_isRead_button" type="text" @click="isRead = false">返回</el-button>
         <el-col v-if="!this.isRead" class="MsgCol">
-          <el-row v-for="(o, index) in 8" :key="index" class="MsgRow">
+          <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
             <el-card class="MsgCard">
               <div slot="header" class="clearfix">
                 <span>title</span>
+                <span>{{ o.date }}</span>
               </div>
-              <div class="MsgContent">123465</div>
+              <div class="MsgContent">
+                <div>{{o.success}}</div>
+                <div>{{o.objectName}}</div>
+                <div>{{o.type}}</div>
+                <div>{{o.reason}}</div>
+                <div>{{o.is_read}}</div>
+              </div>
               <br>
               <div class="button_block">
-                <el-button class="read_button"  type="success" icon="el-icon-check" circle></el-button>
-                <el-button class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+                <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
+                <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
               </div>
-
             </el-card>
           </el-row>
         </el-col>
         <el-col v-if="this.isRead" class="MsgCol">
-          <el-row v-for="(o, index) in 8" :key="index" class="MsgRow">
+          <el-row v-for="(o, index) in this.read_msgList" :key="index" class="MsgRow">
             <el-card class="MsgCard">
               <div slot="header" class="clearfix">
                 <span>title</span>
@@ -89,8 +96,8 @@
               <div class="MsgContent">54321</div>
               <br>
               <div class="r_button_block">
-                <el-button class="not_read_button" >设为未读</el-button>
-                <el-button class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+                <el-button size="medium" class="not_read_button" >设为未读</el-button>
+                <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
               </div>
             </el-card>
           </el-row>
@@ -140,7 +147,8 @@ export default {
       userName:'',
       isRead: false,
       msgList:[],
-      msgNum: 0
+      msgNum: 0,
+      read_msgList:[],
     }
   },
   props: {
@@ -201,22 +209,26 @@ export default {
     reLogin() {
       sessionStorage.clear()
       location.reload()
-    }
-  },
-  mounted() {
-    if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
-      this.isLogin = true
-      this.userName = sessionStorage.getItem("userName")
-
+    },
+    getAllMessage() {
       // 获取消息列表
       let _this = this
       this.$api.message.getMessage({
-        token: sessionStorage.getItem("token"),
         userID: sessionStorage.getItem("userID"),
+        token: sessionStorage.getItem("token"),
+
       }).then(res => {
         if (res.code === "200"){
-          _this.msgList = res.data.rows;
-          _this.msgNum = res.data.rows.length;
+          _this.msgList = [];
+          for (let i = 0; i < res.data.length; i ++) {
+            if (!res.data[i].is_read) {
+              console.log(res.data[i].date)
+              _this.msgList.push(res.data[i])
+            } else {
+              _this.read_msgList.push(res.data[i])
+            }
+          }
+          _this.msgNum = _this.msgList.length;
         } else {
           // _this.$message({
           //   message: res.msg,
@@ -224,6 +236,13 @@ export default {
           // })
         }
       })
+    }
+  },
+  mounted() {
+    if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
+      this.isLogin = true
+      this.userName = sessionStorage.getItem("userName")
+      this.getAllMessage()
     }
   }
 }
@@ -319,7 +338,14 @@ export default {
   .r_con_Register {
   }
 
+  .MsgTitle {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
   .MsgCol {
+    margin-top: 20px;
     height: 500px;
     width: 300px;
     overflow-x: hidden;
@@ -335,11 +361,11 @@ export default {
    }
 
   .MsgRow{
-    height: 230px;
+    height: 280px;
     width: 280px;
   }
   .MsgCard {
-    height: 200px;
+    height: 250px;
   }
   .MsgContent {
     height: 100px;
@@ -350,8 +376,8 @@ export default {
   .button_block {
     position: absolute;
     width: 200px;
-    left: 150px;
-    top: -90px;
+    left: 180px;
+    top: 200px;
   }
   .r_button_block {
     position: absolute;
@@ -363,12 +389,16 @@ export default {
   .check_isRead_button{
     position: absolute;
     color: #0066cc;
-    top: 5px;
-    left: 230px;
+    font-size: 15px;
+    font-weight: bold;
+    top: 10px;
+    left: 200px;
   }
   .goBack_isRead_button{
     position: absolute;
     color: #8c939d;
+    font-size: 15px;
+    font-weight: bold;
     top: 5px;
     left: 250px;
   }

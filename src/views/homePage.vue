@@ -489,7 +489,7 @@ export default {
     //width: 10px;
     top: -20px;
     left: 40px;
-    width: 100px;
+    width: 80px;
     display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
     -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
     overflow: hidden; /*超出的文本隐藏*/

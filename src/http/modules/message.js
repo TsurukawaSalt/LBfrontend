@@ -4,7 +4,7 @@ import axios from "@/http/axios";
 export const getMessage = params => {
     return axios({
         url: '/message/getMessage',
-        method: 'post',
+        method: 'get',
         params
     })
 }
@@ -13,7 +13,7 @@ export const getMessage = params => {
 export const deleteMessage = params => {
     return axios({
         url: '/message/deleteMessage',
-        method: 'post',
+        method: 'get',
         params
     })
 }
