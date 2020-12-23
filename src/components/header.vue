@@ -45,7 +45,7 @@
       </el-popover>
 
       <div class="r_con">
-        <el-badge value="new" class="newMsg">
+        <el-badge value="2" class="newMsg">
           <el-button v-popover:popover type="info" icon="el-icon-message" class="r_con_mess_1">消息</el-button>
         </el-badge>
         <el-button type="text" v-if="isLogin" class="r_con_user" @click="goUser()">{{this.userName}}</el-button>
@@ -60,48 +60,64 @@
           trigger="click"
           content="123456789"
       >
-        <div class="MsgTitle">
-          <span>消息列表</span>
-        </div>
-        <el-button v-if="!this.isRead" class="check_isRead_button" type="text" @click="isRead = true">查看已读消息</el-button>
-        <el-button v-if="this.isRead" class="goBack_isRead_button" type="text" @click="isRead = false">返回</el-button>
-        <el-col v-if="!this.isRead" class="MsgCol">
-          <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
-            <el-card class="MsgCard">
-              <div slot="header" class="clearfix">
-                <span>title</span>
-                <span>{{ o.date }}</span>
-              </div>
-              <div class="MsgContent">
-                <div>{{o.success}}</div>
-                <div>{{o.objectName}}</div>
-                <div>{{o.type}}</div>
-                <div>{{o.reason}}</div>
-                <div>{{o.is_read}}</div>
-              </div>
-              <br>
-              <div class="button_block">
-                <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
-                <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
-              </div>
-            </el-card>
-          </el-row>
-        </el-col>
-        <el-col v-if="this.isRead" class="MsgCol">
-          <el-row v-for="(o, index) in this.read_msgList" :key="index" class="MsgRow">
-            <el-card class="MsgCard">
-              <div slot="header" class="clearfix">
-                <span>title</span>
-              </div>
-              <div class="MsgContent">54321</div>
-              <br>
-              <div class="r_button_block">
-                <el-button size="medium" class="not_read_button" >设为未读</el-button>
-                <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
-              </div>
-            </el-card>
-          </el-row>
-        </el-col>
+        <el-tabs>
+          <el-tab-pane class="MsgCol" label="未读消息">
+            <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
+              <el-card class="MsgCard">
+                <div slot="header" class="clearfix">
+                  <span class="MsgTitle">{{o.type}}认领结果</span>
+                  <span style="float: right;color: #9fa19f">{{ o.date.substring(0,10) }}</span>
+                </div>
+                <div class="MsgContent">
+                  <div v-if="o.type == '文献'">
+                    <div v-if="o.success">
+                      <span>您的{{o.type}}</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">{{o.objectName}}</span>
+                      <span style="color: #42b983">已通过</span>
+                      <span>管理的审核</span>
+                    </div>
+                    <div v-else>
+                      <span>您在文献</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">{{o.objectName}}</span>
+                      <span>的认领过程的由于</span>
+                      <span style="color: #ff3f41">{{o.reason}}</span>
+                      <span>被管理员拒绝</span>
+                    </div>
+
+                  </div>
+                  <div v-else>
+                    <span>恭喜您</span>
+                    <span style="color: #42b983">已通过</span>已通过
+                    <span>管理员审核{{o.type}}</span>
+                    <span class="Msg-text-link">认证成功</span>
+                    已通过管理的审核
+                  </div>
+                </div>
+                <br>
+                <div class="button_block">
+                  <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
+                  <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
+                </div>
+              </el-card>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="已读消息">
+            <el-row v-for="(o, index) in this.read_msgList" :key="index" class="MsgRow">
+              <el-card class="MsgCard">
+                <div slot="header" class="clearfix">
+                  <span>title</span>
+                </div>
+                <div class="MsgContent">54321</div>
+                <br>
+                <div class="r_button_block">
+                  <el-button size="medium" class="not_read_button" >设为未读</el-button>
+                  <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+                </div>
+              </el-card>
+            </el-row>
+          </el-tab-pane>
+        </el-tabs>
+
       </el-popover>
 
     </el-header>
@@ -159,6 +175,9 @@ export default {
     }
   },
   methods:{
+    jumpAcademic(id){
+      this.$router.push('academicShow/'+id);
+    },
     goSearch(isAdvanced){
       if (!isAdvanced) {
         if (this.search_words.searchWords !== '') {
@@ -219,15 +238,9 @@ export default {
 
       }).then(res => {
         if (res.code === "200"){
-          _this.msgList = [];
-          for (let i = 0; i < res.data.length; i ++) {
-            if (!res.data[i].is_read) {
-              console.log(res.data[i].date)
-              _this.msgList.push(res.data[i])
-            } else {
-              _this.read_msgList.push(res.data[i])
-            }
-          }
+          _this.msgList = res.data.rows.filter((o)=>(!o.is_read))
+          _this.read_msgList = res.data.rows.filter((o)=>(o.is_read))
+          console.log(_this.msgList)
           _this.msgNum = _this.msgList.length;
         } else {
           // _this.$message({
@@ -345,7 +358,7 @@ export default {
   }
 
   .MsgCol {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     height: 500px;
     width: 300px;
     overflow-x: hidden;
@@ -369,8 +382,23 @@ export default {
   }
   .MsgContent {
     height: 100px;
-
     /*margin-bottom: 10px;*/
+  }
+
+  .Msg-text-link{
+    color: #0066cc;
+    cursor: pointer;
+  }
+  .Msg-text-link:hover{
+    text-decoration: underline;
+  }
+
+  .Msg-agree{
+
+  }
+
+  .Msg-reject{
+
   }
 
   .button_block {
