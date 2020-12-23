@@ -61,12 +61,12 @@
                     <el-popover
                         placement="bottom-start"
                         width="60"
-                        trigger="click">
+                        trigger="hover">
                       <!--由后端传具体有哪些年份 for循环-->
                       <div class="sort-item">全部时间</div>
-                      <div class="sort-item">2020</div>
-                      <div class="sort-item">2019</div>
-                      <div class="sort-item">2018</div>
+                      <div class="sort-item" @click="yearTo2020">2020</div>
+                      <div class="sort-item" @click="yearTo2019">2019</div>
+                      <div class="sort-item" @click="yearTo2018">2018</div>
                       <el-button class="button-sort" slot="reference">{{ this.getYear }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_year"></i>
                       </el-button>
@@ -76,7 +76,7 @@
                     <el-popover
                         placement="bottom-start"
                         width="60"
-                        trigger="click">
+                        trigger="hover">
                       <div class="sort-item" @click="paperTo0">全部</div>
                       <div class="sort-item" @click="paperTo1">期刊</div>
                       <div class="sort-item" @click="paperTo2">会议</div>
@@ -90,7 +90,7 @@
                     <el-popover
                         placement="bottom-start"
                         width="60"
-                        trigger="click">
+                        trigger="hover">
                       <div class="sort-item" @click="authorTo0">全部作者</div>
                       <div class="sort-item" @click="authorTo1">第一作者</div>
                       <el-button class="button-sort" slot="reference">{{ this.getAuthor }}
@@ -102,7 +102,7 @@
                     <el-popover
                         placement="bottom-start"
                         width="60"
-                        trigger="click">
+                        trigger="hover">
                       <div class="sort-item" @click="sortToTime">按时间降序</div>
                       <div class="sort-item" @click="sortToCited">按被引降序</div>
                       <el-button class="button-sort" slot="reference">{{ this.getSort }}
@@ -183,6 +183,32 @@
         </div>
       </div>
     </div>
+    <!-- 引用 -->
+    <el-dialog
+        title="引用"
+        :visible.sync="quotedialogVisible"
+        width="40%">
+      <el-row style="text-align: left">
+        以下引用格式为GB/T7714，点击按钮即可复制内容
+        <el-button icon="el-icon-document-copy"
+                   style="float: right"
+                   v-clipboard:copy="quoteText"
+                   v-clipboard:success="copySuccess"
+                   v-clipboard:error="copyError"
+        ></el-button>
+      </el-row>
+
+      <el-input
+          type="textarea"
+          placeholder="url"
+          autosize
+          v-model="quoteText"
+          :readonly="true">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -243,6 +269,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     showQuote(val){
+      console.log("正在引用")
       this.quoteText = this.getQuote(val)
       this.quotedialogVisible = true;
       this.sp_result = val;
@@ -416,6 +443,15 @@ export default {
         }
       })
     },
+    yearTo2020() {
+      this.sort_words.sc_year = '2020'
+    },
+    yearTo2019() {
+      this.sort_words.sc_year = '2019'
+    },
+    yearTo2018() {
+      this.sort_words.sc_year = '2018'
+    },
     paperTo0() {
       this.sort_words.paper_type = '';
     },
@@ -585,6 +621,8 @@ export default {
           return '2020'
         case '2019':
           return '2019'
+        case '2018':
+          return '2018'
         default:
           return '全部年份'
       }
