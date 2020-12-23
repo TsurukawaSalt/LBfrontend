@@ -171,11 +171,11 @@
 <!--            </div>-->
 <!--          </div>-->
 <!--        </el-row>-->
-        这里是右侧<br>
+        <br>
+        <el-image :src="require('@/assets/广告.png')"
+                  style="cursor: pointer"
+                  @click="jumpToHome"></el-image>
 
-        假装有广告
-        <el-image :src="img"></el-image>
-        <el-image :src="img"></el-image>
       </el-col>
       <el-dialog
               title="分享"
@@ -305,6 +305,9 @@
       }
     },
     methods:{
+      jumpToHome(){
+        this.$router.push('/');
+      },
       showQuote(){
         this.quoteText = this.getQuote(this.academic)
         this.quotedialogVisible = true;
