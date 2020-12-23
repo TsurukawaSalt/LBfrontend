@@ -226,11 +226,6 @@ export default {
         // alert(200)
         _this.hotKeywords = res.row;
         console.log(_this.hotKeywords[0])
-        for (let i = 0; i < 10; i ++) {
-
-          _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
-          console.log(_this.result_list[i].time)
-        }
       }else {
         // _this.$message({
         //   message: res.msg,
