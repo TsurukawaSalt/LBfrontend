@@ -120,7 +120,8 @@
 
 
       </el-col>
-      <el-col :offset="2" :span="5" align="left">
+      <el-col :offset="2" :span="5" align="left"
+              style="position: fixed;right: 10%">
         <span style="font-size: 20px;">
           研究热点分析
         </span>
