@@ -113,7 +113,6 @@
         <hr color="#9c9e9c">
         <div >
           <p style="text-align: left;font-size: 25px">相关推荐</p>
-
           <div style="padding-left: 80px;" v-for="(result_item,index) in relation_list" v-bind:key="index">
             <academic-item :c_sc = result_item></academic-item>
           </div>
@@ -129,6 +128,20 @@
         <br>
         <el-row>
           <div v-for="word in academic.keywordList" :key="word">
+            <a class="search-word"
+               @click="findByKw(word)">
+              <i class="el-icon-search"></i>
+              {{word}}
+            </a>
+          </div>
+        </el-row>
+        <span style="font-size: 20px;">
+          热门关键词
+        </span>
+        <br>
+        <br>
+        <el-row>
+          <div v-for="word in hot_keywords" :key="word">
             <a class="search-word"
                @click="findByKw(word)">
               <i class="el-icon-search"></i>
@@ -278,6 +291,17 @@
           startTime: '0',
           endTime: '0'
         },
+        hot_keywords:[
+          '计算机',
+          '人工智能',
+          '航空',
+          '深度学习',
+          '合成生物学',
+          '糖尿病',
+          '航天',
+          '新冠',
+          '疫情',
+        ],
       }
     },
     methods:{
