@@ -107,7 +107,7 @@ export default {
       result_length:0,
       swList:[
         {searchWords:'计算机'},
-        {searchWords:'AI'},
+        {searchWords:'人工智能'},
         {searchWords:'医学'},
         {searchWords:'航空航天'},
       ],
@@ -116,7 +116,7 @@ export default {
           '人工智能',
           '航空',
           '深度学习',
-          '合成生物学123456',
+          '合成生物学',
           '糖尿病',
           '航天',
           '新冠',
@@ -482,7 +482,7 @@ export default {
     top: -25px;
     float: left;
     /*margin-left: 90%;*/
-    left: 800px;
+    left: 770px;
     width: 100px;
     height: 100%;
   }
@@ -502,7 +502,7 @@ export default {
     text-align: left;
     top: 50px;
     //width: 200px;
-    left: 20px;
+    left: 50px;
   }
   .keyword {
     font-size: 15px;
