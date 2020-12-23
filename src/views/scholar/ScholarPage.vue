@@ -188,16 +188,18 @@
         title="引用"
         :visible.sync="quotedialogVisible"
         width="40%">
-      <el-row style="text-align: left">
-        以下引用格式为GB/T7714，点击按钮即可复制内容
-        <el-button icon="el-icon-document-copy"
+      <div style="text-align: left">
+        <b>以下引用格式为GB/T7714，点击右侧按钮即可复制内容</b>
+        <el-button type="warning"
+                   size="mini"
+                   icon="el-icon-document-copy"
                    style="float: right"
                    v-clipboard:copy="quoteText"
                    v-clipboard:success="copySuccess"
                    v-clipboard:error="copyError"
         ></el-button>
-      </el-row>
-
+      </div>
+      <br/>
       <el-input
           type="textarea"
           placeholder="url"
