@@ -118,7 +118,7 @@
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
                     <academic-item
                         :c_sc = result_item
-                        :length=660
+                        :length=700
                         v-on:toAuthorPage = "searchAuthor"
                         v-on:toSourcePage = "searchSource"
                         v-on:quote = "showQuote"></academic-item>
@@ -694,7 +694,7 @@ export default {
 
 <style scoped>
   #main-content{
-    width: 1000px;
+    width: 1100px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
