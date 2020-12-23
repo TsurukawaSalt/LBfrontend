@@ -376,8 +376,8 @@ export default {
         token: sessionStorage.getItem("token"),
       }).then(res => {
         if (res.code === "200"){
-          _this.msgList = res.data.rows.filter((o)=>(!o.is_read))
-          _this.read_msgList = res.data.rows.filter((o)=>(o.is_read))
+          _this.msgList = res.data.filter((o)=>(!o.is_read))
+          _this.read_msgList = res.data.filter((o)=>(o.is_read))
           console.log(_this.msgList)
           _this.msgNum = _this.msgList.length;
         } else {
