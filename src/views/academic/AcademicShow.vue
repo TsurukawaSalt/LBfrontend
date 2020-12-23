@@ -50,10 +50,10 @@
           </tr>
           <tr>
             <td>
-              <span class="tableleft" >年份：</span>
+              <span class="tableleft" >时间：</span>
             </td>
             <td style="float:left;">
-              {{academic.time}}
+              {{academic.time.substring(0,10)}}
             </td>
           </tr>
 
