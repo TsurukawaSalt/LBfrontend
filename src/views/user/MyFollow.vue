@@ -10,7 +10,7 @@
                 <ul class="collection-sublist">
                     <li v-for="(item,index) in follow_list" :key="index">
                         <div>
-                            <span class="collection-dir" @click="goScholar(item.id)">
+                            <span class="collection-dir" @click="goScholar(item.expertId)">
                                 <span class="subtitle">
                                     {{item.name}}
                                 </span>                                
@@ -41,6 +41,7 @@
             }).then(res=>{
                 if(Number(res.code) === 200) {
                     _this.follow_list = res.data;
+                     console.log(res.data);
                 }
                 else {
                     _this.$message.error(res.msg);
@@ -56,7 +57,7 @@
             delFollow(index) {
                 var _this = this
                 this.$api.scholar.focusScholar({
-                    scholar_id : _this.follow_list[index].id,
+                    scholar_id : _this.follow_list[index].expertId,
                     user_id : sessionStorage.getItem("userID")
                 }).then(res=>{
                     if(Number(res.code) === 200){
