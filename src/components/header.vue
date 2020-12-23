@@ -48,6 +48,7 @@
       </el-popover>
 
       <div class="r_con">
+        <el-button v-if="isAdmin" class="r_con_admin" type="text" @click="goAdmin">管 理</el-button>
         <span v-if="isLogin">
           <el-badge  :value="msgList.length" :hidden="msgList.length == 0" class="newMsg">
             <el-button v-popover:popover type="info" icon="el-icon-message" class="r_con_mess_1">消息</el-button>
@@ -190,6 +191,7 @@
 
     <el-header v-if="this.status == 2" class="header_2">
       <div class="r_con">
+        <el-button v-if="isAdmin" class="r_con_admin" type="text" @click="goAdmin">管 理</el-button>
         <span v-if="isLogin">
           <el-badge  :value="msgList.length" :hidden="msgList.length == 0" class="newMsg">
             <el-button v-popover:popover type="text" icon="el-icon-message" class="r_con_mess_2">消息</el-button>
@@ -345,6 +347,7 @@ export default {
         endTime: 0,
       },
       isLogin:false,
+      isAdmin:false,
       userName:'',
       isRead: false,
       msgList:[],
@@ -394,6 +397,9 @@ export default {
     },
     goHome(){
       this.$router.push('/');
+    },
+    goAdmin(){
+      this.$router.push(('/admin'))
     },
     goSearch(isAdvanced){
       if (!isAdvanced) {
@@ -472,6 +478,16 @@ export default {
       this.isLogin = true
       this.userName = sessionStorage.getItem("userName")
       this.getAllMessage()
+    }
+    let vue = this;
+    if(this.isLogin){
+      this.$api.user.isadmin({
+        token:sessionStorage.getItem("token")
+      }).then((res)=>{
+        if(res.code == 200){
+          vue.isAdmin = true;
+        }
+      })
     }
   }
 }
@@ -573,11 +589,15 @@ export default {
   }
   .newMsg {
     width: 77px;
+    margin-right: 20px;
     /*height: 10px;*/
+  }
+  .r_con_admin{
+    margin-right: 20px;
   }
   .r_con_user {
     margin-right: 15px;
-    margin-left: 50px;
+    /*margin-left: 50px;*/
   }
   .r_con_reLogin {
     left: 10px;
