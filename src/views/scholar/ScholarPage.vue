@@ -217,8 +217,8 @@ export default {
       has_result: false,
       sort_words: {
         sc_year: '',
-        paper_type: '0',
-        first_author : '0',
+        paper_type: '',
+        first_author : '',
         sc_sort: 'time',
       },
       currentPage: 1,
@@ -412,16 +412,16 @@ export default {
       })
     },
     paperTo0() {
-      this.sort_words.paper_type = '0';
+      this.sort_words.paper_type = '';
     },
     paperTo1() {
-      this.sort_words.paper_type = '1';
+      this.sort_words.paper_type = '期刊';
     },
     paperTo2() {
-      this.sort_words.paper_type = '2';
+      this.sort_words.paper_type = '会议';
     },
     paperTo3() {
-      this.sort_words.paper_type = '3';
+      this.sort_words.paper_type = '图书';
     },
     authorTo0() {
       this.sort_words.first_author = '0';
@@ -448,6 +448,9 @@ export default {
           } else {
             _this.has_ach = true;
           }
+          this.loadRelateSc()
+          this.loadCoAuthorsList()
+          this.loadCoAffList()
         }else {
           _this.$message({
             message: res.msg,
@@ -455,12 +458,10 @@ export default {
           })
         }
       })
-      this.loadRelateSc()
-      this.loadCoAuthorsList()
-      this.loadCoAffList()
     },
     loadRelateSc(){
       var _this = this
+      console.log(_this.scholar_info.name + "正在搜索文献")
       this.$api.academic.getSearchResult({
         search_words: {
           searchWords: '',
@@ -477,6 +478,7 @@ export default {
           level: '',
           savetype: '',
           keywords: '',
+          // type: '',
           type: _this.sort_words.paper_type,
           authors: '',
           jnls: '',
@@ -568,13 +570,13 @@ export default {
     },
     getPaper() {
       switch (this.sort_words.paper_type){
-        case "0":
+        case "":
           return '全部类型'
-        case "1":
+        case "期刊":
           return '期刊'
-        case "2":
+        case "会议":
           return '会议'
-        case "3":
+        case "图书":
           return '专著'
         default:
           return '全部类型'
@@ -628,7 +630,7 @@ export default {
 
 <style scoped>
   #main-content{
-    width: 1100px;
+    width: 1000px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
@@ -638,16 +640,16 @@ export default {
   }
   #author-info{
     border-bottom: 1px solid #e3e3e3;
-    padding: 32px 0 20px 80px;
+    padding: 32px 0 20px 0;
     overflow: hidden;
   }
   #main-content-left{
     float: left;
-    width: 710px;
+    width: 610px;
   }
   #main-content-right{
     float: right;
-    width: 370px;
+    width: 330px;
   }
   .person-image{
     width: 125px;
