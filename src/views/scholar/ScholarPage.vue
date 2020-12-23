@@ -50,24 +50,24 @@
           <div id="achievement">
             <div class="achievement-pie">
               <div class="pie_item">
-                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper1_count/total_rs)*100)" :width="100"></el-progress>
-                <p class="pie_title">{{ Math.floor((paper1_count/total_rs)*100) + "%"}}<br/>期刊</p>
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper1_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper1_count/real_total)*100) + "%"}}<br/>期刊</p>
               </div>
               <div class="pie_item">
-                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper2_count/total_rs)*100)" :width="100"></el-progress>
-                <p class="pie_title">{{ Math.floor((paper2_count/total_rs)*100) + "%" }}<br/>会议</p>
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper2_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper2_count/real_total)*100) + "%" }}<br/>会议</p>
               </div>
               <div class="pie_item">
-                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper3_count/total_rs)*100)" :width="100"></el-progress>
-                <p class="pie_title">{{ Math.floor((paper3_count/total_rs)*100) + "%"}}<br/>专著</p>
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper3_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper3_count/real_total)*100) + "%"}}<br/>专著</p>
               </div>
               <div class="pie_item">
-                <el-progress type="circle" text-inside="false" :percentage="Math.floor(((total_rs - paper1_count - paper2_count - paper3_count)/total_rs)*100)" :width="100"></el-progress>
-                <p class="pie_title">{{ Math.floor(((total_rs - paper1_count - paper2_count - paper3_count)/total_rs)*100) + "%"}}<br/>其他</p>
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor(((real_total - paper1_count - paper2_count - paper3_count)/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor(((real_total - paper1_count - paper2_count - paper3_count)/real_total)*100) + "%"}}<br/>其他</p>
               </div>
               <div class="pie_total">
                   <p style="margin-bottom: 0; font-weight: bold">总计</p>
-                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">{{ this.total_rs }}篇</p>
+                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">{{ this.real_total }}篇</p>
               </div>
             </div>
 <!--            <div class="achievement-line"></div>-->
@@ -286,6 +286,8 @@ export default {
       paper1_count: 0,
       paper2_count: 0,
       paper3_count: 0,
+      real_total: 0,
+      search_count: 0
     }
   },
   methods: {
@@ -625,6 +627,10 @@ export default {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
           _this.total_rs = res.data.total
+          if (_this.search_count === 0){ // 首次加载
+            _this.real_total = _this.total_rs
+            _this.search_count = 1;
+          }
           if (_this.result_list.length === 0){
             _this.has_result = false;
           } else {
