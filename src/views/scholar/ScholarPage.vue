@@ -47,10 +47,31 @@
         <!--成就统计 & 相关文献-->
         <div id="main-content-left">
           <!--成就展示-->
-<!--          <div id="achievement">-->
-<!--            <div class="achievement-pie"></div>-->
+          <div id="achievement">
+            <div class="achievement-pie">
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper1_count/total_rs)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper1_count/total_rs)*100) + "%"}}<br/>期刊</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper2_count/total_rs)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper2_count/total_rs)*100) + "%" }}<br/>会议</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper3_count/total_rs)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper3_count/total_rs)*100) + "%"}}<br/>专著</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor(((total_rs - paper1_count - paper2_count - paper3_count)/total_rs)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor(((total_rs - paper1_count - paper2_count - paper3_count)/total_rs)*100) + "%"}}<br/>其他</p>
+              </div>
+              <div class="pie_total">
+                  <p style="margin-bottom: 0; font-weight: bold">总计</p>
+                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">{{ this.total_rs }}篇</p>
+              </div>
+            </div>
 <!--            <div class="achievement-line"></div>-->
-<!--          </div>-->
+          </div>
           <!--相关文献-->
           <div id="article-list">
             <div id="article-list-container">
@@ -262,6 +283,9 @@ export default {
       quoteText:"",
       quotedialogVisible:false,
       author_type : '0',
+      paper1_count: 0,
+      paper2_count: 0,
+      paper3_count: 0,
     }
   },
   methods: {
@@ -466,6 +490,51 @@ export default {
     paperTo3() {
       this.sort_words.paper_type = '图书';
     },
+    getPaperCount() {
+      var _this = this
+      console.log(_this.scholar_info.name + "正在搜索文献")
+      this.$api.academic.getSearchResult({
+        search_words: {
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: _this.scholar_info.name,
+          origin: '',
+          startTime: '0',
+          endTime: '0'
+        },
+        filter_words: {
+          year: '',
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
+          type: '',
+          authors: '',
+          jnls: '',
+          affs: '',
+        },
+        sort: _this.sort_words.sc_sort,
+        page: _this.currentPage,
+        userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
+      }).then(res => {
+        if (res.code === "200"){
+          _this.paper1_count = res.data.filter_list[1].filter_itemList[0].count;
+          _this.paper2_count = res.data.filter_list[1].filter_itemList[3].count;
+          _this.paper3_count = res.data.filter_list[1].filter_itemList[1].count;
+        }
+        else if (res.code === "100"){
+          _this.has_result = false;
+        }
+        else {
+          _this.has_result = false;
+          _this.$message({
+            message: res.msg,
+            type: "error"
+          })
+        }
+      })
+    },
     authorTo0() {
       // this.author_type = "0";
       // this.result_list_show = this.result_list
@@ -506,6 +575,10 @@ export default {
             _this.has_ach = true;
           }
           this.loadRelateSc()
+          this.getPaperCount()
+          console.log(_this.paper1_count);
+          console.log(_this.paper2_count);
+          console.log(_this.paper3_count);
           this.loadCoAuthorsList()
           this.loadCoAffList()
         }else {
@@ -603,12 +676,12 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_affiliate_list = res.data
+          _this.co_affiliate_list = res.data.expert_list
+          _this.total_co_affs = res.data.total
           if (_this.co_affiliate_list === null){
             _this.has_co_aff = false;
           } else {
             _this.has_co_aff = true;
-            _this.total_co_affs = _this.co_affiliate_list.length
           }
         } else {
           _this.$message({
@@ -709,7 +782,7 @@ export default {
   }
   #main-content-left{
     float: left;
-    width: 610px;
+    width: 700px;
   }
   #main-content-right{
     float: right;
@@ -840,7 +913,26 @@ export default {
     border-bottom: 1px dotted #bfbfbf;
   }
   .achievement-pie{
-    height: 166px;
+    height: 130px;
+    margin-top: 26px;
+    /*text-align: center;*/
+  }
+  .pie_item{
+    display: inline-block;
+    margin-right: 60px;
+  }
+  .pie_title{
+    position: relative;
+    bottom: 76px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .pie_total{
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    bottom: 66px;
   }
   .achievement-line{
     height: 170px;
