@@ -50,11 +50,13 @@
     </el-popover>
     <div class="top_block">
       <el-row>
-        <el-link :underline="false">站内功能</el-link>
+        <div class="top_title">
+          快捷搜索
+        </div>
       </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6" v-for="(o) in 4" :key="o">
-          <el-card class="card" shadow="hover"> 功能</el-card>
+      <el-row class="top_card" :gutter="10">
+        <el-col :span="6" v-for="(o) in this.swList" :key="o">
+          <el-card class="card" shadow="hover" @click.native="goFastSearch(o.searchWords)">{{o.searchWords}}</el-card>
         </el-col>
       </el-row>
     </div>
@@ -85,6 +87,7 @@
         <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
           <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-kw"></el-image>
           <el-link class="keyword" :underline="false" @click="goKwSearch(o)">{{o}}</el-link>
+          <span class="keyword_views">1157</span>
         </el-row>
       </div>
     </div>
@@ -102,30 +105,24 @@ export default {
       // url:require('@/assets/home_icon/Num-1.png'),
       result_list:[],
       result_length:0,
-      // academic_list:[
-      //   {title:"12345666667777777", year:2020, author:'ABC', cited:195},
-      //   {title:'654321', year:2020, author:'ABC', cited:195},
-      //   {title:'111111', year:2020, author:'ABC', cited:195},
-      //   {title:'222222', year:2020, author:'ABC', cited:195},
-      //   {title:'333333', year:2020, author:'ABC', cited:195},
-      //
-      //   {title:'444444', year:2020, author:'ABC', cited:195},
-      //   {title:'555555', year:2020, author:'ABC', cited:195},
-      //   {title:'666666', year:2020, author:'ABC', cited:195},
-      //   {title:'888888', year:2020, author:'ABC', cited:195},
-      //   {title:'777777', year:2020, author:'ABC', cited:195},
-      // ],
+      swList:[
+        {searchWords:'计算机'},
+        {searchWords:'人工智能'},
+        {searchWords:'医学'},
+        {searchWords:'航空航天'},
+      ],
       hot_keywords:[
           '计算机',
           '人工智能',
           '航空',
           '深度学习',
-          '合成生物学123456',
+          '合成生物学',
           '糖尿病',
           '航天',
           '新冠',
           '疫情',
       ],
+      hotKeywords:[],
       search_words: {
         searchWords:'',
         title:'',
@@ -175,6 +172,11 @@ export default {
       this.search_words.keyWords = kw
       this.goSearch(true)
     },
+    goFastSearch(kw){
+      // alert(kw)
+      this.search_words.searchWords = kw
+      this.goSearch(false)
+    },
     goArticle(id){
       this.$router.push('academicShow/'+id)
     },
@@ -186,7 +188,7 @@ export default {
     let _this = this;
     this.$api.academic.getSearchResult({
       search_words: {
-        searchWords:'计算机',
+        searchWords:'',
         keyWords: '',
         title: '',
         experts:'',
@@ -195,7 +197,7 @@ export default {
         endTime: '0',
       },
       filter_words: {},
-      sort: "views",
+      sort: "cited",
       page: 1,
       userID: sessionStorage.getItem("userID")
     }).then(res => {
@@ -211,13 +213,24 @@ export default {
           _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
           console.log(_this.result_list[i].time)
         }
-        // _this.e_result_list = res.data.e_result_list;
-        // if (_this.e_result_list.length === 0){
-        //   _this.has_experts = false
-        // } else {
-        //   _this.has_experts = true
-        //   _this.experts_count = _this.e_result_list.length
-        // }
+      }else {
+        // _this.$message({
+        //   message: res.msg,
+        //   type: "error"
+        // })
+        // console.log("Request => getSearchResult : not 200");
+      }
+    })
+    this.$api.academic.getHotKeywords().then(res => {
+      if (res.code === "200"){
+        // alert(200)
+        _this.hotKeywords = res.row;
+        console.log(_this.hotKeywords[0])
+        for (let i = 0; i < 10; i ++) {
+
+          _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
+          console.log(_this.result_list[i].time)
+        }
       }else {
         // _this.$message({
         //   message: res.msg,
@@ -331,18 +344,25 @@ export default {
   .top_block .el-row{
     width: 100%;
   }
-  .top_block .el-row .el-link {
-    left: -40%;
+  .top_title {
+    position: absolute;
+    left: 20px;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
     color: #2461ea;
+  }
+  .top_card {
+    top: 40px;
+    font-weight: bold;
+    font-size: 18px;
   }
 
   .card {
     margin: 5px;
     width: 95%;
     height: 30%;
+    cursor: pointer;
   }
 
   .middle_block {
@@ -462,7 +482,7 @@ export default {
     top: -25px;
     float: left;
     /*margin-left: 90%;*/
-    left: 800px;
+    left: 770px;
     width: 100px;
     height: 100%;
   }
@@ -496,6 +516,14 @@ export default {
     text-overflow: ellipsis; /* 溢出用省略号*/
   //white-space: nowrap;
     -webkit-box-orient: vertical
+  }
+  .keyword_views {
+    position: absolute;
+    font-size: 15px;
+    color: #245cc0;
+    text-align: left;
+    top: 17px;
+    left: 120px;
   }
 
   @media screen and (min-width: 1400px){
