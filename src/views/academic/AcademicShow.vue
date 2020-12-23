@@ -111,11 +111,14 @@
         </el-row>
 
         <hr color="#9c9e9c">
-        <p style="text-align: left;font-size: 25px">相关推荐</p>
+        <div >
+          <p style="text-align: left;font-size: 25px">相关推荐</p>
 
-        <div v-for="(result_item,index) in relation_list" v-bind:key="index">
-          <academic-item :c_sc = result_item></academic-item>
+          <div style="padding-left: 80px;" v-for="(result_item,index) in relation_list" v-bind:key="index">
+            <academic-item :c_sc = result_item></academic-item>
+          </div>
         </div>
+
 
       </el-col>
       <el-col :offset="2" :span="5" align="left">
