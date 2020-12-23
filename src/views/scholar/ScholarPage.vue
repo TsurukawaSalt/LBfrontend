@@ -116,7 +116,11 @@
               <div id="content-result">
                 <div class="result-list">
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
-                    <academic-item :item = result_item></academic-item>
+                    <academic-item
+                        :c_sc = result_item
+                        v-on:toAuthorPage = "searchAuthor"
+                        v-on:toSourcePage = "searchSource"
+                        v-on:quote = "showQuote"></academic-item>
                   </div>
                 </div>
                 <div class="result-page" v-show="total_rs > 10">
@@ -136,7 +140,7 @@
           </div>
           <div class="no-result-tip" v-if="!has_result" style="text-align: center">
             <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
-            <p>抱歉，暂无该学者的相关学术资源</p>
+            <p>暂无该学者的相关学术资源</p>
           </div>
         </div>
         <!--合作统计展示-->
@@ -221,7 +225,9 @@ export default {
       sourceUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
       has_ach: false,
       has_co_author: false,
-      has_co_aff: false
+      has_co_aff: false,
+      quoteText:"",
+      quotedialogVisible:false,
     }
   },
   methods: {
@@ -230,6 +236,84 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    showQuote(val){
+      this.quoteText = this.getQuote(val)
+      this.quotedialogVisible = true;
+      this.sp_result = val;
+    },
+    getQuote(document){
+      let res = ""
+      for(let i in document.authors){
+        if(i != 0){
+          res += ",";
+        }
+        res += document.authors[i].name;
+      }
+      res += '.';
+      res += document.title+'['
+      let dtype = document.dtype;
+      if(dtype == '专利'){
+        res += 'P'
+      }else if(dtype == '会议'){
+        res += 'C'
+      }else if(dtype == '图书'){
+        res += 'M'
+      }else if(dtype == '学位'){
+        res += 'D'
+      }else if(dtype == '期刊'){
+        res += 'J'
+      }
+      res += '].'
+      res += document.origin;
+      if(document.time.length >= 4){
+        res += ','+document.time.substring(0,4);
+      }
+      return res;
+    },
+    copySuccess(){
+      this.$message({
+        message: '复制成功',
+        type: 'success'
+      });
+      this.sharedialogVisible = false;
+    },
+    copyError(){
+      this.$message.error('您的浏览器不支持该功能，请自行复制链接内容');
+    },
+    searchAuthor(val){
+      var search_words = {
+        searchWords: '',
+        title: '',
+        keyWords: '',
+        experts: val,
+        origin: '',
+        startTime: '0',
+        endTime: '0'
+      }
+      this.$router.push({
+        name: "AcademicSearch",
+        params: {
+          search_words: encodeURIComponent(JSON.stringify(search_words))
+        }
+      })
+    },
+    searchSource(val) {
+      var search_words = {
+        searchWords: '',
+        title: '',
+        keyWords: '',
+        experts: '',
+        origin: val,
+        startTime: '0',
+        endTime: '0'
+      }
+      this.$router.push({
+        name: "AcademicSearch",
+        params: {
+          search_words: encodeURIComponent(JSON.stringify(search_words))
+        }
+      })
     },
     toScholarPage(scholar) {
       // 有 ID
