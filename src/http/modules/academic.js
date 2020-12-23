@@ -57,8 +57,8 @@ export const favorSc = params => {
 // 获取关键字
 export const getHotKeywords = params => {
   return axios({
-    url: '/academic/favorSc',
-    method: 'post',
+    url: '/academic/getHotKeywords',
+    method: 'get',
     params
   })
 }
