@@ -13,11 +13,11 @@
               </div>
             </div>
             <!--认证按钮-->
-            <div class="person-authen is-hover" v-show="!scholar_info.isVerified">
+            <div class="person-authen is-hover" v-show="( this.user_id !== null) && !scholar_info.isVerified">
               <p class="authen-button" @click="handleAuthen">我要认证</p>
             </div>
             <!--关注按钮-->
-            <div class="person-focus is-hover">
+            <div class="person-focus is-hover" v-show="this.user_id !== null">
               <p class="focus-button" @click="handleFocus" v-show="!scholar_info.isFocus">关注</p>
               <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.isFocus">已关注
               <i class="el-icon-check"></i>
@@ -27,7 +27,7 @@
           <!-- 基本信息 -->
           <div class="person-baseinfo">
             <div class="p-name">{{ this.scholar_info.name }}</div>
-            <div class="p-volume c-grey">{{ this.scholar_info.volume }}人看过</div>
+            <div class="p-volume c-grey">{{ this.scholar_info.volume === null ? 0 : this.scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
                 <span class="p-scholarID-id">
@@ -118,6 +118,7 @@
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
                     <academic-item
                         :c_sc = result_item
+                        :length=700
                         v-on:toAuthorPage = "searchAuthor"
                         v-on:toSourcePage = "searchSource"
                         v-on:quote = "showQuote"></academic-item>
@@ -509,10 +510,14 @@ export default {
           this.loadCoAffList()
         }else {
           _this.$message({
-            message: res.msg,
+            message: res.message,
             type: "error"
           })
+          _this.$router.push('/404')
         }
+      }).catch(err => {
+        console.log(err)
+        this.$router.push('/404')
       })
     },
     loadRelateSc(){
@@ -689,7 +694,7 @@ export default {
 
 <style scoped>
   #main-content{
-    width: 1000px;
+    width: 1100px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
