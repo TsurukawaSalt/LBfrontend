@@ -2,11 +2,14 @@
   <div class="wrapper">
     <Header class="header_home"></Header>
     <div class="container">
+      <!-- 热门关键词 -->
       <div class="content-right">
-        <h4 style="margin-top: 8px">热门关键词</h4>
-        <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
-          <el-link class="keyword" :underline="false" @click="searchWords(o)">{{o}}</el-link>
-        </el-row>
+        <div style="margin-left: 20px">
+          <h4 style="margin-top: 8px; margin-bottom: 10px">热门关键词</h4>
+          <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
+            <el-link class="keyword" :underline="false" @click="searchWords(o)" style="line-height: 30px; font-weight: bold; font-size: 14px">{{ o }}</el-link>
+          </el-row>
+        </div>
       </div>
       <!-- 搜索结果 -->
       <div class="content-left" v-if="has_result">
