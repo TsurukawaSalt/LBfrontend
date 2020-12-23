@@ -84,10 +84,10 @@
       </div>
       <div class="right_block">
         <h4>热门关键词</h4>
-        <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
+        <el-row class="keyword_list" v-for="(o, index) in this.hotKeywords" :key="index">
           <el-image :src="require('@/assets/home_icon/Num-'+(index+1)+'.png')" class="num-icon-kw"></el-image>
-          <el-link class="keyword" :underline="false" @click="goKwSearch(o)">{{o}}</el-link>
-          <span class="keyword_views">1157</span>
+          <el-link class="keyword" :underline="false" @click="goKwSearch(o)">{{o.keyword}}</el-link>
+          <span class="keyword_views">{{o.view}}</span>
         </el-row>
       </div>
     </div>
@@ -207,11 +207,11 @@ export default {
         // _this.filter_list = res.data.filter_list;
         // _this.total_rs = res.data.total;
         _this.result_length = _this.result_list.length;
-        console.log(_this.result_list[0])
+        // console.log(_this.result_list[0])
         for (let i = 0; i < 10; i ++) {
 
           _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
-          console.log(_this.result_list[i].time)
+          // console.log(_this.result_list[i].time)
         }
       }else {
         // _this.$message({
@@ -221,11 +221,13 @@ export default {
         // console.log("Request => getSearchResult : not 200");
       }
     })
-    this.$api.academic.getHotKeywords().then(res => {
+    this.$api.academic.getHotKeywords({
+      code:1
+    }).then(res => {
       if (res.code === "200"){
         // alert(200)
-        _this.hotKeywords = res.row;
-        console.log(_this.hotKeywords[0])
+        _this.hotKeywords = res.data.slice(0, 10);
+        console.log(res.data)
       }else {
         // _this.$message({
         //   message: res.msg,
@@ -434,7 +436,8 @@ export default {
     /*background: #8c939d;*/
     //position: absolute;
     font-size: 15px;
-    color: black;
+    font-weight: bold;
+    color: #555666;
     height: 20px;
     width: 200px;
     left: 50px;
@@ -501,6 +504,7 @@ export default {
   }
   .keyword {
     font-size: 15px;
+    color: black;
     //width: 10px;
     top: -20px;
     left: 40px;
