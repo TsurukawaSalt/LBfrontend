@@ -3,7 +3,10 @@
     <Header class="header_home"></Header>
     <div class="container">
       <div class="content-right">
-        这里是右侧
+        <h4 style="margin-top: 8px">热门关键词</h4>
+        <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
+          <el-link class="keyword" :underline="false" @click="searchWords(o)">{{o}}</el-link>
+        </el-row>
       </div>
       <!-- 搜索结果 -->
       <div class="content-left" v-if="has_result">
@@ -167,7 +170,18 @@
         has_result: true,
         quoteText:"",
         quotedialogVisible:false,
-        sp_result:{}
+        sp_result:{},
+        hot_keywords:[
+          '计算机',
+          '人工智能',
+          '航空',
+          '深度学习',
+          '合成生物学',
+          '糖尿病',
+          '航天',
+          '新冠',
+          '疫情',
+        ],
       }
     },
     methods: {
@@ -255,6 +269,23 @@
           keyWords: '',
           experts: '',
           origin: val,
+          startTime: '0',
+          endTime: '0'
+        }
+        this.$router.push({
+          name: "AcademicSearch",
+          params: {
+            search_words: encodeURIComponent(JSON.stringify(search_words))
+          }
+        })
+      },
+      searchWords(val){
+        var search_words = {
+          searchWords: val,
+          title: '',
+          keyWords: '',
+          experts: '',
+          origin: '',
           startTime: '0',
           endTime: '0'
         }
