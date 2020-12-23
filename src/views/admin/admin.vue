@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header></Header>
     <el-container>
       <el-aside style="width: 14%">
         <el-menu default-active="2-1">
@@ -112,12 +111,8 @@
 </template>
 
 <script>
-  import Header from '@/components/header.vue';
   export default {
     name: "admin",
-    components: {
-      Header
-    },
     data(){
       return {
         allAppExperts: {},
@@ -262,6 +257,8 @@
         }else{
           this.$message.error('您没有权限查看该页面');
         }
+      }).then((err)=>{
+        console.error(err)
       })
     }
   }

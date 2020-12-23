@@ -114,7 +114,7 @@
         <p style="text-align: left;font-size: 25px">相关推荐</p>
 
         <div v-for="(result_item,index) in relation_list" v-bind:key="index">
-          <academic-item :item = result_item></academic-item>
+          <academic-item :c_sc = result_item></academic-item>
         </div>
 
       </el-col>
@@ -410,26 +410,26 @@
         }
       },
       getRelation(){
-        console.log('getrelation')
         let vue = this;
-        let kw = "";
-        for(let key of vue.academic.keywords){
-          kw += key + " "
-        }
+
+        console.log('getrelation')
         this.$api.academic.getSearchResult({
           search_words:{
             experts:"",
             origin:"",
-            searchWords:kw,
+            searchWords:vue.academic.keywords,
             startTime:0,
             endTime:0
-          }
+          },
+          filter_words: {},
+          sort: '',
+          page: 1,
+          userID:-1
         }).then((res)=> {
-          if(res == 200){
-            vue.relation_list = res.data.result_list
+          if(res.code == 200){
+            vue.relation_list = res.data.result_list.filter((o)=>(o.id!==vue.academicID))
             console.log('get relation list', vue.relation_list)
           }
-
         })
       }
     },
@@ -463,8 +463,9 @@
                 history.push({id:vue.academicID, title:vue.academic.title, time:date.toLocaleDateString()});
                 localStorage.setItem(userID,JSON.stringify(history));
               }
-            }
-            else{
+
+              this.getRelation();
+            }else{
               this.$message.error("文章不存在或已被删除")
             }
           }
@@ -472,7 +473,6 @@
         console.log(err)
         this.$message.error("文章不存在或已被删除")
       })
-      this.getRelation();
     }
   }
 </script>
