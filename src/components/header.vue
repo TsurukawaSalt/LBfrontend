@@ -66,28 +66,79 @@
               <el-card class="MsgCard">
                 <div slot="header" class="clearfix">
                   <span class="MsgTitle">{{o.type}}认领结果</span>
-                  <span style="float: right;color: #9fa19f">{{ o.date.substring(0,10) }}</span>
+                  <span class="Msg-time">{{ o.date.substring(0,10) }}</span>
                 </div>
                 <div class="MsgContent">
                   <div v-if="o.type == '文献'">
                     <div v-if="o.success">
                       <span>您的{{o.type}}</span>
-                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">{{o.objectName}}</span>
-                      <span style="color: #42b983">已通过</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span class="Msg-agree">已通过</span>
                       <span>管理的审核</span>
                     </div>
                     <div v-else>
-                      <span>您在文献</span>
-                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">{{o.objectName}}</span>
-                      <span>的认领过程的由于</span>
-                      <span style="color: #ff3f41">{{o.reason}}</span>
-                      <span>被管理员拒绝</span>
+                      <span>管理员已拒绝您认领文献</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span>具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
+                    </div>
+
+                  </div>
+                  <div v-else>
+                    <div v-if="o.success">
+                      <span>恭喜您</span>
+                      <span class="Msg-agree">已通过</span>
+                      <span>管理员审核，您已认证成功{{o.type}}</span>
+                      <span class="Msg-text-link">{{o.objectName}}</span>
+                      <span>学者</span>
+                    </div>
+                    <div v-else>
+                      <span>经管理员审核，您未能认证成功</span>
+                      <span class="Msg-text-link">{{o.objectName}}</span>
+                      <span>身份，具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="button_block">
+                  <el-tooltip class="item" effect="dark" content="标记已读" placement="bottom-end">
+                    <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="删除消息" placement="bottom-end">
+                    <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-tooltip>
+                </div>
+              </el-card>
+              <br>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane class="MsgCol" label="已读消息">
+            <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
+              <el-card class="MsgCard">
+                <div slot="header" class="clearfix">
+                  <span class="MsgTitle">{{o.type}}认领结果</span>
+                  <span class="Msg-time">{{ o.date.substring(0,10) }}</span>
+                </div>
+                <div class="MsgContent">
+                  <div v-if="o.type == '文献'">
+                    <div v-if="o.success">
+                      <span>您的{{o.type}}</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span class="Msg-agree">已通过</span>
+                      <span>管理的审核</span>
+                    </div>
+                    <div v-else>
+                      <span>管理员已拒绝您认领文献</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span>具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
                     </div>
 
                   </div>
                   <div v-else>
                     <span>恭喜您</span>
-                    <span style="color: #42b983">已通过</span>已通过
+                    <span class="Msg-agree">已通过</span>已通过
                     <span>管理员审核{{o.type}}</span>
                     <span class="Msg-text-link">认证成功</span>
                     已通过管理的审核
@@ -95,25 +146,15 @@
                 </div>
                 <br>
                 <div class="button_block">
-                  <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
-                  <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
+                  <el-tooltip class="item" effect="dark" content="设为未读" placement="bottom-end">
+                    <el-button class="read_button" size="medium" type="primary" icon="el-icon-edit" plain circle></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="删除消息" placement="bottom-end">
+                    <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-tooltip>
                 </div>
               </el-card>
-            </el-row>
-          </el-tab-pane>
-          <el-tab-pane label="已读消息">
-            <el-row v-for="(o, index) in this.read_msgList" :key="index" class="MsgRow">
-              <el-card class="MsgCard">
-                <div slot="header" class="clearfix">
-                  <span>title</span>
-                </div>
-                <div class="MsgContent">54321</div>
-                <br>
-                <div class="r_button_block">
-                  <el-button size="medium" class="not_read_button" >设为未读</el-button>
-                  <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
-                </div>
-              </el-card>
+              <br>
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -134,12 +175,107 @@
           ref="popover"
           title="消息"
           placement="bottom"
-          width="200"
+          width="290"
           trigger="click"
       >
-        <el-row v-for="(o, index) in 4" :key="index">
-          <el-card>123456</el-card>
-        </el-row>
+        <el-tabs>
+          <el-tab-pane class="MsgCol" label="未读消息">
+            <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
+              <el-card class="MsgCard">
+                <div slot="header" class="clearfix">
+                  <span class="MsgTitle">{{o.type}}认领结果</span>
+                  <span class="Msg-time">{{ o.date.substring(0,10) }}</span>
+                </div>
+                <div class="MsgContent">
+                  <div v-if="o.type == '文献'">
+                    <div v-if="o.success">
+                      <span>您的{{o.type}}</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span class="Msg-agree">已通过</span>
+                      <span>管理的审核</span>
+                    </div>
+                    <div v-else>
+                      <span>管理员已拒绝您认领文献</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span>具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
+                    </div>
+
+                  </div>
+                  <div v-else>
+                    <div v-if="o.success">
+                      <span>恭喜您</span>
+                      <span class="Msg-agree">已通过</span>
+                      <span>管理员审核，您已认证成功{{o.type}}</span>
+                      <span class="Msg-text-link">{{o.objectName}}</span>
+                      <span>学者</span>
+                    </div>
+                    <div v-else>
+                      <span>经管理员审核，您未能认证成功</span>
+                      <span class="Msg-text-link">{{o.objectName}}</span>
+                      <span>身份，具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="button_block">
+                  <el-tooltip class="item" effect="dark" content="标记已读" placement="bottom-end">
+                    <el-button class="read_button" size="medium" type="success" icon="el-icon-check" circle></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="删除消息" placement="bottom-end">
+                    <el-button class="del_button" size="medium" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-tooltip>
+                </div>
+              </el-card>
+              <br>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane class="MsgCol" label="已读消息">
+            <el-row v-for="(o, index) in this.msgList" :key="index" class="MsgRow">
+              <el-card class="MsgCard">
+                <div slot="header" class="clearfix">
+                  <span class="MsgTitle">{{o.type}}认领结果</span>
+                  <span class="Msg-time">{{ o.date.substring(0,10) }}</span>
+                </div>
+                <div class="MsgContent">
+                  <div v-if="o.type == '文献'">
+                    <div v-if="o.success">
+                      <span>您的{{o.type}}</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span class="Msg-agree">已通过</span>
+                      <span>管理的审核</span>
+                    </div>
+                    <div v-else>
+                      <span>管理员已拒绝您认领文献</span>
+                      <span class="Msg-text-link" @click="jumpAcademic(o.objectID)">《{{o.objectName}}》</span>
+                      <span>具体原因为：</span>
+                      <p class="Msg-reject">{{o.reason}}</p>
+                    </div>
+
+                  </div>
+                  <div v-else>
+                    <span>恭喜您</span>
+                    <span class="Msg-agree">已通过</span>已通过
+                    <span>管理员审核{{o.type}}</span>
+                    <span class="Msg-text-link">认证成功</span>
+                    已通过管理的审核
+                  </div>
+                </div>
+                <br>
+                <div class="button_block">
+                  <el-tooltip class="item" effect="dark" content="设为未读" placement="bottom-end">
+                    <el-button class="read_button" size="medium" type="primary" icon="el-icon-edit" plain circle></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="删除消息" placement="bottom-end">
+                    <el-button size="medium" class="del_button" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-tooltip>
+                </div>
+              </el-card>
+              <br>
+            </el-row>
+          </el-tab-pane>
+        </el-tabs>
       </el-popover>
     </el-header>
   </div>
@@ -177,6 +313,9 @@ export default {
   methods:{
     jumpAcademic(id){
       this.$router.push('academicShow/'+id);
+    },
+    jumpExpert(id){
+      this.$router.push('scholarPage/'+id);
     },
     goSearch(isAdvanced){
       if (!isAdvanced) {
@@ -235,7 +374,6 @@ export default {
       this.$api.message.getMessage({
         userID: sessionStorage.getItem("userID"),
         token: sessionStorage.getItem("token"),
-
       }).then(res => {
         if (res.code === "200"){
           _this.msgList = res.data.rows.filter((o)=>(!o.is_read))
@@ -352,9 +490,14 @@ export default {
   }
 
   .MsgTitle {
-    margin-top: 10px;
-    font-size: 20px;
+    /*margin-top: 10px;*/
+    /*font-size: 20px;*/
     font-weight: bold;
+  }
+
+  .Msg-time{
+    float: right;
+    color: #9fa19f;
   }
 
   .MsgCol {
@@ -374,14 +517,14 @@ export default {
    }
 
   .MsgRow{
-    height: 280px;
+    /*bottom: 20px;*/
     width: 280px;
   }
   .MsgCard {
-    height: 250px;
+    /*height: 250px;*/
   }
   .MsgContent {
-    height: 100px;
+    /*height: 100px;*/
     /*margin-bottom: 10px;*/
   }
 
@@ -394,18 +537,20 @@ export default {
   }
 
   .Msg-agree{
-
+    color: #42b983;
   }
 
   .Msg-reject{
-
+    margin-left: 20px;
+    color: #ff3f41;
   }
 
   .button_block {
-    position: absolute;
-    width: 200px;
-    left: 180px;
-    top: 200px;
+    /*position: absolute;*/
+    text-align: right;
+    /*width: 200px;*/
+    /*right: 0px;*/
+    /*bottom: 50px;*/
   }
   .r_button_block {
     position: absolute;
@@ -414,37 +559,17 @@ export default {
     top: -90px;
   }
 
-  .check_isRead_button{
-    position: absolute;
-    color: #0066cc;
-    font-size: 15px;
-    font-weight: bold;
-    top: 10px;
-    left: 200px;
-  }
-  .goBack_isRead_button{
-    position: absolute;
-    color: #8c939d;
-    font-size: 15px;
-    font-weight: bold;
-    top: 5px;
-    left: 250px;
-  }
   .read_button {
-    //position: absolute;
-    left: 150px;
+    /*right: 100px;*/
   }
   .not_read_button {
-    //position: absolute;
     background: #409EFF;
     color: white;
     border-radius: 25px;
-    //left: 100px;
   }
 
   .del_button {
-    //position: absolute;
-    left: 200px;
+    /*float: right;*/
   }
 
   .header_2 {
