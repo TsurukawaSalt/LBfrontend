@@ -1,5 +1,6 @@
 <template>
   <div>
+<!--    <Header status="2"></Header>-->
     <el-container>
       <el-aside style="width: 14%">
         <el-menu default-active="2-1">
@@ -111,8 +112,12 @@
 </template>
 
 <script>
+  // import Header from '@/components/header.vue';
   export default {
     name: "admin",
+    components: {
+      // Header
+    },
     data(){
       return {
         allAppExperts: {},

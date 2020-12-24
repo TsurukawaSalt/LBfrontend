@@ -399,7 +399,10 @@ export default {
       this.$router.push('/');
     },
     goAdmin(){
-      this.$router.push(('/admin'))
+      let url = window.location.origin + "/#/admin"
+      if(window.open(url) === null){
+        window.location.herf = url;
+      }
     },
     goSearch(isAdvanced){
       if (!isAdvanced) {
