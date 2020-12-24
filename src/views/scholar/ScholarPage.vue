@@ -720,8 +720,9 @@ export default {
               break;
             }
           }
-          if(!repeate) {
+          if(!repeate && author.name != "") {
             author.fre = 0;
+            console.log(author)
             author_list.push(author)
           }
         }
