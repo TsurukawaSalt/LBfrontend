@@ -85,7 +85,7 @@
         methods: {
             handleAvatarSuccess(res, file) {
                 console.log(file);
-                this.perInfo.url = res.data;
+                this.perInfo.url = res.data.url;
                 var _this = this
                 this.$api.user.changeImg({
                     userID:sessionStorage.getItem("userID"),
