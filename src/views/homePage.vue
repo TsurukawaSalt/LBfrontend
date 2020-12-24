@@ -178,7 +178,7 @@ export default {
       this.goSearch(false)
     },
     goArticle(id){
-      this.$router.push('academicShow/'+id)
+      window.open(this.$router.resolve('academicShow/'+id).href)
     },
   },
   components:{
