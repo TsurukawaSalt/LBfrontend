@@ -32,8 +32,8 @@
         <el-button class="ext-button" id="button-unfavor" type="mini" round icon="el-icon-star-on" @click="favor()" v-if="this.is_favor">已收藏</el-button>
         <el-button class="ext-button" id="button-favor" type="mini" round icon="el-icon-star-off" @click="favor()" v-if="!this.is_favor">收藏</el-button>
         <el-button class="ext-button" id="button-quote" type="mini" round icon="el-icon-share" @click="quote()">引用</el-button>
-        <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>
-        <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="download()">免费下载</el-button>
+<!--        <el-button class="ext-button" id="button-batchQuote" type="mini" round icon="el-icon-folder-add" @click="batchQuote()">批量引用</el-button>-->
+        <el-button class="ext-button" id="button-download" type="mini" round icon="el-icon-download" @click="toLink(item.link)">查看全文</el-button>
       </div>
     </el-card>
 </template>
