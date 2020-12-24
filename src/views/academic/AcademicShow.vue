@@ -443,13 +443,11 @@
       },
       getRelation(){
         let vue = this;
-
-        console.log('getrelation')
         this.$api.academic.getSearchResult({
           search_words:{
             experts:"",
             origin:"",
-            searchWords:vue.academic.keywords,
+            searchWords:vue.academic.keywordList[0],
             startTime:0,
             endTime:0
           },
