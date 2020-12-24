@@ -178,7 +178,7 @@ export default {
       this.goSearch(false)
     },
     goArticle(id){
-      this.$router.push('academicShow/'+id)
+      window.open(this.$router.resolve('academicShow/'+id).href, '_blank')
     },
   },
   components:{
@@ -435,7 +435,7 @@ export default {
     //position: absolute;
     font-size: 15px;
     color: black;
-    height: 20px;
+    height: 18px;
     width: 200px;
     left: 50px;
     top: -16px;
@@ -548,7 +548,7 @@ export default {
       /*background: #8c939d;*/
     //position: absolute;
       font-size: 15px;
-      height: 20px;
+      /*height: 20px;*/
       width: 250px;
       left: 50px;
       top: -16px;
