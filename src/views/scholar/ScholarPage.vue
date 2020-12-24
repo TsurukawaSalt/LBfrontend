@@ -173,6 +173,13 @@
           <!--合作学者展示-->
           <div class="co-author-wr">
             <i class="el-icon-d-arrow-right" style="float: right;margin-right: 10px" v-show="(total_co_authors > 4)">更多</i>
+<!--            <div style="height:calc(100vh - 50px);">-->
+<!--              <SeeksRelationGraph-->
+<!--                      ref="seeksRelationGraph"-->
+<!--                      :options="graphOptions"-->
+<!--                      :on-node-click="onNodeClick"-->
+<!--                      :on-line-click="onLineClick" />-->
+<!--            </div>-->
             <h3>合作学者</h3>
             <div class="co-author-list" v-if="has_co_author">
               <div v-for="(item, index) in co_authors_list_show" :key="index">
@@ -240,11 +247,14 @@
 <script>
 import AcademicItem from "@/components/AcademicItem";
 import Header from "@/components/header";
+// import SeeksRelationGraph from 'relation-graph'
+
 export default {
   name: "ScholarPage",
   components: {
     AcademicItem,
-    Header
+    Header,
+    // SeeksRelationGraph
   },
   data() {
     return {
@@ -288,10 +298,54 @@ export default {
       paper2_count: 0,
       paper3_count: 0,
       real_total: 0,
-      search_count: 0
+      search_count: 0,
+      // 图谱
+      // graphOptions: {
+      //   allowSwitchLineShape: true,
+      //   allowSwitchJunctionPoint: true,
+      //   defaultJunctionPoint: 'border',
+      //   'layouts': [
+      //     {
+      //       'label': '中心',
+      //       'layoutName': 'center',
+      //       'layoutClassName': 'seeks-layout-center'
+      //     }
+      //   ],
+      //   // 这里可以参考"Graph 图谱"中的参数进行设置
+      // }
     }
   },
   methods: {
+    // showSeeksGraph() {
+    //   let nodes = [];
+    //   let links = [];
+    //   for(let author of this.co_authors_list_show){
+    //     nodes.push({
+    //       id:author.name,
+    //       text:author.name,
+    //       width: 30, height: 30
+    //     })
+    //     links.push({
+    //       from:this.scholar_info.name,
+    //       to:author.name
+    //     })
+    //   }
+    //   let __graph_json_data = {
+    //     rootId: this.scholar_info.name,
+    //     nodes,
+    //     links
+    //   }
+    //   this.$refs.seeksRelationGraph.setJsonData(__graph_json_data, (seeksRGGraph) => {
+    //     seeksRGGraph;
+    //     // 这些写上当图谱初始化完成后需要执行的代码
+    //   })
+    // },
+    // onNodeClick(nodeObject) {
+    //   console.log('onNodeClick:', nodeObject)
+    // },
+    // onLineClick(lineObject) {
+    //   console.log('onLineClick:', lineObject)
+    // },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -582,7 +636,7 @@ export default {
           console.log(_this.paper1_count);
           console.log(_this.paper2_count);
           console.log(_this.paper3_count);
-          this.loadCoAuthorsList()
+          // this.loadCoAuthorsList()
           this.loadCoAffList()
         }else {
           _this.$message({
@@ -627,6 +681,8 @@ export default {
       }).then(res => {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
+          // 通过文章计算合作学者
+          _this.loadCoAuthorsListResult();
           _this.total_rs = res.data.total
           if (_this.search_count === 0){ // 首次加载
             _this.real_total = _this.total_rs
@@ -649,6 +705,37 @@ export default {
           })
         }
       })
+    },
+    loadCoAuthorsListResult(){
+      let author_list = [];
+      for(let doc of this.result_list){
+        for(let author of doc.authors){
+          if(author.name == this.scholar_info.name)
+            continue;
+          let repeate = false;
+          for(let a of author_list){
+            if(a.name == author.name){
+              repeate = true;
+              a.fre++;
+              break;
+            }
+          }
+          if(!repeate) {
+            author.fre = 0;
+            author_list.push(author)
+          }
+        }
+      }
+      if(author_list.length>0)
+        this.has_co_author = true;
+      if(author_list.length > 10){
+        author_list = author_list.slice(0,10);
+      }
+      author_list = author_list.sort((a,b)=>(-a.fre+b.fre))
+      this.co_authors_list_show = author_list
+
+      // 绘制图谱
+      // this.showSeeksGraph()
     },
     loadCoAuthorsList(){
       var _this = this
