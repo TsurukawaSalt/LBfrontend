@@ -211,6 +211,7 @@ export default {
         for (let i = 0; i < 10; i ++) {
 
           _this.result_list[i].time = _this.result_list[i].time.slice(0,4)
+          _this.result_list[i].experts = _this.result_list[i].experts.replaceAll(',',' ')
           // console.log(_this.result_list[i].time)
         }
       }else {
