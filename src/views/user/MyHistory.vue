@@ -13,7 +13,7 @@
                             <div class="collect-detail-left">
                                 {{item.time}}
                             </div>
-                            <span class="collection-dir"> 
+                            <span class="collection-dir" @click="goArticle(item.id)"> 
                                 <span class="subtitle">
                                     {{item.title}}
                                 </span>                          
@@ -70,9 +70,14 @@
         methods: {
              delHistory(index) {
                 this.$message('删除成功');
-                this.history_list.splice(index,1);    
+                this.history_list.splice(index,1);
                 localStorage.setItem(sessionStorage.getItem("userID"),JSON.stringify(this.history_list));
-            }        
+            },
+            goArticle(id){
+                this.$router.push({
+                    path:"/academicShow/"+id,
+                })
+            }   
         }
     }
 </script>
