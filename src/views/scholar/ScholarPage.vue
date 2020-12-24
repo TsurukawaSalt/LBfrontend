@@ -68,6 +68,7 @@
               <div class="pie_total">
                   <p style="margin-bottom: 0; font-weight: bold">总计</p>
                   <p style="font-size: 30px; font-weight: bold; margin-top: 5px">{{ this.real_total }}篇</p>
+<!--                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">1111篇</p>-->
               </div>
             </div>
 <!--            <div class="achievement-line"></div>-->
@@ -925,7 +926,7 @@ export default {
   }
   .pie_item{
     display: inline-block;
-    margin-right: 60px;
+    margin-right: 50px;
   }
   .pie_title{
     position: relative;
