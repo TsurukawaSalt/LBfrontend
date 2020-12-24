@@ -40,7 +40,7 @@
                   prop="objectName"
                   :label="openExperts?'学者名':'文献标题'">
             <template slot-scope="scope" >
-              <p style=" cursor: pointer; " @click="checkObject(scope.row)">
+              <p class="text-link" @click="checkObject(scope.row)">
                 {{scope.row.objectName}}
               </p>
             </template>
@@ -270,6 +270,12 @@
 </script>
 
 <style scoped>
+  .text-link{
+    cursor: pointer;
+  }
+  .text-link:hover{
+    color: #409EFF;
+  }
   .my-button{
     display: inline-block;
     line-height: 1;
