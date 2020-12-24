@@ -553,7 +553,7 @@ export default {
       /*background: #8c939d;*/
     //position: absolute;
       font-size: 15px;
-      height: 20px;
+      /*height: 20px;*/
       width: 250px;
       left: 50px;
       top: -16px;
