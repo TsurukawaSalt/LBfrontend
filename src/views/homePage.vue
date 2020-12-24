@@ -438,7 +438,7 @@ export default {
     font-size: 15px;
     font-weight: bold;
     color: #555666;
-    height: 20px;
+    height: 18px;
     width: 200px;
     left: 50px;
     top: -16px;
