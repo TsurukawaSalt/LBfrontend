@@ -4,7 +4,7 @@
         </Header>
         <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="http://49.232.157.22:8082/user/upload"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
@@ -84,7 +84,8 @@
         },
         methods: {
             handleAvatarSuccess(res, file) {
-                this.perInfo.url = URL.createObjectURL(file.raw);
+                console.log(file);
+                this.perInfo.url = res.data.url;
                 var _this = this
                 this.$api.user.changeImg({
                     userID:sessionStorage.getItem("userID"),

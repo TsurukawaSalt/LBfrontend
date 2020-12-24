@@ -13,11 +13,11 @@
               </div>
             </div>
             <!--认证按钮-->
-            <div class="person-authen is-hover" v-show="!scholar_info.isVerified">
+            <div class="person-authen is-hover" v-show="( this.user_id !== null) && !scholar_info.isVerified">
               <p class="authen-button" @click="handleAuthen">我要认证</p>
             </div>
             <!--关注按钮-->
-            <div class="person-focus is-hover">
+            <div class="person-focus is-hover" v-show="this.user_id !== null">
               <p class="focus-button" @click="handleFocus" v-show="!scholar_info.isFocus">关注</p>
               <p class="unfocus-button" @click="handleFocus" v-show="scholar_info.isFocus">已关注
               <i class="el-icon-check"></i>
@@ -27,7 +27,7 @@
           <!-- 基本信息 -->
           <div class="person-baseinfo">
             <div class="p-name">{{ this.scholar_info.name }}</div>
-            <div class="p-volume c-grey">{{ this.scholar_info.volume }}人看过</div>
+            <div class="p-volume c-grey">{{ this.scholar_info.volume === null ? 0 : this.scholar_info.volume }}人看过</div>
             <div class="p-scholarID">
               <div class="p-scholarID-all c-grey">
                 <span class="p-scholarID-id">
@@ -47,12 +47,34 @@
         <!--成就统计 & 相关文献-->
         <div id="main-content-left">
           <!--成就展示-->
-<!--          <div id="achievement">-->
-<!--            <div class="achievement-pie"></div>-->
+          <div id="achievement">
+            <div class="achievement-pie">
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper1_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper1_count/real_total)*100) + "%"}}<br/>期刊</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper2_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper2_count/real_total)*100) + "%" }}<br/>会议</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor((paper3_count/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor((paper3_count/real_total)*100) + "%"}}<br/>专著</p>
+              </div>
+              <div class="pie_item">
+                <el-progress type="circle" text-inside="false" :percentage="Math.floor(((real_total - paper1_count - paper2_count - paper3_count)/real_total)*100)" :width="100"></el-progress>
+                <p class="pie_title">{{ Math.floor(((real_total - paper1_count - paper2_count - paper3_count)/real_total)*100) + "%"}}<br/>其他</p>
+              </div>
+              <div class="pie_total">
+                  <p style="margin-bottom: 0; font-weight: bold">总计</p>
+                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">{{ this.real_total }}篇</p>
+<!--                  <p style="font-size: 30px; font-weight: bold; margin-top: 5px">1111篇</p>-->
+              </div>
+            </div>
 <!--            <div class="achievement-line"></div>-->
-<!--          </div>-->
+          </div>
           <!--相关文献-->
-          <div id="article-list" v-if="has_result">
+          <div id="article-list">
             <div id="article-list-container">
               <!--筛选 filter-->
               <div id="content-top">
@@ -60,13 +82,13 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
+                        width="60"
+                        trigger="hover">
                       <!--由后端传具体有哪些年份 for循环-->
-                      <div>全部时间</div>
-                      <div>2020</div>
-                      <div>2019</div>
-                      <div>2018</div>
+                      <div class="sort-item">全部时间</div>
+                      <div class="sort-item" @click="yearTo2020">2020</div>
+                      <div class="sort-item" @click="yearTo2019">2019</div>
+                      <div class="sort-item" @click="yearTo2018">2018</div>
                       <el-button class="button-sort" slot="reference">{{ this.getYear }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_year"></i>
                       </el-button>
@@ -75,12 +97,12 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="paperTo0">全部</div>
-                      <div @click="paperTo1">期刊</div>
-                      <div @click="paperTo2">会议</div>
-                      <div @click="paperTo3">专著</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="paperTo0">全部</div>
+                      <div class="sort-item" @click="paperTo1">期刊</div>
+                      <div class="sort-item" @click="paperTo2">会议</div>
+                      <div class="sort-item" @click="paperTo3">专著</div>
                       <el-button class="button-sort" slot="reference">{{ this.getPaper }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_paper"></i>
                       </el-button>
@@ -89,10 +111,10 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="authorTo0">全部作者</div>
-                      <div @click="authorTo1">第一作者</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="authorTo0">全部作者</div>
+                      <div class="sort-item" @click="authorTo1">第一作者</div>
                       <el-button class="button-sort" slot="reference">{{ this.getAuthor }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_author"></i>
                       </el-button>
@@ -101,10 +123,10 @@
                   <div class="filter-item">
                     <el-popover
                         placement="bottom-start"
-                        width="100"
-                        trigger="click">
-                      <div @click="sortToTime">按时间降序</div>
-                      <div @click="sortToCited">按被引降序</div>
+                        width="60"
+                        trigger="hover">
+                      <div class="sort-item" @click="sortToTime">按时间降序</div>
+                      <div class="sort-item" @click="sortToCited">按被引降序</div>
                       <el-button class="button-sort" slot="reference">{{ this.getSort }}
                         <i class="el-icon-s-data" style="float: right" ref="icon_sort"></i>
                       </el-button>
@@ -113,11 +135,12 @@
                 </div>
               </div>
               <!--文献列表-->
-              <div id="content-result">
+              <div id="content-result" v-if="has_result">
                 <div class="result-list">
                   <div v-for="(result_item,index) in result_list" v-bind:key="index">
                     <academic-item
                         :c_sc = result_item
+                        :length=700
                         v-on:toAuthorPage = "searchAuthor"
                         v-on:toSourcePage = "searchSource"
                         v-on:quote = "showQuote"></academic-item>
@@ -136,11 +159,13 @@
                   </el-pagination>
                 </div>
               </div>
+              <!-- 无结果tip -->
+              <div class="no-result-tip" v-if="!has_result" style="text-align: center">
+                <br/>
+                <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
+                <p>暂无该学者的相关学术资源</p>
+              </div>
             </div>
-          </div>
-          <div class="no-result-tip" v-if="!has_result" style="text-align: center">
-            <p style="margin-bottom: 0; font-size: 28px; font-weight: bold; color: #2c3e50">Sorry</p>
-            <p>暂无该学者的相关学术资源</p>
           </div>
         </div>
         <!--合作统计展示-->
@@ -168,10 +193,10 @@
             <div v-if="has_co_aff">
               <ul class="co-affiliate-list" v-for="(item, index) in co_affiliate_list" :key="index">
                 <li>
-                  <span class="co_affiliate_name">{{ item.first }}</span>
+                  <span class="co_affiliate_name">{{ item.org }}</span>
                   <span class="co_affiliate_line">
                   <span class="co_affiliate_width"></span>
-                  <span class="co_affiliate_count">{{ item.second }}</span>
+                  <span class="co_affiliate_count">{{ item.cooperationNum }}</span>
                 </span>
                 </li>
               </ul>
@@ -181,6 +206,34 @@
         </div>
       </div>
     </div>
+    <!-- 引用 -->
+    <el-dialog
+        title="引用"
+        :visible.sync="quotedialogVisible"
+        width="40%">
+      <div style="text-align: left">
+        <b>以下引用格式为GB/T7714，点击右侧按钮即可复制内容</b>
+        <el-button type="warning"
+                   size="mini"
+                   icon="el-icon-document-copy"
+                   style="float: right"
+                   v-clipboard:copy="quoteText"
+                   v-clipboard:success="copySuccess"
+                   v-clipboard:error="copyError"
+        ></el-button>
+      </div>
+      <br/>
+      <el-input
+          type="textarea"
+          placeholder="url"
+          autosize
+          v-model="quoteText"
+          :readonly="true">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="quotedialogVisible=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -213,6 +266,8 @@ export default {
       total_co_authors: 0,
       total_co_affs: 0,
       result_list:[],
+      result_list_first: [],
+      result_list_show: [],
       total_rs: 0,
       has_result: false,
       sort_words: {
@@ -228,6 +283,12 @@ export default {
       has_co_aff: false,
       quoteText:"",
       quotedialogVisible:false,
+      author_type : '0',
+      paper1_count: 0,
+      paper2_count: 0,
+      paper3_count: 0,
+      real_total: 0,
+      search_count: 0
     }
   },
   methods: {
@@ -238,6 +299,7 @@ export default {
       console.log(`当前页: ${val}`);
     },
     showQuote(val){
+      console.log("正在引用")
       this.quoteText = this.getQuote(val)
       this.quotedialogVisible = true;
       this.sp_result = val;
@@ -253,15 +315,15 @@ export default {
       res += '.';
       res += document.title+'['
       let dtype = document.dtype;
-      if(dtype == '专利'){
+      if(dtype === '专利'){
         res += 'P'
-      }else if(dtype == '会议'){
+      }else if(dtype === '会议'){
         res += 'C'
-      }else if(dtype == '图书'){
+      }else if(dtype === '图书'){
         res += 'M'
-      }else if(dtype == '学位'){
+      }else if(dtype === '学位'){
         res += 'D'
-      }else if(dtype == '期刊'){
+      }else if(dtype === '期刊'){
         res += 'J'
       }
       res += '].'
@@ -317,15 +379,15 @@ export default {
     },
     toScholarPage(scholar) {
       // 有 ID
-      if (scholar.expertID !== null){
+      if (scholar.expertid !== null){
         this.$router.push({
           name: "ScholarPage",
           params: {
-            expertid: scholar.expertID
+            expertid: scholar.expertid
           }
         })
       }
-      // 无 ID
+      // 无 ID 跳转搜索页
       else {
         var search_words = {
           searchWords: '',
@@ -402,7 +464,6 @@ export default {
               type: "success"
             })
           }
-
         } else {
           _this.$message({
             message: res.msg,
@@ -410,6 +471,15 @@ export default {
           })
         }
       })
+    },
+    yearTo2020() {
+      this.sort_words.sc_year = '2020'
+    },
+    yearTo2019() {
+      this.sort_words.sc_year = '2019'
+    },
+    yearTo2018() {
+      this.sort_words.sc_year = '2018'
     },
     paperTo0() {
       this.sort_words.paper_type = '';
@@ -423,17 +493,76 @@ export default {
     paperTo3() {
       this.sort_words.paper_type = '图书';
     },
+    getPaperCount() {
+      var _this = this
+      console.log(_this.scholar_info.name + "正在搜索文献")
+      this.$api.academic.getSearchResult({
+        search_words: {
+          searchWords: '',
+          title: '',
+          keyWords: '',
+          experts: _this.scholar_info.name,
+          origin: '',
+          startTime: '0',
+          endTime: '0'
+        },
+        filter_words: {
+          year: '',
+          cate: '',
+          level: '',
+          savetype: '',
+          keywords: '',
+          type: '',
+          authors: '',
+          jnls: '',
+          affs: '',
+        },
+        sort: _this.sort_words.sc_sort,
+        page: _this.currentPage,
+        userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
+      }).then(res => {
+        if (res.code === "200"){
+          _this.paper1_count = res.data.filter_list[1].filter_itemList[0].count;
+          _this.paper2_count = res.data.filter_list[1].filter_itemList[3].count;
+          _this.paper3_count = res.data.filter_list[1].filter_itemList[1].count;
+        }
+        else if (res.code === "100"){
+          _this.has_result = false;
+        }
+        else {
+          _this.has_result = false;
+          _this.$message({
+            message: res.msg,
+            type: "error"
+          })
+        }
+      })
+    },
     authorTo0() {
-      this.sort_words.first_author = '0';
+      // this.author_type = "0";
+      // this.result_list_show = this.result_list
+      this.sort_words.first_author = '0'
     },
     authorTo1() {
-      this.sort_words.first_author = '1';
+      // this.author_type = "1";
+      // this.result_list_show = this.result_list_first
+      this.sort_words.first_author = '1'
     },
     sortToTime() {
       this.sort_words.sc_sort = 'time';
     },
     sortToCited() {
       this.sort_words.sc_sort = 'cited';
+    },
+    getFirstSc() {
+      this.result_list_first = []
+      var name = this.scholar_info.name
+      for (var i=0 ; i < this.result_list.length; i++){
+        if (this.result_list[i].authors[0].name === name){
+          this.result_list_first.push(this.result_list[i])
+        }
+      }
+      console.log("第一作者文章：" + this.result_list_first)
     },
     loadInfo(){
       var _this = this
@@ -449,14 +578,22 @@ export default {
             _this.has_ach = true;
           }
           this.loadRelateSc()
+          this.getPaperCount()
+          console.log(_this.paper1_count);
+          console.log(_this.paper2_count);
+          console.log(_this.paper3_count);
           this.loadCoAuthorsList()
           this.loadCoAffList()
         }else {
           _this.$message({
-            message: res.msg,
+            message: res.message,
             type: "error"
           })
+          _this.$router.push('/404')
         }
+      }).catch(err => {
+        console.log(err)
+        this.$router.push('/404')
       })
     },
     loadRelateSc(){
@@ -491,6 +628,10 @@ export default {
         if (res.code === "200"){
           _this.result_list = res.data.result_list
           _this.total_rs = res.data.total
+          if (_this.search_count === 0){ // 首次加载
+            _this.real_total = _this.total_rs
+            _this.search_count = 1;
+          }
           if (_this.result_list.length === 0){
             _this.has_result = false;
           } else {
@@ -515,17 +656,18 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_authors_list = res.data
+          _this.co_authors_list = res.data.expert_list
+          _this.total_co_authors = res.data.total
           if (_this.co_authors_list === null){
             _this.has_co_author = false;
           } else {
             _this.has_co_author = true;
-            _this.total_co_authors = _this.co_authors_list.length
-            if (_this.total_co_authors > 4){
-              _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
-            } else{
-              _this.co_authors_list_show = _this.co_authors_list
-            }
+            _this.co_authors_list_show = _this.co_authors_list
+            // if (_this.total_co_authors > 4){
+            //   _this.co_authors_list_show = _this.co_authors_list.slice(0,4)
+            // } else{
+            //   _this.co_authors_list_show = _this.co_authors_list
+            // }
           }
         } else {
           _this.$message({
@@ -541,12 +683,12 @@ export default {
         scholar_id: _this.scholar_id
       }).then(res => {
         if (res.code === "200") {
-          _this.co_affiliate_list = res.data
+          _this.co_affiliate_list = res.data.expert_list
+          _this.total_co_affs = res.data.total
           if (_this.co_affiliate_list === null){
             _this.has_co_aff = false;
           } else {
             _this.has_co_aff = true;
-            _this.total_co_affs = _this.co_affiliate_list.length
           }
         } else {
           _this.$message({
@@ -564,6 +706,8 @@ export default {
           return '2020'
         case '2019':
           return '2019'
+        case '2018':
+          return '2018'
         default:
           return '全部年份'
       }
@@ -630,7 +774,7 @@ export default {
 
 <style scoped>
   #main-content{
-    width: 1000px;
+    width: 1100px;
     margin: 0 auto;
     overflow: hidden;
     position: relative;
@@ -645,7 +789,7 @@ export default {
   }
   #main-content-left{
     float: left;
-    width: 610px;
+    width: 700px;
   }
   #main-content-right{
     float: right;
@@ -776,7 +920,26 @@ export default {
     border-bottom: 1px dotted #bfbfbf;
   }
   .achievement-pie{
-    height: 166px;
+    height: 130px;
+    margin-top: 26px;
+    /*text-align: center;*/
+  }
+  .pie_item{
+    display: inline-block;
+    margin-right: 50px;
+  }
+  .pie_title{
+    position: relative;
+    bottom: 76px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .pie_total{
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    bottom: 66px;
   }
   .achievement-line{
     height: 170px;
@@ -832,6 +995,14 @@ export default {
     text-align: center;
   }
   .is-hover:hover{
+    cursor: pointer;
+  }
+  .sort-item{
+    font-size: 12px;
+    line-height: 20px;
+    min-width: 50px;
+  }
+  .sort-item:hover{
     cursor: pointer;
   }
 </style>

@@ -2,13 +2,26 @@
   <div class="wrapper">
     <Header class="header_home"></Header>
     <div class="container">
-      <!-- 热门关键词 -->
+      <!-- 右侧热门显示 -->
       <div class="content-right">
         <div style="margin-left: 20px">
-          <h4 style="margin-top: 8px; margin-bottom: 10px">热门关键词</h4>
-          <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
-            <el-link class="keyword" :underline="false" @click="searchWords(o)" style="line-height: 30px; font-weight: bold; font-size: 14px">{{ o }}</el-link>
-          </el-row>
+          <!-- 热门关键词 -->
+          <div>
+            <h4 style="margin-top: 8px; margin-bottom: 10px">热门关键词</h4>
+            <el-row class="keyword_list" v-for="(o, index) in this.hot_keywords" :key="index">
+              <el-link class="keyword" :underline="false" @click="searchWords(o)" style="line-height: 30px; font-weight: bold; font-size: 14px"><i class="el-icon-search" style="margin-right: 5px"></i>{{ o }}</el-link>
+            </el-row>
+          </div>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          <!-- 热门文献 -->
+          <div>
+            <h4 style="margin-top: 14px; margin-bottom: 10px">热门资源</h4>
+            <div class="hot_source">
+              <div class="hot_source_item" v-for="(o, index) in this.hot_source" :key="index">
+                <div class="hot_title" @click="goArticle(o.id)" >{{ o.title }}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- 搜索结果 -->
@@ -98,21 +111,23 @@
         </p>
       </div>
     </div>
-    <!-- 引用 -->
+    <!-- 引用dialog -->
     <el-dialog
         title="引用"
         :visible.sync="quotedialogVisible"
         width="40%">
-      <el-row style="text-align: left">
-        以下引用格式为GB/T7714，点击按钮即可复制内容
-        <el-button icon="el-icon-document-copy"
+      <div style="text-align: left">
+        <b>以下引用格式为GB/T7714，点击右侧按钮即可复制内容</b>
+        <el-button type="warning"
+                   size="mini"
+                   icon="el-icon-document-copy"
                    style="float: right"
                    v-clipboard:copy="quoteText"
                    v-clipboard:success="copySuccess"
                    v-clipboard:error="copyError"
         ></el-button>
-      </el-row>
-
+      </div>
+      <br/>
       <el-input
           type="textarea"
           placeholder="url"
@@ -185,9 +200,16 @@
           '新冠',
           '疫情',
         ],
+        hot_source: []
       }
     },
     methods: {
+      goArticle(val){
+        let url = window.location.origin + "/#/academicShow/"+val;
+        if(window.open(url) === null){
+          window.location.herf = url;
+        }
+      },
       showQuote(val){
         this.quoteText = this.getQuote(val)
         this.quotedialogVisible = true;
@@ -204,15 +226,15 @@
         res += '.';
         res += document.title+'['
         let dtype = document.dtype;
-        if(dtype == '专利'){
+        if(dtype === '专利'){
           res += 'P'
-        }else if(dtype == '会议'){
+        }else if(dtype === '会议'){
           res += 'C'
-        }else if(dtype == '图书'){
+        }else if(dtype === '图书'){
           res += 'M'
-        }else if(dtype == '学位'){
+        }else if(dtype === '学位'){
           res += 'D'
-        }else if(dtype == '期刊'){
+        }else if(dtype === '期刊'){
           res += 'J'
         }
         res += '].'
@@ -343,6 +365,34 @@
             _this.has_result = false
           } else {
             _this.has_result = false
+            _this.$message({
+              message: res.msg,
+              type: "error"
+            })
+            console.log("Request => getSearchResult : not 200");
+          }
+        })
+      },
+      loadHotSource() {
+        var _this = this;
+        this.$api.academic.getSearchResult({
+          search_words: {
+            searchWords:'',
+            keyWords: '',
+            title: '',
+            experts:'',
+            origin:'',
+            startTime: '0',
+            endTime: '0',
+          },
+          filter_words: {},
+          sort: "cited",
+          page: 1,
+          userID: sessionStorage.getItem("userID") === null ? -1 : sessionStorage.getItem("userID")
+        }).then(res => {
+          if (res.code === "200"){
+            _this.hot_source = res.data.result_list
+          } else {
             _this.$message({
               message: res.msg,
               type: "error"
@@ -486,6 +536,7 @@
       console.log("排序方式" + this.sort)
       // 加载检索数据
       this.loadSearchSc()
+      this.loadHotSource()
     }
   }
 </script>
@@ -614,11 +665,45 @@
     font-weight: bold;
     margin-bottom: 0;
   }
+  .hot_title{
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .hot_title:hover{
+    color: #0066cc;
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
+  .keyword_list{
+    transition: background-color .1s;
+    float: left;
+    cursor: pointer;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 230px;
+    margin: 0 10px 10px 0;
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    background: #fff;
+    color: #333;
+    pointer-events: all;
+  }
+  .keyword_list:hover{
+    background-color: #f1f1f1;
+  }
 </style>
 <style>
   .el-popover{
     min-width: 70px;
     padding: 2px 12px 2px 12px;
     box-shadow: none;
+  }
+  .el-dialog__body {
+    padding: 20px 20px 10px;
   }
 </style>

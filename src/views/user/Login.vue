@@ -38,15 +38,15 @@
       submit(){
         var encryptionPasswd = this.$md5(this.user.passwd);
 //        alert(encryptionPasswd);
-        if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
-          // alert("您已登录");
-          this.$message({
-            message: '您已登录',
-            type: 'warning'
-          });
-          this.$router.push("/");
-        }
-        else {
+//         if(sessionStorage.getItem("userName")!=null||sessionStorage.getItem("userID")!=null){
+//           // alert("您已登录");
+//           this.$message({
+//             message: '您已登录',
+//             type: 'warning'
+//           });
+//           this.$router.push("/");
+//         }
+//         else {
           var _this = this
           this.$api.user.postLoginForm ({
             userName: _this.user.userName,
@@ -63,7 +63,7 @@
               _this.$message.error(res.msg);
             }
           })
-        }
+        // }
       },
       gotoRegister(){
         this.$router.push("/register");

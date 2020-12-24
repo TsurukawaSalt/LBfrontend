@@ -17,3 +17,12 @@ export const deleteMessage = params => {
         params
     })
 }
+
+// 修改已读未读
+export const setMessageStatus = params => {
+    return axios({
+        url: '/message/setMessageStatus',
+        method: 'get',
+        params
+    })
+}

@@ -116,6 +116,9 @@
           <div style="padding-left: 80px;" v-for="(result_item,index) in relation_list" v-bind:key="index">
             <academic-item :c_sc = result_item></academic-item>
           </div>
+          <div v-if="relation_list === null">
+            <p>暂无信息</p>
+          </div>
         </div>
 
 
@@ -171,11 +174,11 @@
 <!--            </div>-->
 <!--          </div>-->
 <!--        </el-row>-->
-        这里是右侧<br>
+        <br>
+        <el-image :src="require('@/assets/广告.png')"
+                  style="cursor: pointer"
+                  @click="jumpToHome"></el-image>
 
-        假装有广告
-        <el-image :src="img"></el-image>
-        <el-image :src="img"></el-image>
       </el-col>
       <el-dialog
               title="分享"
@@ -253,7 +256,6 @@
 
 <script>
   import AcademicItem from "@/components/AcademicItem";
-
   export default {
     name: "AcademicShow",
     components: {
@@ -274,7 +276,7 @@
           views:123,
           is_favor:true,
         },
-        relation_list:[],
+        relation_list:null,
         dialogVisible:false,
         sharedialogVisible:false,
         quotedialogVisible:false,
@@ -305,6 +307,9 @@
       }
     },
     methods:{
+      jumpToHome(){
+        this.$router.push('/');
+      },
       showQuote(){
         this.quoteText = this.getQuote(this.academic)
         this.quotedialogVisible = true;
@@ -438,13 +443,11 @@
       },
       getRelation(){
         let vue = this;
-
-        console.log('getrelation')
         this.$api.academic.getSearchResult({
           search_words:{
             experts:"",
             origin:"",
-            searchWords:vue.academic.keywords,
+            searchWords:vue.academic.keywordList[0],
             startTime:0,
             endTime:0
           },
@@ -494,11 +497,13 @@
               this.getRelation();
             }else{
               this.$message.error("文章不存在或已被删除")
+              this.$router.push('/404')
             }
           }
       ).catch(err=>{
         console.log(err)
         this.$message.error("文章不存在或已被删除")
+        this.$router.push('/404')
       })
     }
   }

@@ -1,5 +1,5 @@
 <template>
-    <el-card class="card-body" ref="card" style="text-align: left">
+    <el-card class="card-body" ref="card" :style="SetWidth">
       <!-- source信息部分 -->
       <div class="sc-content">
         <!-- 标题 -->
@@ -7,7 +7,6 @@
           <span class="title-click" @click="toDetailPage">{{ item.title }}</span>
         </div>
         <!-- 摘要 -->
-        <!-- TODO 限制行数 -->
         <div class="summary">{{ item.summary }}</div>
         <!-- 其他信息：所有作者/来源(期刊/出版社/或无)/被引量/年份-->
         <div class="info">
@@ -46,14 +45,19 @@
       c_sc: {
         type: Object,
         default: null
+      },
+      length: {
+        type: Number,
+        default: 610
       }
     },
     data() {
       return {
-        item: {
-
-        },
-        is_favor: false
+        item: {},
+        is_favor: false,
+        SetWidth: {
+          width: '610px'
+        }
       }
     },
     methods: {
@@ -86,12 +90,11 @@
         this.$emit("toSourcePage", val);
       },
       toCitedPage() {
-        // 到来源网站查看文章
+        // 查看引用信息
         console.log("跳转引用详情页！")
       },
       toLink(link){
         // window.location.href = link;
-
         window.open(link, '_blank');
       },
       favor() {
@@ -152,6 +155,9 @@
     mounted() {
       this.item = this.c_sc
       this.is_favor = this.item.is_favor
+      console.log("before" + this.$data.SetWidth.width)
+      this.$data.SetWidth.width = this.length + "px"
+      console.log("after" + this.$data.SetWidth.width)
     }
   }
 </script>
@@ -165,6 +171,7 @@
    border-left: none;
    border-right: none;
    box-shadow: none;
+   text-align: left
  }
  .el-card /deep/ .el-card__body{
    padding: 10px 10px 15px 0;
